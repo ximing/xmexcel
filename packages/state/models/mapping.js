@@ -19,10 +19,36 @@ export class MapResult {
 /*
 * mapping = [row,col,endRow,endCol]
 * */
-export class Mapping {
+export default class Mapping {
 
     constructor(mapping) {
-        this.mappping = mapping;
+        let r = mapping.r;
+        if (r[2] == null) {
+            r[2] = r[0];
+        }
+        if (r[3] == null) {
+            r[3] = r[1];
+        }
+        if (r[0] > r[2]) {
+            let t = r[0];
+            r[0] = r[2];
+            r[2] = t;
+        }
+        if (r[1] > r[3]) {
+            let t = r[1];
+            r[1] = r[3];
+            r[3] = t;
+        }
+        this.r = mapping.r.slice(0, 4);
+        this.id = mapping.id;
+    }
+
+    static create(mapping) {
+        if (Mapping.isMapping(mapping)) {
+            return mapping;
+        } else {
+            return new Mapping(mapping);
+        }
     }
 
     static isMapping(any) {
@@ -34,7 +60,7 @@ export class Mapping {
 
     static fromJSON(object) {
         if (!Mapping.isMapping(object)) {
-            return new Mapping(object)
+            return new Mapping(object);
         }
         return object;
     }

@@ -1,12 +1,14 @@
 /**
  * Created by ximing on 12/26/17.
  */
-import {OP_NAME} from '../constants/op-consts'
+import {OP_NAME} from '../constants/op-consts';
+import Mapping from '../models/mapping';
+import OpResult from './opResult';
 
 export class Value {
     constructor({m, v}) {
         this.name = OP_NAME.VALUE;
-        this.m = m;
+        this.m = Mapping.create(m);
         this.v = v;
     }
 
@@ -18,4 +20,17 @@ export class Value {
         return JSON.stringify(this);
     }
 
+    apply(doc) {
+        try {
+            for (let i = this.m.r[0]; i < this.m.r[2]; i++) {
+                for (let j = this.m.r[1]; j < this.m.r[3]; j++) {
+                    doc.sheets[this.m.id].cells[i][j] = this.v;
+                }
+            }
+            OpResult.ok(doc);
+        } catch (err) {
+            OpResult.fail(`操作的值超过表格空间限制${this.toJSON()}`);
+        }
+    }
 }
+

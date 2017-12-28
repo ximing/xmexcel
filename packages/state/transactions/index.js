@@ -3,6 +3,7 @@
  */
 'use strict';
 import debug from 'debug';
+import shortid from 'shortid';
 
 const log = debug('excel:state:transaction');
 
@@ -12,6 +13,8 @@ export default class Transaction {
     constructor(state) {
         this.before = state.doc;
         this.ops = [];
+        this.schema = state.schema;
+        this.objectId = shortid.generate();
     }
 
     apply() {
@@ -26,12 +29,22 @@ export default class Transaction {
             } else {
                 log(res.failed);
             }
-        });ss
+        });
         this.doc = doc;
         return doc;
     }
 
-    changeValue() {
-        this.ops.push(new Value({}));
+    changeValue(m, v) {
+        this.ops.push(new Value({m, v}));
     }
+
+    addMark(m, v) {
+    }
+
+    removeMark(m, v) {
+    }
+
+    toggleMark(m, v) {
+    }
+
 }

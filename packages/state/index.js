@@ -9,10 +9,11 @@ import Schema from './shcema';
 import Transaction from './transactions';
 
 export default class ExcelState {
-    constructor({doc, schema, plugins, meta}) {
+    constructor({doc, schema, plugins, meta, pluginState} = {plugins: [], pluginState: {}}) {
         this.doc = doc;
         this.schema = schema;
         this.plugins = plugins;
+        this.pluginState = pluginState;
         this.meta = meta;
         this.objectId = shortid.generate();
     }
@@ -21,8 +22,12 @@ export default class ExcelState {
         return new Transaction(this);
     }
 
-    static create({doc, schema, plugins, meta} = {schema: Schema}) {
-        return new ExcelState({doc, schema, plugins, meta});
+    static create({doc, schema, plugins, meta} = {schema: Schema, meta: {}}) {
+        let pluginState = {};
+        plugins.forEach(plugin => {
+            pluginState[plugin.key] = plugin.spec.init();
+        });
+        return new ExcelState({doc, schema, plugins, meta, pluginState});
     }
 
     setMeta(key, value) {
@@ -34,6 +39,14 @@ export default class ExcelState {
     }
 
     apply(tr) {
-
+        let pluginState = {};
+        this.plugins.forEach(plugin => {
+            pluginState[plugin.key] = plugin.apply(tr);
+        });
+        if (tr.objectId !== this.tr.objectId) {
+            throw new Error('error tr');
+        }
+        let doc = tr.apply(this);
+        return new ExcelState({doc, schema: this.schema, plugins: this.plugins, meta: this.meta, pluginState});
     }
 }
