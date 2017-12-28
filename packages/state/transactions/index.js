@@ -17,7 +17,7 @@ export default class Transaction {
         this.objectId = shortid.generate();
     }
 
-    apply() {
+    apply(state) {
         if (this.ops.length === 0) {
             return this.doc;
         }
@@ -36,15 +36,19 @@ export default class Transaction {
 
     changeValue(m, v) {
         this.ops.push(new Value({m, v}));
+        return this;
     }
 
     addMark(m, v) {
+        return this;
     }
 
     removeMark(m, v) {
+        return this;
     }
 
     toggleMark(m, v) {
+        return this;
     }
 
 }

@@ -12,8 +12,8 @@ test('demo', (t) => {
     let state = ExcelState.create({
         doc: defaultData
     });
-
-    console.log(JSON.stringify(state));
-
     t.truthy(Excel.isExcel(state.doc));
+    let tr = state.tr.changeValue({id: 'shortid', r: [2, 2, 2, 2]}, 1000);
+    let newState = state.apply(tr);
+    t.is(newState.doc.sheets['shortid']['cells'][2][2], 1000);
 });

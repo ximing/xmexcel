@@ -22,14 +22,14 @@ export class Value {
 
     apply(doc) {
         try {
-            for (let i = this.m.r[0]; i < this.m.r[2]; i++) {
-                for (let j = this.m.r[1]; j < this.m.r[3]; j++) {
+            for (let i = this.m.r[0]; i <= this.m.r[2]; i++) {
+                for (let j = this.m.r[1]; j <= this.m.r[3]; j++) {
                     doc.sheets[this.m.id].cells[i][j] = this.v;
                 }
             }
-            OpResult.ok(doc);
+            return OpResult.ok(doc);
         } catch (err) {
-            OpResult.fail(`操作的值超过表格空间限制${this.toJSON()}`);
+            return OpResult.fail(`操作的值超过表格空间限制${this.toJSON()}`);
         }
     }
 }

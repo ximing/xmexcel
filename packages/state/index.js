@@ -47,9 +47,6 @@ export default class ExcelState {
         this.plugins.forEach(plugin => {
             pluginState[plugin.key] = plugin.apply(tr);
         });
-        if (tr.objectId !== this.tr.objectId) {
-            throw new Error('error tr');
-        }
         let doc = tr.apply(this);
         return new ExcelState({doc, schema: this.schema, plugins: this.plugins, meta: this.meta, pluginState});
     }
