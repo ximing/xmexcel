@@ -13,7 +13,7 @@ test('demo', (t) => {
         doc: defaultData
     });
     t.truthy(Excel.isExcel(state.doc));
-    let tr = state.tr.changeValue({id: 'shortid', r: [2, 2, 2, 2]}, 1000);
+    let tr = state.tr.changeValue({id: 'shortid', r: [2, 2, 5, 5]}, 1000);
     let newState = state.apply(tr);
-    t.is(newState.doc.sheets['shortid']['cells'][2][2], 1000);
+    t.is(newState.doc.sheets['shortid']['cells'][3][3], 1000);
 });

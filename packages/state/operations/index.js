@@ -28,8 +28,7 @@ export class Value {
                     cells[i][j] = this.v;
                 }
             }
-            let newDoc = {...doc, ...{...doc.sheets, ...{...doc.sheets[this.m.id], cells}}};
-            return OpResult.ok(newDoc);
+            return OpResult.ok(doc.generateNewState(`sheets/${this.m.id}/cells`, cells));
         } catch (err) {
             return OpResult.fail(`操作的值超过表格空间限制${this.toJSON()}`);
         }

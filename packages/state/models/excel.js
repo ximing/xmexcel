@@ -78,6 +78,21 @@ class Excel {
     getSheet(key) {
         return this.sheets.get(key);
     }
+
+    generateNewState(path, value) {
+        let newValue = value;
+        let pathArr = path.split('/');
+        let targetValue = this;
+        for (let i = pathArr.length - 1; i > 0; i--) {
+            let keys = pathArr.slice(0, i);
+            for (let j = 0; j < keys.length; j++) {
+                targetValue = targetValue[keys[j]];
+            }
+            newValue = {...targetValue, [pathArr[i]]: newValue};
+            targetValue = this;
+        }
+        return {...this,...newValue};
+    }
 }
 
 Excel.prototype[MODEL_TYPES.EXCEL] = true;
