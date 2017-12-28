@@ -2,7 +2,7 @@
  * Created by ximing on 12/28/17.
  */
 'use strict';
-import {MODEL_TYPES} from '../constants/model-types';
+import MODEL_TYPES from '../constants/model-types';
 
 export class MapResult {
     constructor(range, deleted = false) {

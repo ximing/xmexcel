@@ -4,6 +4,16 @@
 'use strict';
 import test from 'ava';
 
+import ExcelState from '../packages/state';
+import Excel from '../packages/state/models/excel';
+import {defaultData} from './lib';
+
 test('demo', (t) => {
-    t.pass();
+    let state = ExcelState.create({
+        doc: defaultData
+    });
+
+    console.log(JSON.stringify(state));
+
+    t.truthy(Excel.isExcel(state.doc));
 });

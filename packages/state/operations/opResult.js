@@ -3,7 +3,6 @@
  */
 'use strict';
 const debug = require('debug');
-window.debug = debug;
 const log = debug('excel:op:opResult');
 export default class OpResult {
     constructor(doc, failed) {

@@ -4,7 +4,7 @@
 'use strict';
 import _ from 'lodash';
 
-import {MODEL_TYPES} from '../constants/model-types';
+import MODEL_TYPES from '../constants/model-types';
 
 class Mark {
 
@@ -14,11 +14,11 @@ class Mark {
     }
 
     static fromJSON(mark) {
-        return new Map(mark);
+        return new Mark(mark);
     }
 
-    static isMark(mark) {
-
+    static isMark(any) {
+        return !!(any && any[MODEL_TYPES.MARK]);
     }
 
 }

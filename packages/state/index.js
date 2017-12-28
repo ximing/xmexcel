@@ -4,12 +4,13 @@
 'use strict';
 import shortid from 'shortid';
 
-export ExcelModel from './models/excel';
+import Doc from './models/excel';
 import Schema from './shcema';
 import Transaction from './transactions';
 
+export const ExcelModel = Doc;
 export default class ExcelState {
-    constructor({doc, schema, plugins, meta, pluginState} = {plugins: [], pluginState: {}}) {
+    constructor({doc, schema, plugins = [], meta, pluginState = {}} = {}) {
         this.doc = doc;
         this.schema = schema;
         this.plugins = plugins;
@@ -22,11 +23,14 @@ export default class ExcelState {
         return new Transaction(this);
     }
 
-    static create({doc, schema, plugins, meta} = {schema: Schema, meta: {}}) {
+    static create({doc, schema = Schema, plugins = [], meta = {}} = {}) {
         let pluginState = {};
         plugins.forEach(plugin => {
             pluginState[plugin.key] = plugin.spec.init();
         });
+        if (!Doc.isExcel(doc)) {
+            doc = Doc.fromJSON(doc);
+        }
         return new ExcelState({doc, schema, plugins, meta, pluginState});
     }
 
