@@ -1,0 +1,25 @@
+{
+  "presets": [
+  ],
+  "env": {
+    "test": {
+      "presets": [
+        "es2015",
+        "stage-0"
+      ],
+      "plugins": [
+        "transform-runtime",
+        "transform-es2015-modules-commonjs",
+        "transform-export-extensions"
+      ]
+    },
+    "development": {
+      "presets": []
+    }
+  },
+  "ignore": [
+    "node_modules/**",
+    "dist"
+  ],
+  "plugins": []
+}
