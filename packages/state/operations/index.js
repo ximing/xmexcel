@@ -22,12 +22,14 @@ export class Value {
 
     apply(doc) {
         try {
+            let cells = doc.sheets[this.m.id].cells.slice(0);
             for (let i = this.m.r[0]; i <= this.m.r[2]; i++) {
                 for (let j = this.m.r[1]; j <= this.m.r[3]; j++) {
-                    doc.sheets[this.m.id].cells[i][j] = this.v;
+                    cells[i][j] = this.v;
                 }
             }
-            return OpResult.ok(doc);
+            let newDoc = {...doc, ...{...doc.sheets, ...{...doc.sheets[this.m.id], cells}}};
+            return OpResult.ok(newDoc);
         } catch (err) {
             return OpResult.fail(`操作的值超过表格空间限制${this.toJSON()}`);
         }
