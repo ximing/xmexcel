@@ -4,5 +4,7 @@
 'use strict';
 export const OP_NAME = {
     VALUE: 'OP_VALUE',
-    ADD_MARK: 'OP_ADD_MARK'
+    ADD_MARK: 'OP_ADD_MARK',
+    ClEAR_MARK: 'OP_CLEAR_MARK',
+    REMOVE_MARK: 'OP_REMOVE_MARK'
 };

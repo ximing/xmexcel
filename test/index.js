@@ -17,12 +17,3 @@ test('change value', (t) => {
     let newState = state.apply(tr);
     t.is(newState.doc.sheets['shortid']['cells'][3][3], 1000);
 });
-
-test('change mark', (t) => {
-    let state = ExcelState.create({
-        doc: defaultData
-    });
-    let tr = state.tr.addMark({id: 'shortid', r: [2, 2, 2, 2]}, {key: 'b', val: true});
-    let newState = state.apply(tr);
-    t.is(newState.doc.sheets['shortid']['cellMetas'][2][2].marks.find(i=>i.key==='b').val,true);
-});
