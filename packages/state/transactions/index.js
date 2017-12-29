@@ -7,7 +7,7 @@ import shortid from 'shortid';
 
 const log = debug('excel:state:transaction');
 
-import {Value} from '../operations';
+import {Value, AddMark} from '../operations';
 
 export default class Transaction {
     constructor(state) {
@@ -35,11 +35,12 @@ export default class Transaction {
     }
 
     changeValue(m, v) {
-        this.ops.push(new Value({m, v}));
+        this.ops.push(Value.fromJSON({m, v}));
         return this;
     }
 
-    addMark(m, v) {
+    addMark(m, {key, val}) {
+        this.ops.push(AddMark.fromJSON({m, v: {key, val}}));
         return this;
     }
 

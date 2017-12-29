@@ -34,24 +34,24 @@ class CellMeta {
 
     static fromJS = CellMeta.fromJSON;
 
-    static fromJSON(object) {
-        const {f, fmt, marks = []} = object;
+    static fromJSON(object={}) {
+        const {f = null, fmt = null, marks = []} = object;
         const cell = new CellMeta({f, fmt, marks: marks.map(Mark.fromJSON)});
         return cell;
     }
 
-    toJSON() {
-        const object = {
-            f: this.f,
-            fmt: this.fmt,
-            marks: this.marks
-        };
-
-        return object;
-    }
-
-    toJS() {
-        return this.toJSON();
+    addMark(mark) {
+        let i = 0;
+        for (; i < this.marks.length; i++) {
+            if (this.marks[i].key === mark.key) {
+                break;
+            }
+        }
+        if (i === this.marks.length) {
+            this.marks.push(mark);
+        } else {
+            this.marks[i] = mark;
+        }
     }
 }
 
