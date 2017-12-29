@@ -68,6 +68,14 @@ class CellMeta {
     clearMark() {
         this.marks = [];
     }
+
+    setFormula(f) {
+        this.f = f;
+    }
+
+    setFmt(f) {
+        this.fmt = f;
+    }
 }
 
 CellMeta.prototype[MODEL_TYPES.CELLMeta] = true;

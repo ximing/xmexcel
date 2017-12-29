@@ -28,16 +28,12 @@ const DEFAULTS = {
 
 class Sheet {
 
-    constructor({title, cells, cellMetas, selection, mergeCells, hiddenRows, rowsHeight, colsWidth, fixed}) {
+    constructor({title, cells, cellMetas, selection, setting}) {
         this.title = title;
         this.cells = cells;
         this.cellMetas = cellMetas;
         this.selection = selection;
-        this.mergeCells = mergeCells;
-        this.hiddenRows = hiddenRows;
-        this.rowsHeight = rowsHeight;
-        this.colsWidth = colsWidth;
-        this.fixed = fixed;
+        this.setting = setting;
     }
 
     static create(attrs = {}) {
@@ -64,14 +60,7 @@ class Sheet {
             cells = generateEmptyCells(),
             cellMetas = {},
             selection = [0, 0, 0, 0],
-            mergeCells = [],
-            hiddenRows = [],
-            rowsHeight = [],
-            colsWidth = [],
-            fixed = {
-                fixedRowsTop: 0,
-                fixedColumnsLeft: 0
-            }
+            setting = {}
         } = object;
         if (typeof title !== 'string') {
             throw new Error('`Sheet.fromJSON` requires a block `text` string.');
@@ -91,11 +80,7 @@ class Sheet {
             cells,
             cellMetas: _cellMetas,
             selection,
-            mergeCells,
-            hiddenRows,
-            rowsHeight,
-            colsWidth,
-            fixed
+            setting
         });
         return sheet;
     }
@@ -118,6 +103,19 @@ class Sheet {
 
     toJS() {
         return this.toJSON();
+    }
+
+    getSetting(key) {
+        if (key) {
+            return this.setting[key];
+        } else {
+            return this.setting;
+        }
+    }
+
+    setSetting(key, value) {
+        this.setting[key] = value;
+        return this.setting;
     }
 }
 

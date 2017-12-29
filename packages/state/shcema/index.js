@@ -4,7 +4,7 @@
 'use strict';
 export default {
     marks: {
-        'bold': (node, data) => {
+        'b': (node, data) => {
             return node;
         },
         'color': (node, data) => {
