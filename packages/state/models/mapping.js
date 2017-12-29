@@ -22,7 +22,7 @@ export class MapResult {
 export default class Mapping {
 
     constructor(mapping) {
-        let r = mapping.r;
+        let r = mapping.r || [0, 0, 0, 0];
         if (r[2] == null) {
             r[2] = r[0];
         }
@@ -39,7 +39,7 @@ export default class Mapping {
             r[1] = r[3];
             r[3] = t;
         }
-        this.r = mapping.r.slice(0, 4);
+        this.r = r.slice(0, 4);
         this.id = mapping.id;
     }
 

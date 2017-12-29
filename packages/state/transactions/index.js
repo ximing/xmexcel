@@ -7,7 +7,10 @@ import shortid from 'shortid';
 
 const log = debug('excel:state:transaction');
 
-import {Value, AddMark, RemoveMark, ClearMark, SetFmt, SetFormula} from '../operations';
+import {
+    Value, AddMark, RemoveMark, ClearMark,
+    SetFmt, SetFormula, SetSheetSetting
+} from '../operations';
 
 export default class Transaction {
     constructor(state) {
@@ -61,6 +64,11 @@ export default class Transaction {
 
     setFormula(m, f) {
         this.ops.push(SetFormula.fromJSON({m, f}));
+        return this;
+    }
+
+    setSheetSetting(m, key, val) {
+        this.ops.push(SetSheetSetting.fromJSON({m, key, val}));
         return this;
     }
 }

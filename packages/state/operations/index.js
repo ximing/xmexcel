@@ -4,3 +4,4 @@
 
 export {AddMark, RemoveMark, ClearMark, SetFmt, SetFormula} from './mark';
 export {Value} from './value';
+export {SetSheetSetting} from './sheet';
