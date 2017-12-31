@@ -1,0 +1,29 @@
+.htContextMenu {
+    .htSeparator {
+        border-top: 1px solid #dedede !important;
+        .htItemWrapper{
+            height:0px;
+        }
+    }
+    .htItemWrapper {
+        font-size: 12px;
+    }
+    .wtHider {
+        .wtSpreader {
+            table.htCore {
+                background-color: #FFFFFF;
+                border: none;
+                border-bottom-left-radius: 0;
+                border-bottom-right-radius: 0;
+                box-shadow: 0 0 1px 1px rgba(135, 135, 135, .4);
+                tbody tr td{
+                    padding-top: 4px;
+                    &.htSeparator{
+                        padding: 0;
+                    }
+                }
+
+            }
+        }
+    }
+}
