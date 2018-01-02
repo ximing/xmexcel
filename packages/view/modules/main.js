@@ -196,11 +196,12 @@ export default class Main extends Base {
         });
     }
 
-    updateSettings() {
+    updateSettings(settings) {
+        this.hot.updateSettings(settings);
     }
 
-    loadData() {
-
+    loadData(data) {
+        this.hot.loadData(data);
     }
 
     setSelection(s, scrollToCell = true, changeListener = true) {

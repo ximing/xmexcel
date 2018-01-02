@@ -112,6 +112,12 @@ class Excel {
     getActiveId() {
         return this.activeSheetId;
     }
+
+    setActiveId(id) {
+        let newState = {...this, activeSheetId: id};
+        return Excel.fromJSON(newState);
+    }
+
 }
 
 Excel.prototype[MODEL_TYPES.EXCEL] = true;

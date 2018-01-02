@@ -53,7 +53,7 @@ class DXExcelView {
 
     dispatchTransaction = (tr) => {
         let newState = this.state.apply(tr);
-        console.log(newState, tr);
+        // console.log(newState, tr);
         this.updateState(newState);
     };
 
@@ -64,12 +64,16 @@ class DXExcelView {
             // update sheet setting
             // refresh toolbar View
             let needRender = false, loadData = false,
-                updateSetting = false, updateSelection = false;
+                updateSetting = false, updateSelection = false,
+                renderFooter = false;
             let doc = this.state.doc;
             let newDoc = newState.doc;
             if (doc !== newDoc) {
                 if (doc.activeSheetId !== newDoc.activeSheetId) {
-                    //TODO change Active Id
+                    // debugger
+                    loadData = true;
+                    updateSetting = true;
+                    renderFooter = true;
                 } else {
                     if (doc.sheets !== newDoc.sheets) {
                         if (doc.sheets[doc.activeSheetId] !== newDoc.sheets[newDoc.activeSheetId]) {
@@ -93,25 +97,32 @@ class DXExcelView {
             }
             this.state = newState;
             if (loadData && updateSetting) {
-                this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].setting);
                 this.mainModule.loadData(newDoc.sheets[newDoc.activeSheetId].cells);
-                this.mainModule.setSelection(newDoc.sheets[newDoc.activeSheetId].selection, true, true);
+                this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].setting);
+                this.mainModule.setSelection(newDoc.sheets[newDoc.activeSheetId].selection || [0, 0, 0, 0], true, true);
             } else if (loadData) {
                 this.mainModule.loadData(newDoc.sheets[newDoc.activeSheetId].cells);
             } else if (updateSetting) {
                 this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].setting);
             } else if (updateSelection) {
-                this.mainModule.setSelection(newDoc.sheets[newDoc.activeSheetId].selection, true, true);
+                this.mainModule.setSelection(newDoc.sheets[newDoc.activeSheetId].selection || [0, 0, 0, 0], true, true);
             } else if (needRender) {
                 this.mainModule.render();
             }
+            if (renderFooter) {
+                this.footerModule.render();
+            }
             this.observeChange = true;
         }
-    }
+    };
 
     registerModule(Module) {
         const m = new Module(this);
         this._moduleMap[m.getName()] = m;
+    }
+
+    getModule(name) {
+        return this._moduleMap[name]
     }
 
     dispatch = (tr) => {

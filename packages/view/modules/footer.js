@@ -6,6 +6,7 @@ import crel from 'crel';
 
 import Base from './base';
 import CONSTS from '../consts';
+import {getData} from '../utils/dom';
 
 export default class FxEditor extends Base {
     constructor(dom, view) {
@@ -21,7 +22,8 @@ export default class FxEditor extends Base {
         if (event.target) {
             if (event.target.nodeName.toLocaleUpperCase() === 'A' && event.target.className.includes('sheet-tab')) {
                 if (!event.target.className.includes('active')) {
-
+                    let id = getData(event.target, 'id');
+                    this.view.dispatch(this.view.state.tr.changeSheet(id));
                 }
             }
         }
@@ -42,7 +44,7 @@ export default class FxEditor extends Base {
         let tabs = this.view.state.doc.sheetOrder.map(item => {
             let className = `sheet-tab ${this.view.state.doc.activeSheetId === item ? 'active' : ''}`;
             return crel(
-                "a", {class: className},
+                "a", {class: className, 'data-id': item},
                 this.view.state.doc.sheets[item].title
             );
         });

@@ -58,3 +58,26 @@ export class ChangeSelection {
         }
     }
 }
+
+export class ChangeSheet {
+    constructor({m}) {
+        this.name = OP_NAME.CHANGE_SHEET;
+        this.m = m;
+    }
+
+    static fromJSON(object) {
+        object = {...object};
+        if (!Mapping.isMapping(object.m)) {
+            object.m = Mapping.create(object.m);
+        }
+        return new ChangeSheet(object);
+    }
+
+    apply(doc) {
+        try {
+            return OpResult.ok(doc.setActiveId(this.m.id));
+        } catch (err) {
+            return OpResult.fail(`操作的值超过表格空间限制${JSON.stringify(this)}`);
+        }
+    }
+}

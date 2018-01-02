@@ -10,7 +10,7 @@ const log = debug('excel:state:transaction');
 import {
     Value, AddMark, RemoveMark, ClearMark,
     SetFmt, SetFormula, SetSheetSetting,
-    ChangeSelection
+    ChangeSelection, ChangeSheet
 } from '../operations';
 
 export default class Transaction {
@@ -75,6 +75,11 @@ export default class Transaction {
 
     changeSelection(m) {
         this.ops.push(ChangeSelection.fromJSON({m}));
+        return this;
+    }
+
+    changeSheet(id) {
+        this.ops.push(ChangeSheet.fromJSON({m: {id}}));
         return this;
     }
 }
