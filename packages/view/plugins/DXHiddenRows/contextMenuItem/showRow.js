@@ -1,4 +1,4 @@
-import {rangeEach} from 'handsontable/commonjs/helpers/number';
+import {rangeEach} from '../../../handsontable/src/helpers/number';
 
 export default function showRowItem(hiddenRowsPlugin) {
     const beforeHiddenRows = [];

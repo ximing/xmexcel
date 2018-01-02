@@ -2,18 +2,18 @@
  * Created by ximing on 10/29/17.
  */
 'use strict';
-import BasePlugin from '../../handsontable/plugins/_base.js';
-import Hooks from '../../handsontable/pluginHooks';
+import BasePlugin from '../../handsontable/src/plugins/_base.js';
+import Hooks from '../../handsontable/src/pluginHooks';
 import SheetClip from './SheetClip';
-import {CellCoords, CellRange} from '../../handsontable/3rdparty/walkontable/src';
-import {getSelectionText} from '../../handsontable/helpers/dom/element';
-import {arrayEach} from '../../handsontable/helpers/array';
-import {rangeEach} from '../../handsontable/helpers/number';
-import {registerPlugin, getPlugin} from '../../handsontable/plugins';
+import {CellCoords, CellRange} from '../../handsontable/src/3rdparty/walkontable/src';
+import {getSelectionText} from '../../handsontable/src/helpers/dom/element';
+import {arrayEach} from '../../handsontable/src/helpers/array';
+import {rangeEach} from '../../handsontable/src/helpers/number';
+import {registerPlugin, getPlugin} from '../../handsontable/src/plugins';
 import Contenteditable from './contenteditable.js';
-import EventManager from '../../handsontable/eventManager';
+import EventManager from '../../handsontable/src/eventManager';
 import PasteEvent from './pasteEvent';
-import Bootstrap from '../../bootstrap';
+// import Bootstrap from '../../bootstrap';
 
 import './dxCopyPaste.scss';
 
@@ -47,7 +47,7 @@ class DXCopyPaste extends BasePlugin {
     constructor(hotInstance) {
         super(hotInstance);
 
-        this.boot = Bootstrap.getSingleton();
+        // this.boot = Bootstrap.getSingleton();
         /**
          * Event manager
          *

@@ -4,14 +4,22 @@
 'use strict';
 import './handsontable/src/css/handsontable.css';
 
+import MainModules from './modules/main';
+
 localStorage.debug = 'excel:*';
 
 class DXExcelView {
     constructor(element, option) {
         this.element = element;
         this.state = option.state;
-        this.dispatchTransaction = option.dispatchTransaction;
+        this.dispatchTransaction = option.dispatchTransaction || this.dispatchTransaction;
+        this._moduleMap = {};
     }
+
+    dispatchTransaction = (tr) => {
+        let newState = this.state.apply(tr);
+        this.updateState(newState);
+    };
 
     updateState(newState) {
         if (this.state !== newState) {
@@ -27,13 +35,9 @@ class DXExcelView {
     }
 
     registerModule(Module) {
+
     }
 
-    applyCommand(command, source) {
-    }
-
-    onChange(type, callback) {
-    }
 }
 
 export default DXExcelView;

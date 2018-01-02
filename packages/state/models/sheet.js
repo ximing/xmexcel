@@ -52,8 +52,6 @@ class Sheet {
         return !!(any && any[MODEL_TYPES.SHEET]);
     }
 
-    static fromJS = Sheet.fromJSON;
-
     static fromJSON(object) {
         const {
             title,
@@ -116,6 +114,11 @@ class Sheet {
     setSetting(key, value) {
         this.setting[key] = value;
         return this.setting;
+    }
+
+    getCellMeta(row, col) {
+        let rowData = this.cellMetas[row] || {};
+        return rowData[col];
     }
 }
 

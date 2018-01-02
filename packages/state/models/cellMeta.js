@@ -32,8 +32,6 @@ class CellMeta {
         return !!(any && any[MODEL_TYPES.CELLMeta]);
     }
 
-    static fromJS = CellMeta.fromJSON;
-
     static fromJSON(object = {}) {
         const {f = null, fmt = null, marks = []} = object;
         const cell = new CellMeta({f, fmt, marks: marks.map(Mark.fromJSON)});
@@ -75,6 +73,22 @@ class CellMeta {
 
     setFmt(f) {
         this.fmt = f;
+    }
+
+    getMarks() {
+        return this.marks;
+    }
+
+    hasMark(key) {
+        return !!this.marks.find(item => item.key === key);
+    }
+
+    getFmt() {
+        return this.fmt;
+    }
+
+    getFormula() {
+        return this.f;
     }
 }
 

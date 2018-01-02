@@ -2,7 +2,7 @@
  * Created by ximing on 10/30/17.
  */
 'use strict';
-import {CellCoords, Selection} from '../handsontable/3rdparty/walkontable/src';
+import {CellCoords, Selection} from '../handsontable/src/3rdparty/walkontable/src';
 import {extractLabel} from 'hot-formula-parser';
 import _ from 'lodash';
 import CONSTS from '../consts';

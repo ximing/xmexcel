@@ -9,6 +9,7 @@ import Schema from './shcema';
 import Transaction from './transactions';
 
 export const ExcelModel = Doc;
+
 export default class ExcelState {
     constructor({doc, schema, plugins = [], meta, pluginState = {}} = {}) {
         this.doc = doc;
@@ -50,4 +51,5 @@ export default class ExcelState {
         let doc = tr.apply(this);
         return new ExcelState({doc, schema: this.schema, plugins: this.plugins, meta: this.meta, pluginState});
     }
+
 }

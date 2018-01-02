@@ -3,7 +3,6 @@
  */
 'use strict';
 import _ from 'lodash';
-import {Record, Set} from 'immutable';
 import MODEL_TYPES from '../constants/model-types';
 
 const isPlainObject = _.isPlainObject;

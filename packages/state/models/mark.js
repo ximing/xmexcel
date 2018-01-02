@@ -20,7 +20,6 @@ class Mark {
     static isMark(any) {
         return !!(any && any[MODEL_TYPES.MARK]);
     }
-
 }
 
 Mark.prototype[MODEL_TYPES.MARK] = true;

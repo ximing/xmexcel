@@ -6,6 +6,7 @@ const webpack = require('webpack');
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 var FriendlyErrorsPlugin = require('friendly-errors-webpack-plugin');
+let env = process.env.NODE_ENV || 'development';
 
 module.exports = {
     entry: {
@@ -56,9 +57,8 @@ module.exports = {
                     loader: 'babel-loader',
                     options: {
                         'presets': [
-                            ['es2015', {
-                                'modules': false
-                            }], 'stage-0', 'react'
+                            ['es2015', {'modules': false}],
+                            'stage-0', 'react'
                         ],
                         'env': {},
                         'ignore': [
@@ -67,7 +67,9 @@ module.exports = {
                         ],
                         'plugins': [
                             'react-hot-loader/babel',
-                            'transform-decorators-legacy'
+                            'transform-decorators-legacy',
+                            "transform-es2015-modules-commonjs",
+                            'transform-class-properties'
                         ]
                     }
                 }
@@ -110,10 +112,14 @@ module.exports = {
         new webpack.HotModuleReplacementPlugin(),
         new webpack.optimize.ModuleConcatenationPlugin(),
         new webpack.DllReferencePlugin({
-            context: path.join(__dirname, "demo", "dll"),
             context: __dirname,
             manifest: require("./demo/dll/manifest.json")
         }),
+        new webpack.DefinePlugin({
+            'process.env': {
+                NODE_ENV: JSON.stringify(env)
+            }
+        }),
         new FriendlyErrorsPlugin()
-        ]
+    ]
 };

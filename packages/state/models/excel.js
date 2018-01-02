@@ -41,8 +41,6 @@ class Excel {
         return !!(any && any[MODEL_TYPES.EXCEL]);
     }
 
-    static fromJS = Excel.fromJSON;
-
     static fromJSON(object) {
         const {
             sheets,
@@ -91,7 +89,15 @@ class Excel {
             newValue = {...targetValue, [pathArr[i]]: newValue};
             targetValue = this;
         }
-        return {...this,...newValue};
+        return {...this, ...newValue};
+    }
+
+    getActiveData() {
+        return this.getActiveSheet().cells;
+    }
+
+    getActiveSheet() {
+        return this.sheets[this.activeSheetId];
     }
 }
 

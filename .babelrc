@@ -1,10 +1,10 @@
 {
   "presets": [
+    "es2015"
   ],
   "env": {
     "test": {
       "presets": [
-        "es2015",
         "stage-0"
       ],
       "plugins": [
@@ -21,5 +21,9 @@
     "node_modules/**",
     "dist"
   ],
-  "plugins": []
+  "plugins": [
+    "transform-runtime",
+    "transform-es2015-modules-commonjs",
+    "transform-export-extensions"
+  ]
 }

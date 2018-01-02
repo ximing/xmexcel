@@ -4,26 +4,27 @@
 
 'use strict';
 import _ from 'jquery';
-import Handsontable from '../handsontable/index';
+import {toLabel} from 'hot-formula-parser';
+
+import Handsontable from '../handsontable/src/index';
 import {
     empty, addClass, innerWidth, getCaretPosition, getComputedStyle,
     setCaretPosition
-} from '../handsontable/helpers/dom/element';
-import TextEditor from '../handsontable/editors/textEditor';
-import {EditorState} from '../handsontable/editors/_baseEditor';
-import {CellCoords} from '../handsontable/3rdparty/walkontable/src';
-import {KEY_CODES} from '../handsontable/helpers/unicode';
+} from '../handsontable/src/helpers/dom/element';
+import TextEditor from '../handsontable/src/editors/textEditor';
+import {EditorState} from '../handsontable/src/editors/_baseEditor';
+import {CellCoords} from '../handsontable/src/3rdparty/walkontable/src';
+import {KEY_CODES} from '../handsontable/src/helpers/unicode';
 import {
     stopPropagation,
     stopImmediatePropagation,
     isImmediatePropagationStopped
-} from '../handsontable/helpers/dom/event';
+} from '../handsontable/src/helpers/dom/event';
 
 import FormulaSelection from './FormulaSelection';
 import {isFormula} from '../utils/util';
-import {toLabel} from 'hot-formula-parser';
 import CONSTS from '../consts';
-import Bootstrap from '../bootstrap';
+// import Bootstrap from '../bootstrap';
 
 const onBeforeKeyDown = function onBeforeKeyDown(event) {
     let
@@ -124,7 +125,7 @@ class DXExcelEditor extends TextEditor {
 
     init() {
         super.init();
-        this.bootstrap = Bootstrap.getSingleton();
+        // this.bootstrap = Bootstrap.getSingleton();
     }
 
     createElements() {
@@ -398,12 +399,6 @@ class DXExcelEditor extends TextEditor {
         } else {
             selection = [this.row, this.col, null, null];
         }
-
-        // if (isFormula(value[0][0])) {
-        //     this.bootstrap.getMainModule().setCellMeta(this.row, this.col, {f: value[0][0]});
-        // } else {
-        //     this.instance.populateFromArray(selection[0], selection[1], value, selection[2], selection[3], 'edit');
-        // }
 
         this.instance.populateFromArray(selection[0], selection[1], value, selection[2], selection[3], 'edit');
 
