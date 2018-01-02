@@ -11,6 +11,7 @@ import FormulaSelection from '../plugins/FormulaSelection';
 import NumFmt from '../utils/numFmt';
 import CONSTS from '../consts';
 import Base from './base';
+import {mergeCellData, isFormula} from '../utils/util';
 
 export default class Main extends Base {
     constructor(dom, view) {
@@ -36,7 +37,7 @@ export default class Main extends Base {
             fixedRowsTop: 0,
             width: this.width,
             height: this.height,
-            observeChanges: true,
+            observeChanges: false,
             mergeCells: true,
             dxUndoRedo: true,
             copyPaste: false,
@@ -78,6 +79,32 @@ export default class Main extends Base {
             },
             afterRowResize: (currentRow, newSize) => {
                 // boot.applyCommand(new ResizeRow(this.getActiveSheetId(), currentRow, newSize));
+            },
+            beforeChange: (changes, source) => {
+                if (this.view.observeChange) {
+                    let meta;
+                    let tr = this.view.state.tr;
+                    for (let i = 0, l = changes.length; i < l; i++) {
+                        let change = changes[i];
+                        if (change[2] === change[3]) {
+                            changes[i] = null;
+                        } else if (isFormula(change[3])) {
+                            tr.setFormula({
+                                id: this.view.state.doc.getActiveId(),
+                                r: [change[0], change[1]]
+                            }, change[3]);
+                        } else if ((meta = this.view.state.doc.getActiveCellMeta(change[0], change[1]))
+                            && isFormula(meta.f) && !isFormula(change[3])) {
+                            tr.setFormula({id: this.view.state.doc.getActiveId(), r: [change[0], change[1]]}, null);
+                        } else {
+                            tr.changeValue({
+                                id: this.view.state.doc.getActiveId(),
+                                r: [change[0], change[1]]
+                            }, change[3]);
+                        }
+                    }
+                    this.view.dispatchTransaction(tr);
+                }
             },
             renderer: (instance, td, row, col, prop, value, cellProperties) => {
                 let cellMeta = this.view.state.doc.getActiveSheet().getCellMeta(row, col);
@@ -152,9 +179,16 @@ export default class Main extends Base {
             afterRemoveRow(...args) {
                 // console.log('afterRemoveRow', args);
             },
-            afterSelectionEnd(...args) {
-                // console.log('afterSelectionEnd', args);
-                // boot.emit('selection', ...args);
+            afterSelectionEnd: (...args) => {
+                if (this.view.observeChange) {
+                    let selection = this.view.state.doc.getActiveSelection();
+                    if (args[0] !== selection[0] || args[1] !== selection[1]
+                        || args[2] !== selection[2] || args[3] !== selection[3]) {
+                        let tr = this.view.state.tr;
+                        tr.changeSelection({id: this.view.state.doc.getActiveId(), r: args});
+                        this.view.dispatchTransaction(tr);
+                    }
+                }
             },
             afterSetDataAtCell(data, type) {
                 // console.log('afterSetDataAtCell', data, type);
@@ -168,10 +202,14 @@ export default class Main extends Base {
     }
 
     updateSettings() {
+    }
+
+    loadData() {
 
     }
 
-    updateData() {
-
+    setSelection(s, scrollToCell = true, changeListener = true) {
+        let [row, col, endRow, endCol] = s;
+        this.hot.selectCell(row, col, endRow, endCol, scrollToCell, changeListener);
     }
 }

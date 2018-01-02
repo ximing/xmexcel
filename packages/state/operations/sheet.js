@@ -33,3 +33,28 @@ export class SetSheetSetting {
         }
     }
 }
+
+export class ChangeSelection {
+    constructor({m}) {
+        this.name = OP_NAME.CHANGE_SELECTION;
+        this.m = m;
+    }
+
+    static fromJSON(object) {
+        object = {...object};
+        if (!Mapping.isMapping(object.m)) {
+            object.m = Mapping.create(object.m);
+        }
+        return new SetSheetSetting(object);
+    }
+
+    apply(doc) {
+        try {
+            let sheet = new Sheet(doc.sheets[this.m.id]);
+            sheet.changeSelection(this.m.r);
+            return OpResult.ok(doc.generateNewState(`sheets/${this.m.id}`, sheet));
+        } catch (err) {
+            return OpResult.fail(`操作的值超过表格空间限制${JSON.stringify(this)}`);
+        }
+    }
+}

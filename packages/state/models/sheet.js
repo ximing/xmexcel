@@ -120,6 +120,11 @@ class Sheet {
         let rowData = this.cellMetas[row] || {};
         return rowData[col] || CellMeta.fromJSON();
     }
+
+    changeSelection(selection) {
+        this.selection = selection;
+        return this.selection;
+    }
 }
 
 Sheet.prototype[MODEL_TYPES.SHEET] = true;

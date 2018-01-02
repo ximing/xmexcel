@@ -89,15 +89,28 @@ class Excel {
             newValue = {...targetValue, [pathArr[i]]: newValue};
             targetValue = this;
         }
-        return {...this, ...newValue};
+        //TODO 这里会重新生成一个state ，需要做差量化的类似  immutable的 生成器
+        return Excel.fromJSON({...this, ...newValue});
     }
 
     getActiveData() {
         return this.getActiveSheet().cells;
     }
 
+    getActiveCellMeta(row, col) {
+        return this.getActiveSheet().getCellMeta(row, col);
+    }
+
+    getActiveSelection() {
+        return this.getActiveSheet().selection;
+    }
+
     getActiveSheet() {
         return this.sheets[this.activeSheetId];
+    }
+
+    getActiveId() {
+        return this.activeSheetId;
     }
 }
 

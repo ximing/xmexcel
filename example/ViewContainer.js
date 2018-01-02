@@ -13,8 +13,8 @@ import {defaultData} from '../test/lib/index';
 export default class ViewContainer extends Component {
 
     componentDidMount() {
-        console.log(defaultData, this.body)
-        new XMExcelView(this.body, {
+        console.log(defaultData, this.body);
+        window.excelView = new XMExcelView(this.body, {
             state: XMExcelState.create({
                 doc: defaultData
             })

@@ -24,7 +24,6 @@ import {
 import FormulaSelection from './FormulaSelection';
 import {isFormula} from '../utils/util';
 import CONSTS from '../consts';
-// import Bootstrap from '../bootstrap';
 
 const onBeforeKeyDown = function onBeforeKeyDown(event) {
     let
@@ -135,7 +134,6 @@ export default function (view) {
             this.textareaStyle.height = 0;
             this.textareaStyle.backgroundColor = 'blue';
             this.textareaStyle.color = 'blue';
-            // addClass(this.TEXTAREA, 'dx-excel-cell-editor');
             this.TEXTAREA.className = 'handsontableInputHolder dx-excel-cell-editor';
             this.$TEXTAREA = $(this.TEXTAREA);
             empty(this.TEXTAREA_PARENT);
