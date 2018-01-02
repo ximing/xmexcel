@@ -12,9 +12,7 @@ import NumFmt from '../utils/numFmt';
 import CONSTS from '../consts';
 import Base from './base';
 
-Handsontable.editors.registerEditor('text', DXExcelEditor);
-
-export default class Main extends Base{
+export default class Main extends Base {
     constructor(dom, view) {
         super();
         this.name = CONSTS.moduleNames.MAIN;
@@ -23,6 +21,7 @@ export default class Main extends Base{
         let {width, height} = this.dom.getBoundingClientRect();
         this.width = width;
         this.height = height;
+        Handsontable.editors.registerEditor('text', DXExcelEditor(view));
         this.setUpHandsontable();
     }
 
@@ -83,7 +82,7 @@ export default class Main extends Base{
             renderer: (instance, td, row, col, prop, value, cellProperties) => {
                 let cellMeta = this.view.state.doc.getActiveSheet().getCellMeta(row, col);
                 if (cellMeta) {
-                    cellMeta.getMarks.forEach(mark => {
+                    cellMeta.getMarks().forEach(mark => {
                         if (this.view.state.schema.marks[mark.key]) {
                             this.view.state.schema.marks[mark.key](td, mark.val);
                         }

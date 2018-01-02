@@ -1,17 +1,20 @@
 .handsontable th.ht__highlight {
     background-color: #e6f0ff;
 }
+
 .handsontable th {
-//background-color: #ffffff;
+    //background-color: #ffffff;
     background-color: #f7f7f7;
-//color: #5292f7;
+    //color: #5292f7;
     font-weight: normal;
     white-space: nowrap;
 }
+
 .handsontable td {
     color: #333333;
     white-space: pre;
 }
+
 .wtSpreader {
 }
 
@@ -44,6 +47,7 @@
         }
     }
 }
+
 .ht_clone_top_left_corner.handsontable {
     .wtHolder .wtHider .htCore tbody tr {
         td:last-child {
@@ -56,6 +60,7 @@
         }
     }
 }
+
 .ht_clone_left.handsontable {
     tbody {
         tr {
@@ -77,3 +82,10 @@
         visibility: visible !important;
     }
 }
+
+.dx-excel-cell-editor {
+    outline: none;
+    padding: 0 3px;
+    border: 2px solid rgb(82, 146, 247);
+}
+

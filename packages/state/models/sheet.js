@@ -118,7 +118,7 @@ class Sheet {
 
     getCellMeta(row, col) {
         let rowData = this.cellMetas[row] || {};
-        return rowData[col];
+        return rowData[col] || CellMeta.fromJSON();
     }
 }
 
