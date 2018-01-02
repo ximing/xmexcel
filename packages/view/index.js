@@ -53,7 +53,7 @@ class DXExcelView {
 
     dispatchTransaction = (tr) => {
         let newState = this.state.apply(tr);
-        // console.log(newState, tr);
+        console.log(newState, tr);
         this.updateState(newState);
     };
 

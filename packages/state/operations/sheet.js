@@ -45,7 +45,7 @@ export class ChangeSelection {
         if (!Mapping.isMapping(object.m)) {
             object.m = Mapping.create(object.m);
         }
-        return new SetSheetSetting(object);
+        return new ChangeSelection(object);
     }
 
     apply(doc) {

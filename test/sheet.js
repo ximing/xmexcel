@@ -13,13 +13,19 @@ let state = ExcelState.create({
 
 
 test('change sheet setting', (t) => {
-    let state = ExcelState.create({
-        doc: defaultData
-    });
     let tr = state.tr.setSheetSetting({id: 'shortid'}, 'mergeCells', [[5, 5, 7, 7]]);
     let newState = state.apply(tr);
     t.is(
         JSON.stringify(newState.doc.sheets['shortid']['setting']['mergeCells'], null, 0),
         JSON.stringify([[5, 5, 7, 7]], null, 0)
+    );
+});
+
+test('change sheet selection', (t) => {
+    let tr = state.tr.changeSelection({id: 'shortid', r: [3, 3, 3, 3]});
+    let newState = state.apply(tr);
+    t.is(
+        JSON.stringify(newState.doc.sheets['shortid']['selection'], null, 0),
+        JSON.stringify([3, 3, 3, 3], null, 0)
     );
 });

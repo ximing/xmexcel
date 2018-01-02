@@ -90,7 +90,7 @@ class Excel {
             targetValue = this;
         }
         //TODO 这里会重新生成一个state ，需要做差量化的类似  immutable的 生成器
-        return Excel.fromJSON({...this, ...newValue});
+        return Excel.fromJSON({...this, sheets: newValue});
     }
 
     getActiveData() {
