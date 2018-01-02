@@ -196,11 +196,6 @@ export default class Main extends Base {
         });
     }
 
-
-    render() {
-
-    }
-
     updateSettings() {
     }
 

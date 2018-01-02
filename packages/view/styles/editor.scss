@@ -1,0 +1,60 @@
+.xm-excel-editor {
+    position: absolute;
+    top: 0px;
+    left: 0px;
+    right: 0px;
+    bottom: 0px;
+    .xm-editor-wrap {
+        position: absolute;
+        top: 0px;
+        left: 0px;
+        right: 0px;
+        height: 25px;
+        border-top: 1px solid #dddddd;
+        background: #f0f0f0;
+        display: flex;
+        flex-direction: row;
+        .xm-left-label {
+            width: 52px;
+            border-right: 1px solid #dddddd;
+            text-align: center;
+            vertical-align: middle;
+            line-height: 25px;
+            img{
+                width: 12px;
+            }
+        }
+        .xm-sheet-fx-editor {
+            background: #FFFFFF;
+            width: 100%;
+            outline: none;
+            height: 25px;
+            line-height: 25px;
+            padding: 0 5px;
+            font-size: 13px;
+        }
+    }
+    .xm-view-wrap {
+        position: absolute;
+        top: 25px;
+        left: 0px;
+        right: 0px;
+        bottom: 30px;
+        .xm-sheet-view {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+        }
+    }
+    .xm-footer-wrap {
+        position: absolute;
+        bottom: 0px;
+        left: 0px;
+        right: 0px;
+        height: 30px;
+        background: #f0f0f0;
+        border-top: 1px solid #dddddd;
+    }
+}
