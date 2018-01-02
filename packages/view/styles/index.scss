@@ -1,4 +1,4 @@
-$primary-color: #118bfb;
+$primary: #3974CC;
 
 .handsontable th.ht__highlight {
     background-color: #e6f0ff;
@@ -13,7 +13,7 @@ $primary-color: #118bfb;
         height: 100%;
         top: 0;
         right: 0px;
-        background: $primary-color;
+        background: $primary;
     }
 }
 
@@ -26,7 +26,7 @@ $primary-color: #118bfb;
         width: 100%;
         bottom: 0;
         left: 0;
-        background: $primary-color;
+        background: $primary;
     }
 }
 

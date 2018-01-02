@@ -9,6 +9,10 @@ export default {
      */
     moduleNames: {
         'MAIN': 'MAIN',
+        'FX_EDITOR': 'FX_EDITOR',
+        'FOOTER': 'FX_EDITOR',
+
+
         'STYLE': 'STYLE',
         'VIEW': 'VIEW',
         'HISTORY': 'history',
