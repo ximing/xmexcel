@@ -2,6 +2,7 @@
  * Created by yeanzhi on 17/4/12.
  */
 'use strict';
+import './index.scss';
 import React, {Component} from "react";
 import rab, {connect, createAction} from 'rabjs/index.js';
 import {Route, routerRedux, Redirect, Switch} from 'rabjs/router';

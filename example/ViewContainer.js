@@ -13,7 +13,7 @@ import {defaultData} from '../test/lib/index';
 export default class ViewContainer extends Component {
 
     componentDidMount() {
-        console.log(defaultData)
+        console.log(defaultData, this.body)
         new XMExcelView(this.body, {
             state: XMExcelState.create({
                 doc: defaultData
@@ -23,12 +23,11 @@ export default class ViewContainer extends Component {
 
     render() {
         return (
-            <div>
+            <div className="view">
                 <div id="header">
                     这是一个header
                 </div>
                 <div id="body" ref={r => this.body = r}>
-
                 </div>
             </div>
         )

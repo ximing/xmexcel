@@ -10,11 +10,13 @@ import DXExcelEditor from '../plugins/DXExcelEditor';
 import FormulaSelection from '../plugins/FormulaSelection';
 import NumFmt from '../utils/numFmt';
 import CONSTS from '../consts';
+import Base from './base';
 
 Handsontable.editors.registerEditor('text', DXExcelEditor);
 
-export default class Main {
+export default class Main extends Base{
     constructor(dom, view) {
+        super();
         this.name = CONSTS.moduleNames.MAIN;
         this.dom = dom;
         this.view = view;
@@ -26,7 +28,7 @@ export default class Main {
 
     setUpHandsontable() {
         window.handsontableInstance = this.hot = new Handsontable(this.dom, {
-            data: this.view.doc.getActiveData(),
+            data: this.view.state.doc.getActiveData(),
             colHeaders: true,
             rowHeaders: true,
             maxCols: 20000,
@@ -59,17 +61,17 @@ export default class Main {
                 };
             },
             rowHeights: (index) => {
-                let meta = this.getActiveMeta();
-                if (meta && meta['row'] && meta['row'][index]) {
-                    return meta['row'][index]['h'] || 23;
-                }
+                // let meta = this.getActiveMeta();
+                // if (meta && meta['row'] && meta['row'][index]) {
+                //     return meta['row'][index]['h'] || 23;
+                // }
                 return 23;
             },
             colWidths: (index) => {
-                let meta = this.getActiveMeta();
-                if (meta && meta['col'] && meta['col'][index]) {
-                    return meta['col'][index]['w'] || 100;
-                }
+                // let meta = this.getActiveMeta();
+                // if (meta && meta['col'] && meta['col'][index]) {
+                //     return meta['col'][index]['w'] || 100;
+                // }
                 return 100;
             },
             afterColumnResize: (currentCol, newSize) => {
@@ -79,7 +81,7 @@ export default class Main {
                 // boot.applyCommand(new ResizeRow(this.getActiveSheetId(), currentRow, newSize));
             },
             renderer: (instance, td, row, col, prop, value, cellProperties) => {
-                let cellMeta = this.view.state.getActiveSheet().getCellMeta(row, col);
+                let cellMeta = this.view.state.doc.getActiveSheet().getCellMeta(row, col);
                 if (cellMeta) {
                     cellMeta.getMarks.forEach(mark => {
                         if (this.view.state.schema.marks[mark.key]) {

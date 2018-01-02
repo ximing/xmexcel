@@ -3,8 +3,8 @@
  */
 'use strict';
 import './handsontable/src/css/handsontable.css';
-
-import MainModules from './modules/main';
+import './styles/index.scss';
+import MainModule from './modules/main';
 
 localStorage.debug = 'excel:*';
 
@@ -14,6 +14,12 @@ class DXExcelView {
         this.state = option.state;
         this.dispatchTransaction = option.dispatchTransaction || this.dispatchTransaction;
         this._moduleMap = {};
+        this.initModules();
+    }
+
+    initModules() {
+        let mainModule = new MainModule(this.element, this);
+        this._moduleMap[mainModule.getName()] = mainModule;
     }
 
     dispatchTransaction = (tr) => {

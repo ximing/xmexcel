@@ -24,7 +24,7 @@ module.exports = {
     devtool: 'cheap-module-eval-source-map',
 
     devServer: {
-        contentBase: [path.join(__dirname,'demo'), path.join(__dirname, 'dist')],
+        contentBase: [path.join(__dirname, 'demo'), path.join(__dirname, 'dist')],
         overlay: true,
         port: 11122,
         host: '0.0.0.0',
@@ -51,28 +51,30 @@ module.exports = {
         rules: [
             {
                 test: /\.js$/,
-                use:[{
-                    loader:'react-hot-loader/webpack'
-                },                    {
-                    loader: 'babel-loader',
-                    options: {
-                        'presets': [
-                            ['es2015', {'modules': false}],
-                            'stage-0', 'react'
-                        ],
-                        'env': {},
-                        'ignore': [
-                            'node_modules/**',
-                            'dist'
-                        ],
-                        'plugins': [
-                            'react-hot-loader/babel',
-                            'transform-decorators-legacy',
-                            "transform-es2015-modules-commonjs",
-                            'transform-class-properties'
-                        ]
+                use: [
+                    //     {
+                    //     loader:'react-hot-loader/webpack'
+                    // },
+                    {
+                        loader: 'babel-loader',
+                        options: {
+                            'presets': [
+                                ['es2015', {'modules': false}],
+                                'stage-0', 'react'
+                            ],
+                            'env': {},
+                            'ignore': [
+                                'node_modules/**',
+                                'dist'
+                            ],
+                            'plugins': [
+                                // 'react-hot-loader/babel',
+                                'transform-decorators-legacy',
+                                "transform-es2015-modules-commonjs",
+                                'transform-class-properties'
+                            ]
+                        }
                     }
-                }
                 ],
                 exclude: /node_modules/
             },
@@ -105,9 +107,9 @@ module.exports = {
     plugins: [
         new webpack.NamedModulesPlugin(),
         new HtmlWebpackPlugin({
-            title:'test',
-            template:"example/tpl.ejs",
-            inject:false
+            title: 'test',
+            template: "example/tpl.ejs",
+            inject: false
         }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.optimize.ModuleConcatenationPlugin(),
