@@ -5,7 +5,6 @@
 import shortid from 'shortid';
 
 import Doc from './models/excel';
-import Schema from './shcema';
 import Transaction from './transactions';
 
 export const ExcelModel = Doc;
@@ -24,7 +23,7 @@ export default class ExcelState {
         return new Transaction(this);
     }
 
-    static create({doc, schema = Schema, plugins = [], meta = {}} = {}) {
+    static create({doc, schema = {marks: []}, plugins = [], meta = {}} = {}) {
         let pluginState = {};
         plugins.forEach(plugin => {
             pluginState[plugin.key] = plugin.spec.init();

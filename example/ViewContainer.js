@@ -9,6 +9,7 @@ import XMExcelView from '../packages/view/index';
 import XMExcelState from '../packages/state/index';
 
 import {defaultData} from '../test/lib/index';
+import schema from '../packages/schema/index';
 
 export default class ViewContainer extends Component {
 
@@ -16,9 +17,10 @@ export default class ViewContainer extends Component {
         console.log(defaultData, this.body);
         window.excelView = new XMExcelView(this.body, {
             state: XMExcelState.create({
-                doc: defaultData
+                doc: defaultData,
+                schema: schema
             })
-        });
+        })
     }
 
     render() {

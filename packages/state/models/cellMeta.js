@@ -34,6 +34,7 @@ class CellMeta {
 
     static fromJSON(object = {}) {
         const {f = null, fmt = null, marks = []} = object;
+        // console.log('marks', marks);
         const cell = new CellMeta({f, fmt, marks: marks.map(Mark.fromJSON)});
         return cell;
     }

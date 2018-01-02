@@ -15,44 +15,41 @@ export default {
         }
     },
     'i': (node, data) => {
-        if (data.val) {
+        if (data) {
             addStyle(node, 'fontStyle', 'italic');
         }
     },
     's': (node, data) => {
-        if (data.val) {
+        if (data) {
             appendStyle(node, 'textDecoration', 'line-through');
         }
     },
     'u': (node, data) => {
-        if (data.val) {
+        if (data) {
             appendStyle(node, 'textDecoration', 'underline');
         }
     },
     'color': (node, data) => {
-        if (data.val) {
-            addStyle(node, 'color', data.val);
+        if (data) {
+            addStyle(node, 'color', data);
         }
     },
     'bgColor': (node, data) => {
-        if (data.val) {
-            addStyle(node, 'background-color', data.val);
+        if (data) {
+            addStyle(node, 'background-color', data);
         }
     },
-    'center': (node, data) => {
-
-    },
     'fontSize': (node, data) => {
-        if (data.val) {
-            addStyle(node, 'font-size', data.val);
+        if (data) {
+            addStyle(node, 'font-size', data);
             addStyle(node, 'line-height', 1.2);
-            addStyle(node, 'height', data.val || '23px');
+            addStyle(node, 'height', data || '23px');
         }
     },
     'v': (node, data) => {
-        addStyle(node, 'vertical-align', data.val);
+        addStyle(node, 'vertical-align', data);
     },
     'h': (node, data) => {
-        addStyle(node, 'text-align', data.val);
+        addStyle(node, 'text-align', data);
     }
 };

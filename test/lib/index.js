@@ -54,7 +54,30 @@ export const defaultData = {
         shortid1: {
             title: "表格2",
             cells: shortid1,
-            cellMetas: {},
+            cellMetas: {
+                "0": {
+                    "0": {
+                        "marks": [{
+                            key: "b",
+                            val: true
+                        }, {
+                            key: "i",
+                            val: true
+                        }, {
+                            key: "color",
+                            val: "#ffffff"
+                        }, {
+                            key: "bgColor",
+                            val: "#3fdaff"
+                        }
+                        ]
+                    },
+                    "1": {},
+                    "2": {"f": "=SUM($d$1:d$3,$b2)"},
+                    "3": {},
+                    "5": {}
+                }
+            }
 
         },
     },
