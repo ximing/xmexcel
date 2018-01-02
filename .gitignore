@@ -43,3 +43,4 @@ public
 .DS_Store
 !src/assets
 dist
+demo/dll
