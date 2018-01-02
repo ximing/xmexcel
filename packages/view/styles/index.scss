@@ -1,5 +1,33 @@
+$primary-color: #118bfb;
+
 .handsontable th.ht__highlight {
     background-color: #e6f0ff;
+}
+
+.ht_clone_left table th.ht__highlight {
+    position: relative;
+    &:after {
+        content: ' ';
+        position: absolute;
+        width: 1px;
+        height: 100%;
+        top: 0;
+        right: 0px;
+        background: $primary-color;
+    }
+}
+
+.ht_clone_top table th.ht__highlight {
+    position: relative;
+    &:after {
+        content: ' ';
+        position: absolute;
+        height: 1px;
+        width: 100%;
+        bottom: 0;
+        left: 0;
+        background: $primary-color;
+    }
 }
 
 .handsontable th {
