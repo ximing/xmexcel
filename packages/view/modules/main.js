@@ -103,7 +103,7 @@ export default class Main extends Base {
                             }, change[3]);
                         }
                     }
-                    this.view.dispatchTransaction(tr);
+                    this.view.dispatch(tr);
                 }
             },
             renderer: (instance, td, row, col, prop, value, cellProperties) => {
@@ -186,7 +186,7 @@ export default class Main extends Base {
                         || args[2] !== selection[2] || args[3] !== selection[3]) {
                         let tr = this.view.state.tr;
                         tr.changeSelection({id: this.view.state.doc.getActiveId(), r: args});
-                        this.view.dispatchTransaction(tr);
+                        this.view.dispatch(tr);
                     }
                 }
             },
@@ -206,5 +206,13 @@ export default class Main extends Base {
     setSelection(s, scrollToCell = true, changeListener = true) {
         let [row, col, endRow, endCol] = s;
         this.hot.selectCell(row, col, endRow, endCol, scrollToCell, changeListener);
+    }
+
+    getHot() {
+        return this.hot;
+    }
+
+    render() {
+        this.hot.render();
     }
 }

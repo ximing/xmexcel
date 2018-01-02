@@ -36,7 +36,7 @@ class DXExcelView {
                 crel('div', {class: 'xm-sheet-view', id: 'xmSheetView'})
             ),
             crel(
-                'div', {class: 'xm-footer-wrap',id: 'xmSheetFooter'}
+                'div', {class: 'xm-footer-wrap', id: 'xmSheetFooter'}
             )
         );
         this.element.appendChild(editorWrap);
@@ -57,7 +57,7 @@ class DXExcelView {
         this.updateState(newState);
     };
 
-    updateState(newState) {
+    updateState = (newState) => {
         if (this.state !== newState) {
             this.observeChange = false;
             // refresh sheet View
@@ -112,6 +112,10 @@ class DXExcelView {
     registerModule(Module) {
         const m = new Module(this);
         this._moduleMap[m.getName()] = m;
+    }
+
+    dispatch = (tr) => {
+        this.dispatchTransaction(tr);
     }
 
 }

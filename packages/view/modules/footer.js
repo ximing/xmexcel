@@ -14,6 +14,25 @@ export default class FxEditor extends Base {
         this.dom = dom;
         this.view = view;
         this.render();
+        this.bindEvent();
+    }
+
+    onClick = (event) => {
+        if (event.target) {
+            if (event.target.nodeName.toLocaleUpperCase() === 'A' && event.target.className.includes('sheet-tab')) {
+                if (!event.target.className.includes('active')) {
+
+                }
+            }
+        }
+    };
+
+    bindEvent() {
+        this.dom.addEventListener('click', this.onClick);
+    }
+
+    destory() {
+        this.dom.removeEventListener('click', this.onClick);
     }
 
     render() {
@@ -21,7 +40,7 @@ export default class FxEditor extends Base {
             this.dom.removeChild(this.footer);
         }
         let tabs = this.view.state.doc.sheetOrder.map(item => {
-            let className = `${this.view.state.doc.activeSheetId === item ? 'active' : ''}`;
+            let className = `sheet-tab ${this.view.state.doc.activeSheetId === item ? 'active' : ''}`;
             return crel(
                 "a", {class: className},
                 this.view.state.doc.sheets[item].title

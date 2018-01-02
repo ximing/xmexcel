@@ -33,4 +33,6 @@ export default class ModuleBase {
         return current;
     }
 
+    destory() {
+    }
 }
