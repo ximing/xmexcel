@@ -23,7 +23,7 @@ export class Plugin {
     }
 
     getState(state) {
-        return state.pluginState[this.key];
+        return state[this.key];
     }
 
     apply(tr) {

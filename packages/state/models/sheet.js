@@ -28,12 +28,11 @@ const DEFAULTS = {
 
 class Sheet {
 
-    constructor({title, cells, cellMetas, selection, setting}) {
+    constructor({title, cells, cellMetas, settings}) {
         this.title = title;
         this.cells = cells;
         this.cellMetas = cellMetas;
-        this.selection = selection;
-        this.setting = setting;
+        this.settings = settings;
     }
 
     static create(attrs = {}) {
@@ -57,8 +56,7 @@ class Sheet {
             title,
             cells = generateEmptyCells(),
             cellMetas = {},
-            selection = [0, 0, 0, 0],
-            setting = {}
+            settings = {}
         } = object;
         if (typeof title !== 'string') {
             throw new Error('`Sheet.fromJSON` requires a block `text` string.');
@@ -77,8 +75,7 @@ class Sheet {
             title,
             cells,
             cellMetas: _cellMetas,
-            selection,
-            setting
+            settings
         });
         return sheet;
     }
@@ -88,32 +85,23 @@ class Sheet {
             title: this.title,
             cells: this.cells,
             cellMetas: this.cellMetas,
-            selection: this.selection,
-            mergeCells: this.mergeCells,
-            hiddenRows: this.hiddenRows,
-            rowsHeight: this.rowsHeight,
-            colsWidth: this.colsWidth,
-            fixed: this.fixed
+            settings: this.settings
         };
 
         return object;
     }
 
-    toJS() {
-        return this.toJSON();
-    }
-
     getSetting(key) {
         if (key) {
-            return this.setting[key];
+            return this.settings[key];
         } else {
-            return this.setting;
+            return this.settings;
         }
     }
 
     setSetting(key, value) {
-        this.setting[key] = value;
-        return this.setting;
+        this.settings[key] = value;
+        return this.settings;
     }
 
     getCellMeta(row, col) {
@@ -121,9 +109,8 @@ class Sheet {
         return rowData[col] || CellMeta.fromJSON();
     }
 
-    changeSelection(selection) {
-        this.selection = selection;
-        return this.selection;
+    setState(state) {
+        return Sheet.fromJSON({...this, ...state});
     }
 }
 

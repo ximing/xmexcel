@@ -2,53 +2,80 @@
  * Created by yeanzhi on 17/4/12.
  */
 'use strict';
-import shortid from 'shortid';
-
-import Doc from './models/excel';
+import Doc from './models/doc';
 import Transaction from './transactions';
 
+export {Plugin, PluginKey} from './plugin/index';
 export const ExcelModel = Doc;
+import {Selection} from './plugin/selection';
+
+function bind(f, self) {
+    return !self || !f ? f : f.bind(self)
+}
+
+class FieldDesc {
+    constructor(name, desc, self) {
+        this.name = name;
+        this.init = bind(desc.init, self);
+        this.apply = bind(desc.apply, self);
+    }
+}
+
+const baseFields = [
+    new FieldDesc("doc", {
+        init(config) {
+            if (!Doc.isDoc(config.doc)) {
+                return Doc.fromJSON(config.doc);
+            }
+            return config.doc;
+        },
+        apply(tr) {
+            return tr.doc;
+        }
+    }),
+
+    new FieldDesc("selections", {
+        init(config) {
+            return config.selections || Selection.atStart(config.doc);
+        },
+        apply(tr) {
+            return tr.selections;
+        }
+    })
+];
 
 export default class ExcelState {
-    constructor({doc, schema, plugins = [], meta, pluginState = {}} = {}) {
-        this.doc = doc;
+    constructor({schema, plugins = [], state = {}} = {}) {
         this.schema = schema;
         this.plugins = plugins;
-        this.pluginState = pluginState;
-        this.meta = meta;
-        this.objectId = shortid.generate();
+        Object.keys(state).forEach(key => this[key] = state[key]);
     }
 
     get tr() {
         return new Transaction(this);
     }
 
-    static create({doc, schema = {marks: []}, plugins = [], meta = {}} = {}) {
-        let pluginState = {};
+    static create(config) {
+        const {schema = {marks: []}, plugins = []} = config;
+        let state = {};
         plugins.forEach(plugin => {
-            pluginState[plugin.key] = plugin.spec.init();
+            state[plugin.key] = plugin.spec.init(config);
         });
-        if (!Doc.isExcel(doc)) {
-            doc = Doc.fromJSON(doc);
-        }
-        return new ExcelState({doc, schema, plugins, meta, pluginState});
-    }
-
-    setMeta(key, value) {
-        return this.meta.set(key, value);
-    }
-
-    getMeta(key) {
-        return this.meta.get(key);
+        baseFields.forEach(base => {
+            state[base.name] = base.init(config);
+        });
+        return new ExcelState({state, schema, plugins});
     }
 
     apply(tr) {
-        let pluginState = {};
+        let state = {};
+        tr.apply();
         this.plugins.forEach(plugin => {
-            pluginState[plugin.key] = plugin.apply(tr);
+            state[plugin.key] = plugin.apply(tr);
         });
-        let doc = tr.apply(this);
-        return new ExcelState({doc, schema: this.schema, plugins: this.plugins, meta: this.meta, pluginState});
+        baseFields.forEach(base => {
+            state[base.name] = base.apply(tr);
+        });
+        return new ExcelState({schema: this.schema, plugins: this.plugins, state});
     }
-
 }

@@ -5,6 +5,7 @@
 import {OP_NAME} from '../constants/op-consts';
 import Mapping from '../models/mapping';
 import OpResult from './opResult';
+
 export class Value {
     constructor({m, v}) {
         this.name = OP_NAME.VALUE;
@@ -27,7 +28,11 @@ export class Value {
                     cells[i][j] = this.v;
                 }
             }
-            return OpResult.ok(doc.generateNewState(`sheets/${this.m.id}/cells`, cells));
+            //doc.generateNewState(`sheets/${this.m.id}/cells`, cells)
+            let newSheet = doc.sheets[this.m.id].setState({cells: cells});
+            console.log('new Sheet', newSheet[0])
+            let newDoc = doc.setSheet(this.m.id, newSheet);
+            return OpResult.ok(newDoc);
         } catch (err) {
             return OpResult.fail(`操作的值超过表格空间限制${this.toJSON()}`);
         }

@@ -6,7 +6,7 @@ const MODEL_TYPES = {
     CELLMeta: '@@__DXEXCEL_CELL_META__@@',
     CELLS: '@@__DXEXCEL_CELLS__@@',
     SHEET: '@@__DXEXCEL_SHEET__@@',
-    EXCEL: '@@__DXEXCEL_EXCEL__@@',
+    DOC: '@@__DXEXCEL_DOC__@@',
     SELECTION: '@@__DXEXCEL_SELECTION__@@',
     MERGE_CELLS: '@@__DXEXCEL_MERGE_CELLS__@@',
     HIDDEN_ROWS: '@@__DXEXCEL_HIDDEN_ROWS__@@',

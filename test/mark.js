@@ -5,7 +5,7 @@
 import test from 'ava';
 
 import ExcelState from '../packages/state';
-import Excel from '../packages/state/models/excel';
+import Excel from '../packages/state/models/doc';
 import {defaultData} from './lib';
 
 let state = ExcelState.create({

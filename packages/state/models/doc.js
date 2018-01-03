@@ -17,7 +17,7 @@ const DEFAULTS = {
 };
 * */
 
-class Excel {
+class Doc {
 
     constructor({sheets, sheetOrder, activeSheetId}) {
         this.sheets = sheets;
@@ -26,19 +26,19 @@ class Excel {
     }
 
     static create(attrs = {}) {
-        if (Excel.isExcel(attrs)) {
+        if (Doc.isDoc(attrs)) {
             return attrs;
         }
 
         if (isPlainObject(attrs)) {
-            return Excel.fromJSON(attrs);
+            return Doc.fromJSON(attrs);
         }
 
-        throw new Error(`\`Excel.create\` only accepts objects, strings or characters, but you passed it: ${attrs}`)
+        throw new Error(`\`Doc.create\` only accepts objects, strings or characters, but you passed it: ${attrs}`)
     }
 
-    static isExcel(any) {
-        return !!(any && any[MODEL_TYPES.EXCEL]);
+    static isDoc(any) {
+        return !!(any && any[MODEL_TYPES.DOC]);
     }
 
     static fromJSON(object) {
@@ -51,12 +51,12 @@ class Excel {
         Object.keys(sheets).forEach(key => {
             _sheets[key] = Sheet.fromJSON(sheets[key]);
         });
-        const excel = new Excel({
+        const doc = new Doc({
             sheets: _sheets,
             activeSheetId: activeSheetId,
             sheetOrder: sheetOrder
         });
-        return excel;
+        return doc;
     }
 
     toJSON() {
@@ -90,7 +90,7 @@ class Excel {
             targetValue = this;
         }
         //TODO 这里会重新生成一个state ，需要做差量化的类似  immutable的 生成器
-        return Excel.fromJSON({...this, sheets: newValue});
+        return Doc.fromJSON({...this, sheets: newValue});
     }
 
     getActiveData() {
@@ -115,11 +115,25 @@ class Excel {
 
     setActiveId(id) {
         let newState = {...this, activeSheetId: id};
-        return Excel.fromJSON(newState);
+        return Doc.fromJSON(newState);
+    }
+
+    setState(state) {
+        return Doc.fromJSON({...this, ...state});
+    }
+
+    setSheet(_id, sheet) {
+        return Doc.fromJSON({
+            ...this,
+            ...{
+                ...this.sheets,
+                _id: sheet
+            }
+        });
     }
 
 }
 
-Excel.prototype[MODEL_TYPES.EXCEL] = true;
+Doc.prototype[MODEL_TYPES.DOC] = true;
 
-export default Excel;
+export default Doc;

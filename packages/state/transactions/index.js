@@ -3,7 +3,6 @@
  */
 'use strict';
 import debug from 'debug';
-import shortid from 'shortid';
 
 const log = debug('excel:state:transaction');
 
@@ -16,12 +15,13 @@ import {
 export default class Transaction {
     constructor(state) {
         this.before = state.doc;
+        this.doc = state.doc;
         this.ops = [];
         this.schema = state.schema;
-        this.objectId = shortid.generate();
+        this.selections = state.selections;
     }
 
-    apply(state) {
+    apply() {
         if (this.ops.length === 0) {
             return this.doc;
         }
@@ -74,7 +74,7 @@ export default class Transaction {
     }
 
     changeSelection(m) {
-        this.ops.push(ChangeSelection.fromJSON({m}));
+        this.selections[m.id] = m;
         return this;
     }
 
