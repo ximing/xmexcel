@@ -25,7 +25,7 @@ test('change sheet selection', (t) => {
     let tr = state.tr.changeSelection({id: 'shortid', r: [3, 3, 3, 3]});
     let newState = state.apply(tr);
     t.is(
-        JSON.stringify(newState.selections['shortid'].r, null, 0),
+        JSON.stringify(newState.selections.getSelection('shortid').r, null, 0),
         JSON.stringify([3, 3, 3, 3], null, 0)
     );
 });

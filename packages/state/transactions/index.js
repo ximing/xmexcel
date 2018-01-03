@@ -12,6 +12,8 @@ import {
     ChangeSelection, ChangeSheet
 } from '../operations';
 
+import {Selection, Selections} from '../plugin/selection';
+
 export default class Transaction {
     constructor(state) {
         this.before = state.doc;
@@ -74,7 +76,7 @@ export default class Transaction {
     }
 
     changeSelection(m) {
-        this.selections[m.id] = m;
+        this.selections = this.selections.setSelection(m);
         return this;
     }
 

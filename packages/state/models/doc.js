@@ -101,10 +101,6 @@ class Doc {
         return this.getActiveSheet().getCellMeta(row, col);
     }
 
-    getActiveSelection() {
-        return this.getActiveSheet().selection;
-    }
-
     getActiveSheet() {
         return this.sheets[this.activeSheetId];
     }

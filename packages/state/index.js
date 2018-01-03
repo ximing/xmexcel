@@ -7,10 +7,12 @@ import Transaction from './transactions';
 
 export {Plugin, PluginKey} from './plugin/index';
 export const ExcelModel = Doc;
-import {Selection} from './plugin/selection';
+import {Selection, Selections} from './plugin/selection';
+
+export {Selection, Selections};
 
 function bind(f, self) {
-    return !self || !f ? f : f.bind(self)
+    return !self || !f ? f : f.bind(self);
 }
 
 class FieldDesc {
@@ -36,7 +38,7 @@ const baseFields = [
 
     new FieldDesc("selections", {
         init(config) {
-            return config.selections || Selection.atStart(config.doc);
+            return config.selections ? Selections.fromJSON(config.selections) : Selections.atStart(config.doc);
         },
         apply(tr) {
             return tr.selections;
@@ -78,4 +80,5 @@ export default class ExcelState {
         });
         return new ExcelState({schema: this.schema, plugins: this.plugins, state});
     }
+
 }
