@@ -98,12 +98,12 @@ class DXExcelView {
             this.state = newState;
             if (loadData && updateSetting) {
                 this.mainModule.loadData(newDoc.sheets[newDoc.activeSheetId].cells);
-                this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].setting);
+                this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].settings);
                 this.mainModule.setSelection(newDoc.sheets[newDoc.activeSheetId].selection || [0, 0, 0, 0], true, true);
             } else if (loadData) {
                 this.mainModule.loadData(newDoc.sheets[newDoc.activeSheetId].cells);
             } else if (updateSetting) {
-                this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].setting);
+                this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].settings);
             } else if (updateSelection) {
                 this.mainModule.setSelection(newDoc.sheets[newDoc.activeSheetId].selection || [0, 0, 0, 0], true, true);
             } else if (needRender) {
