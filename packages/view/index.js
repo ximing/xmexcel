@@ -83,7 +83,7 @@ class DXExcelView {
                             if (doc.sheets[doc.activeSheetId].cellMetas !== newDoc.sheets[newDoc.activeSheetId].cellMetas) {
                                 needRender = true;
                             }
-                            if (doc.sheets[doc.activeSheetId].setting !== newDoc.sheets[newDoc.activeSheetId].setting) {
+                            if (doc.sheets[doc.activeSheetId].settings !== newDoc.sheets[newDoc.activeSheetId].settings) {
                                 updateSetting = true;
                             }
                             if (doc.sheets[doc.activeSheetId].selection !== newDoc.sheets[newDoc.activeSheetId].selection) {
@@ -99,13 +99,14 @@ class DXExcelView {
             if (loadData && updateSetting) {
                 this.mainModule.loadData(newDoc.sheets[newDoc.activeSheetId].cells);
                 this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].settings);
-                this.mainModule.setSelection(newDoc.sheets[newDoc.activeSheetId].selection || [0, 0, 0, 0], true, true);
+                console.log('selections', newState.selections.getSelection(newDoc.activeSheetId));
+                this.mainModule.setSelection(newState.selections.getSelection(newDoc.activeSheetId).r || [0, 0, 0, 0], true, true);
             } else if (loadData) {
                 this.mainModule.loadData(newDoc.sheets[newDoc.activeSheetId].cells);
             } else if (updateSetting) {
                 this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].settings);
             } else if (updateSelection) {
-                this.mainModule.setSelection(newDoc.sheets[newDoc.activeSheetId].selection || [0, 0, 0, 0], true, true);
+                this.mainModule.setSelection(newState.selections.getSelection(newDoc.activeSheetId).r || [0, 0, 0, 0], true, true);
             } else if (needRender) {
                 this.mainModule.render();
             }

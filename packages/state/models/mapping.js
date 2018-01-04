@@ -19,7 +19,7 @@ export class MapResult {
 /*
 * mapping = [row,col,endRow,endCol]
 * */
-export default class Mapping {
+export class Mapping {
 
     constructor(mapping) {
         let r = mapping.r || [0, 0, 0, 0];

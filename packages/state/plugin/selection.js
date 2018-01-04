@@ -2,26 +2,7 @@
  * Created by ximing on 1/3/18.
  */
 'use strict';
-
-export class Selection {
-
-    constructor({id, r}) {
-        this.id = id;
-        this.r = r;
-    }
-
-    static isSelection(any) {
-        return !!(any && any['DX_SELECTION']);
-    }
-
-    static fromJSON(selection) {
-        if (Selection.isSelection(selection)) {
-            return selection;
-        }
-        return new Selection(selection);
-    }
-};
-Selection.prototype['DX_SELECTION'] = 'DX_SELECTION';
+import {Mapping} from '../models/mapping';
 
 export class Selections {
 
@@ -33,7 +14,7 @@ export class Selections {
         let selections = {};
         if (doc) {
             doc.sheetOrder.forEach(key => {
-                selections[key] = [0, 0, 0, 0];
+                selections[key] = {id: key, r: [0, 0, 0, 0]};
             });
         }
         return Selections.fromJSON(selections);
@@ -45,7 +26,7 @@ export class Selections {
         }
         let _selections = new Selections();
         Object.keys(selections).forEach(key => {
-            _selections[key] = Selection.fromJSON({id: key, r: selections[key]});
+            _selections[key] = Mapping.fromJSON(selections[key]);
         });
         return _selections;
     }
@@ -55,7 +36,7 @@ export class Selections {
     }
 
     setSelection({id, r}) {
-        return Selections.fromJSON({...this, [id]: r});
+        return Selections.fromJSON({...this, [id]: Mapping.fromJSON({id, r})});
     }
 }
 

@@ -3,7 +3,7 @@
  */
 'use strict';
 import {OP_NAME} from '../constants/op-consts';
-import Mapping from '../models/mapping';
+import {Mapping} from '../models/mapping';
 import OpResult from './opResult';
 import CellMeta from '../models/cellMeta';
 import Mark from '../models/mark';
