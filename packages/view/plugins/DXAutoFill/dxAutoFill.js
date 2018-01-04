@@ -130,7 +130,7 @@ class Autofill extends BasePlugin {
     getSelectionData() {
         const selRange = {
             from: this.hot.getSelectedRange().from,
-            to: this.hot.getSelectedRange().to,
+            to: this.hot.getSelectedRange().to
         };
 
         return this.hot.getData(selRange.from.row, selRange.from.col, selRange.to.row, selRange.to.col);

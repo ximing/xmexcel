@@ -86,10 +86,10 @@ export default {
                 let style = meta.s || {};
                 let textDecoration = '';
                 if (style.u) {
-                    textDecoration += ' underline'
+                    textDecoration += ' underline';
                 }
                 if (style.s) {
-                    textDecoration += ' line-through'
+                    textDecoration += ' line-through';
                 }
                 trStr += `<td style='
 ${textDecoration ? `text-decoration:${textDecoration};` : ''}

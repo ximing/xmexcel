@@ -101,7 +101,7 @@ class DXCopyPaste extends BasePlugin {
             isTriggeredByCopy: false,
             isTriggeredByCut: false,
             isBeginEditing: false,
-            isFragmentSelectionEnabled: false,
+            isFragmentSelectionEnabled: false
         });
     }
 
@@ -518,7 +518,7 @@ class DXCopyPaste extends BasePlugin {
                     f: inputArray[i][j].f,
                     fmt: inputArray[i][j].fmt,
                     s: inputArray[i][j].s
-                }])
+                }]);
             }
         }
         console.log('sssss --->', dataArray);

@@ -1,12 +1,13 @@
 import CONSTS from '../consts';
 import _ from 'lodash';
-import {SUPPORTED_FORMULAS} from 'hot-formula-parser';
+// import {SUPPORTED_FORMULAS} from 'hot-formula-parser';
 
 export const nextTick = function (callback) {
     new Promise(function (res) {
         res();
     }).then(callback);
 };
+
 export const keyMirror = function (...args) {
     const obj = {};
     args.forEach(key => {
@@ -14,17 +15,6 @@ export const keyMirror = function (...args) {
     });
     return obj;
 };
-export const convertToArray = function (sheets, xfs, styles, format = CONSTS.FORMAT) {
-    let cells = {};
-    Object.keys(sheets).forEach((key) => {
-        let sheet;
-        if (sheet = sheets[key]) {
-            cells[key] = convertCellsToData(sheet.cells, sheet.row, sheet.col, xfs, styles, format);
-        }
-    });
-    return cells;
-};
-
 
 export const convertCellsToData = function (obj, row, col, xfs, styles, format) {
     let arr = [];
@@ -49,6 +39,17 @@ export const convertCellsToData = function (obj, row, col, xfs, styles, format) 
     return arr;
 };
 
+export const convertToArray = function (sheets, xfs, styles, format = CONSTS.FORMAT) {
+    let cells = {};
+    Object.keys(sheets).forEach((key) => {
+        let sheet;
+        if (sheet = sheets[key]) {
+            cells[key] = convertCellsToData(sheet.cells, sheet.row, sheet.col, xfs, styles, format);
+        }
+    });
+    return cells;
+};
+
 export const convertCellsToMeta = function (obj, xfs, styles, format) {
     _.forEach(obj, (rowValue, rowKey) => {
         _.forEach(rowValue, (cellValue, colKey) => {
@@ -70,7 +71,6 @@ export const convertCellsToMeta = function (obj, xfs, styles, format) {
                     cellValue.s = _style;
                 }
                 if (_.isNumber(cellValue.fmt) && format[cellValue.fmt]) {
-                    console.log('format[cellValue.fmt]', format[cellValue.fmt]);
                     cellValue.fmt = format[cellValue.fmt];
                 }
             }
@@ -160,7 +160,6 @@ export const convertStyle = function (data) {
             styles[key] = convertSheetStyle(sheet.cells, sheet.row, sheet.col, data.xfs, data.styles);
         }
     });
-    console.log('styles', styles);
     return styles;
 };
 
@@ -315,7 +314,7 @@ export function contains(a, b) {
 
 export function is(type, obj) {
     var clas = Object.prototype.toString.call(obj).slice(8, -1);
-    return obj !== undefined && obj !== null && clas === type;
+    return obj !== void 0 && obj !== null && clas === type;
 }
 
 export function loop() {

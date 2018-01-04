@@ -62,7 +62,7 @@ class FormulaSelection {
                 border: {
                     width: 1.5,
                     color: CONSTS.FORMULA_COLOR[this.vernier % 8]
-                },
+                }
             });
             coords.forEach(coord => {
                 selection.add(new CellCoords(coord[0], coord[1]));

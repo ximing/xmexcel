@@ -490,7 +490,7 @@ class DXHiddenRows extends BasePlugin {
     onAfterContextMenuDefaultOptions(options) {
         options.items.push(
             {
-                name: '---------',
+                name: '---------'
             },
             hideRowItem(this),
             showRowItem(this)

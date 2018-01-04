@@ -44,7 +44,7 @@ export default class FxEditor extends Base {
         let tabs = this.view.state.doc.sheetOrder.map(item => {
             let className = `sheet-tab ${this.view.state.doc.activeSheetId === item ? 'active' : ''}`;
             return crel(
-                "a", {class: className, 'data-id': item},
+                'a', {class: className, 'data-id': item},
                 this.view.state.doc.sheets[item].title
             );
         });

@@ -10,7 +10,6 @@ import crel from 'crel';
 
 export const renderCell = function (v, f) {
     if (!!f) {
-        let newVal = v;
         if (f === 'text') {
             return v;
         } else if (f === 'number') {

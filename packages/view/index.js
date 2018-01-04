@@ -30,7 +30,7 @@ class DXExcelView {
             crel(
                 'div', {class: 'xm-editor-wrap'},
                 crel('div', {class: 'xm-left-label'}, crel('img', {src: CONST.fn})),
-                crel('div', {class: 'xm-sheet-fx-editor', id: "xmSheetFxEditor", contenteditable: "true"})),
+                crel('div', {class: 'xm-sheet-fx-editor', id: 'xmSheetFxEditor', contenteditable: 'true'})),
             crel(
                 'div', {class: 'xm-view-wrap'},
                 crel('div', {class: 'xm-sheet-view', id: 'xmSheetView'})
@@ -74,25 +74,23 @@ class DXExcelView {
                     loadData = true;
                     updateSetting = true;
                     renderFooter = true;
-                } else {
-                    if (doc.sheets !== newDoc.sheets) {
-                        if (doc.sheets[doc.activeSheetId] !== newDoc.sheets[newDoc.activeSheetId]) {
-                            if (doc.sheets[doc.activeSheetId].cells !== newDoc.sheets[newDoc.activeSheetId].cells) {
-                                loadData = true;
-                            }
-                            if (doc.sheets[doc.activeSheetId].cellMetas !== newDoc.sheets[newDoc.activeSheetId].cellMetas) {
-                                needRender = true;
-                            }
-                            if (doc.sheets[doc.activeSheetId].settings !== newDoc.sheets[newDoc.activeSheetId].settings) {
-                                updateSetting = true;
-                            }
-                            if (doc.sheets[doc.activeSheetId].selection !== newDoc.sheets[newDoc.activeSheetId].selection) {
-                                updateSelection = true;
-                            }
+                } else if (doc.sheets !== newDoc.sheets) {
+                    if (doc.sheets[doc.activeSheetId] !== newDoc.sheets[newDoc.activeSheetId]) {
+                        if (doc.sheets[doc.activeSheetId].cells !== newDoc.sheets[newDoc.activeSheetId].cells) {
+                            loadData = true;
                         }
-                    } else if (doc.sheetOrder !== newDoc.sheetOrder) {
-                        //TODO  change footer
+                        if (doc.sheets[doc.activeSheetId].cellMetas !== newDoc.sheets[newDoc.activeSheetId].cellMetas) {
+                            needRender = true;
+                        }
+                        if (doc.sheets[doc.activeSheetId].settings !== newDoc.sheets[newDoc.activeSheetId].settings) {
+                            updateSetting = true;
+                        }
+                        if (doc.sheets[doc.activeSheetId].selection !== newDoc.sheets[newDoc.activeSheetId].selection) {
+                            updateSelection = true;
+                        }
                     }
+                } else if (doc.sheetOrder !== newDoc.sheetOrder) {
+                    //TODO  change footer
                 }
             }
             this.state = newState;
@@ -123,7 +121,7 @@ class DXExcelView {
     }
 
     getModule(name) {
-        return this._moduleMap[name]
+        return this._moduleMap[name];
     }
 
     dispatch = (tr) => {

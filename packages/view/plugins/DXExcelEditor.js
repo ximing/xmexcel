@@ -197,7 +197,7 @@ export default function (view) {
             this.instance.addHook('beforeKeyDown', onBeforeKeyDown);
 
             this.selectionStart = this.$TEXTAREA.prop('selectionStart');
-            this.setFormulaSelection(this.$TEXTAREA.val())
+            this.setFormulaSelection(this.$TEXTAREA.val());
             this.checkShouldClose();
         };
 
@@ -246,9 +246,9 @@ export default function (view) {
                 // console.log('ssss--->'.repeat(10), label, textVal, this.selectionStart,
                 //     textVal.substring(0, this.selectionStart),
                 //     textVal.substring(this.selectionStart, textVal.length))
-                this.setValue(`${textVal.substring(0, this.selectionStart)}${label}${textVal.substring(this.selectionStart, textVal.length)}`)
+                this.setValue(`${textVal.substring(0, this.selectionStart)}${label}${textVal.substring(this.selectionStart, textVal.length)}`);
             } else if (textVal.slice(-1) === ',') {
-                this.setValue(`${textVal.substring(0, this.selectionStart)}${label}${textVal.substring(this.selectionStart, textVal.length)}`)
+                this.setValue(`${textVal.substring(0, this.selectionStart)}${label}${textVal.substring(this.selectionStart, textVal.length)}`);
             } else {
                 let index = textVal.lastIndexOf('(');
                 let newVal = textVal.slice(index);
