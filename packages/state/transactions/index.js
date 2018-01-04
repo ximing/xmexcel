@@ -9,10 +9,9 @@ const log = debug('excel:state:transaction');
 import {
     Value, AddMark, RemoveMark, ClearMark,
     SetFmt, SetFormula, SetSheetSetting,
-    ChangeSelection, ChangeSheet
+    ChangeSheet
 } from '../operations';
 
-import {Selection, Selections} from '../plugin/selection';
 
 export default class Transaction {
     constructor(state) {

@@ -6,10 +6,11 @@ import Doc from './models/doc';
 import Transaction from './transactions';
 
 export {Plugin, PluginKey} from './plugin/index';
-export const ExcelModel = Doc;
-import {Selection, Selections} from './plugin/selection';
+export {Mapping, MapResult} from './models/mapping';
+export const ExcelDoc = Doc;
+import {Selections} from './plugin/selection';
 
-export {Selection, Selections};
+export {Selections};
 
 function bind(f, self) {
     return !self || !f ? f : f.bind(self);
@@ -24,7 +25,7 @@ class FieldDesc {
 }
 
 const baseFields = [
-    new FieldDesc("doc", {
+    new FieldDesc('doc', {
         init(config) {
             if (!Doc.isDoc(config.doc)) {
                 return Doc.fromJSON(config.doc);
@@ -36,7 +37,7 @@ const baseFields = [
         }
     }),
 
-    new FieldDesc("selections", {
+    new FieldDesc('selections', {
         init(config) {
             return config.selections ? Selections.fromJSON(config.selections) : Selections.atStart(config.doc);
         },

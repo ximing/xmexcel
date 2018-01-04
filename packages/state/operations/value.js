@@ -30,7 +30,6 @@ export class Value {
             }
             //doc.generateNewState(`sheets/${this.m.id}/cells`, cells)
             let newSheet = doc.sheets[this.m.id].setState({cells: cells});
-            console.log('new Sheet', newSheet[0])
             let newDoc = doc.setSheet(this.m.id, newSheet);
             return OpResult.ok(newDoc);
         } catch (err) {

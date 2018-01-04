@@ -44,7 +44,7 @@ class Sheet {
             return Sheet.fromJSON(attrs);
         }
 
-        throw new Error(`\`Sheet.create\` only accepts objects, strings or characters, but you passed it: ${attrs}`)
+        throw new Error(`\`Sheet.create\` only accepts objects, strings or characters, but you passed it: ${attrs}`);
     }
 
     static isSheet(any) {

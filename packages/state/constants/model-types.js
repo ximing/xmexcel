@@ -26,4 +26,4 @@ const MODEL_TYPES = {
  * @type {Object}
  */
 
-export default MODEL_TYPES
+export default MODEL_TYPES;

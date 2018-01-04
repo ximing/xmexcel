@@ -34,7 +34,7 @@ class Doc {
             return Doc.fromJSON(attrs);
         }
 
-        throw new Error(`\`Doc.create\` only accepts objects, strings or characters, but you passed it: ${attrs}`)
+        throw new Error(`\`Doc.create\` only accepts objects, strings or characters, but you passed it: ${attrs}`);
     }
 
     static isDoc(any) {

@@ -25,7 +25,7 @@ class CellMeta {
             return CellMeta.fromJSON(attrs);
         }
 
-        throw new Error(`\`CellMeta.create\` only accepts objects, strings or characters, but you passed it: ${attrs}`)
+        throw new Error(`\`CellMeta.create\` only accepts objects, strings or characters, but you passed it: ${attrs}`);
     }
 
     static isCellMeta(any) {

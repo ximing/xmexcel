@@ -9,8 +9,8 @@ export const generateEmptyCells = function (row = MIN_ROW, col = MIN_COL) {
     row = Math.max(row, MIN_ROW);
     let rowArr = [];
     for (let i = 0; i < row; i++) {
-        let col = new Array(col);
-        rowArr.push(col);
+        let _col = new Array(col);
+        rowArr.push(_col);
     }
     return rowArr;
 };
