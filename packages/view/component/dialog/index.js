@@ -22,7 +22,12 @@ export default class {
             'div', {class: 'xm-dialog'},
             crel(
                 'div', {class: 'xm-dialog-inner'},
-                this.titleDom, this.inner)
+                this.titleDom,
+                crel(
+                    'div', {class: 'xm-dialog-body'},
+                    this.inner
+                )
+            )
         );
         if (mark) {
             this.inner = crel('div', {class: 'xm-dialog-mark'}, this.inner);

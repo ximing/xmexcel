@@ -56,6 +56,11 @@ export class Mapping {
     }
 
     rebase(mapping, left = true) {
+        if (this.r && mapping.r) {
+            MapResult(this.r);
+        } else {
+            return MapResult(this.r)
+        }
     }
 
     static fromJSON(object) {

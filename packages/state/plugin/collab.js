@@ -15,16 +15,16 @@ class Rebaseable {
 // : ([Rebaseable], [Step], Transform) → [Rebaseable]
 // Undo a given set of steps, apply a set of other steps, and then
 // redo them.
-export function rebaseOps(steps, over, transform) {
-    for (let i = steps.length - 1; i >= 0; i--) transform.step(steps[i].inverted);
+export function rebaseOps(ops, over, transform) {
+    for (let i = ops.length - 1; i >= 0; i--) transform.step(ops[i].inverted);
     for (let i = 0; i < over.length; i++) transform.step(over[i]);
     let result = [];
-    for (let i = 0, mapFrom = steps.length; i < steps.length; i++) {
-        let mapped = steps[i].step.map(transform.mapping.slice(mapFrom));
+    for (let i = 0, mapFrom = ops.length; i < ops.length; i++) {
+        let mapped = ops[i].step.map(transform.mapping.slice(mapFrom));
         mapFrom--;
         if (mapped && !transform.maybeStep(mapped).failed) {
-            transform.mapping.setMirror(mapFrom, transform.steps.length - 1);
-            result.push(new Rebaseable(mapped, mapped.invert(transform.docs[transform.docs.length - 1]), steps[i].origin));
+            transform.mapping.setMirror(mapFrom, transform.ops.length - 1);
+            result.push(new Rebaseable(mapped, mapped.invert(transform.docs[transform.docs.length - 1]), ops[i].origin));
         }
     }
     return result;

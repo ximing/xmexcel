@@ -45,6 +45,10 @@ export class AddMark {
             return OpResult.fail(`操作的值超过表格空间限制${JSON.stringify(this)}`);
         }
     }
+
+    rebase() {
+
+    }
 }
 
 export class RemoveMark {
