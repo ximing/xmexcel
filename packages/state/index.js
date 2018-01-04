@@ -73,11 +73,11 @@ export default class ExcelState {
     apply(tr) {
         let state = {};
         tr.apply();
-        this.plugins.forEach(plugin => {
-            state[plugin.key] = plugin.apply(tr);
-        });
         baseFields.forEach(base => {
             state[base.name] = base.apply(tr);
+        });
+        this.plugins.forEach(plugin => {
+            state[plugin.key] = plugin.apply(tr, plugin.key.getState(this));
         });
         return new ExcelState({schema: this.schema, plugins: this.plugins, state});
     }

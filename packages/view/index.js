@@ -9,6 +9,7 @@ import './styles/index.scss';
 import MainModule from './modules/main';
 import FooterModule from './modules/footer';
 import FxEditorModule from './modules/fxEditor';
+import SheetModule from './modules/sheet';
 import CONST from './consts';
 
 localStorage.debug = 'excel:*';
@@ -39,6 +40,10 @@ class DXExcelView {
                 'div', {class: 'xm-footer-wrap', id: 'xmSheetFooter'}
             )
         );
+        this.dialogWrapper = crel(
+            'div', {class: 'xm-excel-dialog-wrapper'}
+        );
+        document.body.appendChild(this.dialogWrapper);
         this.element.appendChild(editorWrap);
     }
 
@@ -46,9 +51,11 @@ class DXExcelView {
         let mainModule = this.mainModule = new MainModule(document.getElementById('xmSheetView'), this);
         let footerModule = this.footerModule = new FooterModule(document.getElementById('xmSheetFooter'), this);
         let fxEditorModule = this.fxEditorModule = new FxEditorModule(document.getElementById('xmSheetFxEditor'), this);
+        let sheetModule = this.sheetModule = new SheetModule(this.dialogWrapper, this);
         this._moduleMap[mainModule.getName()] = mainModule;
         this._moduleMap[footerModule.getName()] = footerModule;
         this._moduleMap[fxEditorModule.getName()] = fxEditorModule;
+        this._moduleMap[sheetModule.getName()] = sheetModule;
     }
 
     dispatchTransaction = (tr) => {

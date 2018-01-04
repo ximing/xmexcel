@@ -23,8 +23,10 @@ export default class FxEditor extends Base {
             if (event.target.nodeName.toLocaleUpperCase() === 'A' && event.target.className.includes('sheet-tab')) {
                 if (!event.target.className.includes('active')) {
                     let id = getData(event.target, 'id');
-                    this.view.dispatch(this.view.state.tr.changeSheet(id));
+                    this.view.dispatch(this.view.state.tr.switchSheet(id));
                 }
+            } else if (event.target.className.includes('xm-footer-opver-add')) {
+                this.view.getModule(CONSTS.moduleNames.SHEET).openAddDialog();
             }
         }
     };
@@ -52,7 +54,9 @@ export default class FxEditor extends Base {
             'div', {class: 'xm-footer-view'},
             crel(
                 'div', {class: 'xm-footer-opver-container'},
-                '+'
+                crel(
+                    'button', {class: 'xm-footer-opver-add'}, '+'
+                )
             ),
             crel(
                 'div', {class: 'xm-footer-tab-container'},

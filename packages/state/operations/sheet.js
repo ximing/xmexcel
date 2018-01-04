@@ -34,7 +34,7 @@ export class SetSheetSetting {
     }
 }
 
-export class ChangeSheet {
+export class SwitchSheet {
     constructor({m}) {
         this.name = OP_NAME.CHANGE_SHEET;
         this.m = m;
@@ -45,7 +45,7 @@ export class ChangeSheet {
         if (!Mapping.isMapping(object.m)) {
             object.m = Mapping.create(object.m);
         }
-        return new ChangeSheet(object);
+        return new SwitchSheet(object);
     }
 
     apply(doc) {
@@ -55,4 +55,35 @@ export class ChangeSheet {
             return OpResult.fail(`操作的值超过表格空间限制${JSON.stringify(this)}`);
         }
     }
+}
+
+export class RemoveSheet {
+    constructor({m}) {
+        this.name = OP_NAME.CHANGE_SHEET;
+        this.m = m;
+    }
+
+    static fromJSON(object) {
+        object = {...object};
+        if (!Mapping.isMapping(object.m)) {
+            object.m = Mapping.create(object.m);
+        }
+        return new RemoveSheet(object);
+    }
+
+    apply(doc) {
+        try {
+            return OpResult.ok(doc.setActiveId(this.m.id));
+        } catch (err) {
+            return OpResult.fail(`操作的值超过表格空间限制${JSON.stringify(this)}`);
+        }
+    }
+}
+
+export class AddSheet {
+
+}
+
+export class ChangeSheet {
+
 }

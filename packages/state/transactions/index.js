@@ -9,17 +9,19 @@ const log = debug('excel:state:transaction');
 import {
     Value, AddMark, RemoveMark, ClearMark,
     SetFmt, SetFormula, SetSheetSetting,
-    ChangeSheet
+    ChangeSheet, SwitchSheet, AddSheet, RemoveSheet
 } from '../operations';
 
 
 export default class Transaction {
     constructor(state) {
+        this.state = state;
         this.before = state.doc;
         this.doc = state.doc;
         this.ops = [];
         this.schema = state.schema;
         this.selections = state.selections;
+        this.docChanged = false;
     }
 
     apply() {
@@ -30,8 +32,12 @@ export default class Transaction {
         this.ops.forEach(op => {
             let res = op.apply(doc);
             if (res.doc) {
-                doc = res.doc;
+                if (doc !== res.doc) {
+                    this.docChanged = true;
+                    doc = res.doc;
+                }
             } else {
+                //TODO how to handle err info ?
                 log(res.failed);
             }
         });
@@ -79,8 +85,21 @@ export default class Transaction {
         return this;
     }
 
-    changeSheet(id) {
-        this.ops.push(ChangeSheet.fromJSON({m: {id}}));
+    switchSheet(id) {
+        this.ops.push(SwitchSheet.fromJSON({m: {id}}));
+        return this;
+    }
+
+    removeSheet(id) {
+        this.ops.push();
+        return this;
+    }
+
+    addSheet(title) {
+        return this;
+    }
+
+    changeSheet() {
         return this;
     }
 }

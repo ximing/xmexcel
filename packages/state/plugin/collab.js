@@ -15,7 +15,7 @@ class Rebaseable {
 // : ([Rebaseable], [Step], Transform) → [Rebaseable]
 // Undo a given set of steps, apply a set of other steps, and then
 // redo them.
-export function rebaseSteps(steps, over, transform) {
+export function rebaseOps(steps, over, transform) {
     for (let i = steps.length - 1; i >= 0; i--) transform.step(steps[i].inverted);
     for (let i = 0; i < over.length; i++) transform.step(over[i]);
     let result = [];
@@ -53,10 +53,14 @@ class CollabState {
 
 function unconfirmedFrom(transform) {
     let result = [];
-    for (let i = 0; i < transform.steps.length; i++) {
-        result.push(new Rebaseable(transform.steps[i],
-            transform.steps[i].invert(transform.docs[i]),
-            transform));
+    for (let i = 0; i < transform.ops.length; i++) {
+        result.push(
+            new Rebaseable(
+                transform.ops[i],
+                transform.ops[i].invert(transform.docs[i]),
+                transform
+            )
+        );
     }
     return result;
 }
@@ -90,8 +94,12 @@ export function collab(config = {}) {
             init: () => new CollabState(config.version, []),
             apply(tr, collab) {
                 let newState = tr.getMeta(collabKey);
-                if (newState) {return newState;}
-                if (tr.docChanged) {return new CollabState(collab.version, collab.unconfirmed.concat(unconfirmedFrom(tr)));}
+                if (newState) {
+                    return newState;
+                }
+                if (tr.docChanged) {
+                    return new CollabState(collab.version, collab.unconfirmed.concat(unconfirmedFrom(tr)));
+                }
                 return collab;
             }
         },
@@ -107,31 +115,33 @@ export function collab(config = {}) {
 // Create a transaction that represents a set of new steps received from
 // the authority. Applying this transaction moves the state forward to
 // adjust to the authority's view of the document.
-export function receiveTransaction(state, steps, clientIDs) {
+export function receiveTransaction(state, ops, clientIDs) {
     // Pushes a set of steps (received from the central authority) into
     // the editor state (which should have the collab plugin enabled).
     // Will recognize its own changes, and confirm unconfirmed steps as
     // appropriate. Remaining unconfirmed steps will be rebased over
     // remote steps.
     let collabState = collabKey.getState(state);
-    let version = collabState.version + steps.length;
+    let version = collabState.version + ops.length;
     let ourID = collabKey.get(state).spec.config.clientID;
 
     // Find out which prefix of the steps originated with us
     let ours = 0;
     while (ours < clientIDs.length && clientIDs[ours] == ourID) ++ours;
     let unconfirmed = collabState.unconfirmed.slice(ours);
-    steps = ours ? steps.slice(ours) : steps;
+    ops = ours ? ops.slice(ours) : ops;
 
     // If all steps originated with us, we're done.
-    if (!steps.length) {return state.tr.setMeta(collabKey, new CollabState(version, unconfirmed));}
+    if (!ops.length) {
+        return state.tr.setMeta(collabKey, new CollabState(version, unconfirmed));
+    }
 
     let nUnconfirmed = unconfirmed.length;
     let tr = state.tr;
     if (nUnconfirmed) {
-        unconfirmed = rebaseSteps(unconfirmed, steps, tr);
+        unconfirmed = rebaseOps(unconfirmed, ops, tr);
     } else {
-        for (let i = 0; i < steps.length; i++) tr.step(steps[i]);
+        for (let i = 0; i < ops.length; i++) tr.step(ops[i]);
         unconfirmed = [];
     }
 
