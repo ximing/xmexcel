@@ -182,8 +182,8 @@ export default class Main extends Base {
             afterSelectionEnd: (...args) => {
                 if (this.view.observeChange) {
                     let selection = this.view.state.selections.getSelection(this.view.state.doc.getActiveId());
-                    if (args[0] !== selection.r[0] || args[1] !== selection.r[1]
-                        || args[2] !== selection.r[2] || args[3] !== selection.r[3]) {
+                    if (args[0] !== selection[0] || args[1] !== selection[1]
+                        || args[2] !== selection[2] || args[3] !== selection[3]) {
                         let tr = this.view.state.tr;
                         tr.changeSelection({id: this.view.state.doc.getActiveId(), r: args});
                         this.view.dispatch(tr);

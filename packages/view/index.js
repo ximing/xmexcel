@@ -104,14 +104,13 @@ class DXExcelView {
             if (loadData && updateSetting) {
                 this.mainModule.loadData(newDoc.sheets[newDoc.activeSheetId].cells);
                 this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].settings);
-                console.log('selections', newState.selections.getSelection(newDoc.activeSheetId));
-                this.mainModule.setSelection(newState.selections.getSelection(newDoc.activeSheetId).r || [0, 0, 0, 0], true, true);
+                this.mainModule.setSelection(newState.selections.getSelection(newDoc.activeSheetId) || [0, 0, 0, 0], true, true);
             } else if (loadData) {
                 this.mainModule.loadData(newDoc.sheets[newDoc.activeSheetId].cells);
             } else if (updateSetting) {
                 this.mainModule.updateSettings(newDoc.sheets[newDoc.activeSheetId].settings);
             } else if (updateSelection) {
-                this.mainModule.setSelection(newState.selections.getSelection(newDoc.activeSheetId).r || [0, 0, 0, 0], true, true);
+                this.mainModule.setSelection(newState.selections.getSelection(newDoc.activeSheetId) || [0, 0, 0, 0], true, true);
             } else if (needRender) {
                 this.mainModule.render();
             }
