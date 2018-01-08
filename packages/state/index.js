@@ -7,6 +7,7 @@ import Transaction from './transactions';
 
 export {Plugin, PluginKey} from './plugin/index';
 export {Mapping, MapResult} from './models/mapping';
+export {Selection} from './models/selection';
 export const ExcelDoc = Doc;
 import {Selections} from './plugin/selection';
 

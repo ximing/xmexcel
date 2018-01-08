@@ -5,13 +5,14 @@
 import MODEL_TYPES from '../constants/model-types';
 
 export class MapResult {
-    constructor(range, deleted = false) {
-        this.range = range;
+    constructor(id, r, deleted = false) {
+        this.id = id;
+        this.r = r;
         this.deleted = deleted;
     }
 
-    static create(range, deleted) {
-        return new MapResult(range, deleted);
+    static create(id, range, deleted) {
+        return new MapResult(id, range, deleted);
     }
 }
 
@@ -55,11 +56,33 @@ export class Mapping {
         return !!(any && any[MODEL_TYPES.MAPPING]);
     }
 
-    rebase(mapping, left = true) {
-        if (this.r && mapping.r) {
-            MapResult(this.r);
+    /*
+    * rebase op
+    * */
+    rebase(mapping, left = true, del = false) {
+        if (del) {
+            return MapResult.create(this.id, this.r, true);
         } else {
-            return MapResult(this.r)
+            if (left) {
+                return Mapping.doRebase(this, mapping);
+            } else {
+                return Mapping.doRebase(mapping, this);
+            }
+        }
+    }
+
+    /*
+    * left rebase right
+    * right -> left
+    * */
+    static doRebase(left, right) {
+        let _left, _right;
+        if (left.r && right.r) {
+            if (right.r[0] < left.r[0]) {
+            }
+            return MapResult(left.r);
+        } else {
+            throw new Error('rebase param error');
         }
     }
 

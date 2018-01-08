@@ -45,48 +45,48 @@ export default class Transaction {
         return doc;
     }
 
-    changeValue(m, v) {
-        this.ops.push(Value.fromJSON({m, v}));
+    changeValue(selection, v) {
+        this.ops.push(Value.fromJSON({selection, v}));
         return this;
     }
 
-    addMark(m, {key, val}) {
-        this.ops.push(AddMark.fromJSON({m, v: {key, val}}));
+    addMark(selection, {key, val}) {
+        this.ops.push(AddMark.fromJSON({selection, v: {key, val}}));
         return this;
     }
 
-    removeMark(m, key) {
-        this.ops.push(RemoveMark.fromJSON({m, key}));
+    removeMark(selection, key) {
+        this.ops.push(RemoveMark.fromJSON({selection, key}));
         return this;
     }
 
-    clearMark(m) {
-        this.ops.push(ClearMark.fromJSON({m}));
+    clearMark(selection) {
+        this.ops.push(ClearMark.fromJSON({selection}));
         return this;
     }
 
-    setFmt(m, fmt) {
-        this.ops.push(SetFmt.fromJSON({m, fmt}));
+    setFmt(selection, fmt) {
+        this.ops.push(SetFmt.fromJSON({selection, fmt}));
         return this;
     }
 
-    setFormula(m, f) {
-        this.ops.push(SetFormula.fromJSON({m, f}));
+    setFormula(selection, f) {
+        this.ops.push(SetFormula.fromJSON({selection, f}));
         return this;
     }
 
-    setSheetSetting(m, key, val) {
-        this.ops.push(SetSheetSetting.fromJSON({m, key, val}));
+    setSheetSetting(selection, key, val) {
+        this.ops.push(SetSheetSetting.fromJSON({selection, key, val}));
         return this;
     }
 
-    changeSelection(m) {
-        this.selections = this.selections.setSelection(m);
+    changeSelection(selection) {
+        this.selections = this.selections.setSelection(selection);
         return this;
     }
 
     switchSheet(id) {
-        this.ops.push(SwitchSheet.fromJSON({m: {id}}));
+        this.ops.push(SwitchSheet.fromJSON({selection: {id}}));
         return this;
     }
 

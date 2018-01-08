@@ -3,31 +3,31 @@
  */
 'use strict';
 import {OP_NAME} from '../constants/op-consts';
-import {Mapping} from '../models/mapping';
+import {Selection} from '../models/selection';
 import OpResult from './opResult';
 import Sheet from '../models/sheet';
 
 export class SetSheetSetting {
-    constructor({m, key, val}) {
+    constructor({selection, key, val}) {
         this.name = OP_NAME.SET_SHEET_SETTING;
-        this.m = m;
+        this.selection = selection;
         this.key = key;
         this.val = val;
     }
 
     static fromJSON(object) {
         object = {...object};
-        if (!Mapping.isMapping(object.m)) {
-            object.m = Mapping.create(object.m);
+        if (!Selection.isSelection(object.selection)) {
+            object.selection = Selection.create(object.selection);
         }
         return new SetSheetSetting(object);
     }
 
     apply(doc) {
         try {
-            let sheet = new Sheet(doc.sheets[this.m.id]);
+            let sheet = new Sheet(doc.sheets[this.selection.id]);
             sheet.setSetting(this.key, this.val);
-            return OpResult.ok(doc.generateNewState(`sheets/${this.m.id}`, sheet));
+            return OpResult.ok(doc.generateNewState(`sheets/${this.selection.id}`, sheet));
         } catch (err) {
             return OpResult.fail(`操作的值超过表格空间限制${JSON.stringify(this)}`);
         }
@@ -35,22 +35,22 @@ export class SetSheetSetting {
 }
 
 export class SwitchSheet {
-    constructor({m}) {
+    constructor({selection}) {
         this.name = OP_NAME.CHANGE_SHEET;
-        this.m = m;
+        this.selection = selection;
     }
 
     static fromJSON(object) {
         object = {...object};
-        if (!Mapping.isMapping(object.m)) {
-            object.m = Mapping.create(object.m);
+        if (!Selection.isSelection(object.selection)) {
+            object.selection = Selection.create(object.selection);
         }
         return new SwitchSheet(object);
     }
 
     apply(doc) {
         try {
-            return OpResult.ok(doc.setActiveId(this.m.id));
+            return OpResult.ok(doc.setActiveId(this.selection.id));
         } catch (err) {
             return OpResult.fail(`操作的值超过表格空间限制${JSON.stringify(this)}`);
         }
@@ -58,22 +58,22 @@ export class SwitchSheet {
 }
 
 export class RemoveSheet {
-    constructor({m}) {
+    constructor({selection}) {
         this.name = OP_NAME.CHANGE_SHEET;
-        this.m = m;
+        this.selection = selection;
     }
 
     static fromJSON(object) {
         object = {...object};
-        if (!Mapping.isMapping(object.m)) {
-            object.m = Mapping.create(object.m);
+        if (!Selection.isSelection(object.selection)) {
+            object.selection = Selection.create(object.selection);
         }
         return new RemoveSheet(object);
     }
 
     apply(doc) {
         try {
-            return OpResult.ok(doc.setActiveId(this.m.id));
+            return OpResult.ok(doc.setActiveId(this.selection.id));
         } catch (err) {
             return OpResult.fail(`操作的值超过表格空间限制${JSON.stringify(this)}`);
         }
