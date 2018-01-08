@@ -2,7 +2,7 @@
  * Created by ximing on 1/3/18.
  */
 'use strict';
-import {Mapping} from '../models/mapping';
+import {Selection} from '../models/selection';
 
 export class Selections {
 
@@ -26,7 +26,7 @@ export class Selections {
         }
         let _selections = new Selections();
         Object.keys(selections).forEach(key => {
-            _selections[key] = Mapping.fromJSON(selections[key]);
+            _selections[key] = Selection.normalize(selections[key].r);
         });
         return _selections;
     }
@@ -36,7 +36,7 @@ export class Selections {
     }
 
     setSelection({id, r}) {
-        return Selections.fromJSON({...this, [id]: Mapping.fromJSON({id, r})});
+        return Selections.fromJSON({...this, [id]: {id, r}});
     }
 }
 

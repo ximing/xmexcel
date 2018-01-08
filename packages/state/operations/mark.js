@@ -18,7 +18,7 @@ export class AddMark {
     static fromJSON(object) {
         object = {...object};
         if (!Selection.isSelection(object.selection)) {
-            object.selection = Selection.create(object.selection);
+            object.selection = Selection.fromJSON(object.selection);
         }
         if (!Mark.isMark(object.v)) {
             object.v = Mark.fromJSON(object.v);
@@ -30,7 +30,7 @@ export class AddMark {
         try {
             let cellMetas = {...doc.sheets[this.selection.id].cellMetas};
             for (let rIndex = 0, l = this.selection.ranges.length; rIndex < l; rIndex++) {
-                for (let i = this.selection.ranges[rIndex][0]; i <= this.selection.ranges[2]; i++) {
+                for (let i = this.selection.ranges[rIndex][0]; i <= this.selection.ranges[rIndex][2]; i++) {
                     if (!cellMetas[i]) {
                         cellMetas[i] = {};
                     }
