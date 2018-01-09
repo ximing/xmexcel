@@ -9,7 +9,8 @@ const log = debug('excel:state:transaction');
 import {
     Value, AddMark, RemoveMark, ClearMark,
     SetFmt, SetFormula, SetSheetSetting,
-    ChangeSheet, SwitchSheet, AddSheet, RemoveSheet
+    ChangeSheet, SwitchSheet, AddSheet, RemoveSheet,
+    AddRow, AddCol, RemoveRow, RemoveCol
 } from '../operations';
 
 
@@ -90,32 +91,38 @@ export default class Transaction {
         return this;
     }
 
-    addCol() {
+    addCol(obj) {
+        this.ops.push(AddCol.fromJSON(obj));
         return this;
     }
 
-    removeCol() {
+    removeCol(obj) {
+        this.ops.push(RemoveCol.fromJSON(obj));
         return this;
     }
 
-    addRow() {
+    addRow(obj) {
+        this.ops.push(AddRow.fromJSON(obj));
         return this;
     }
 
-    removeRow() {
+    removeRow(obj) {
+        this.ops.push(RemoveRow.fromJSON(obj));
         return this;
     }
 
     removeSheet(id) {
-        this.ops.push();
+        this.ops.push(RemoveSheet.fromJSON({id}));
         return this;
     }
 
     addSheet(title) {
+        this.ops.push(AddSheet.fromJSON({title}));
         return this;
     }
 
     changeSheet() {
+        this.ops.push(ChangeSheet.fromJSON());
         return this;
     }
 }
