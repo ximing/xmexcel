@@ -90,6 +90,22 @@ export default class Transaction {
         return this;
     }
 
+    addCol() {
+        return this;
+    }
+
+    removeCol() {
+        return this;
+    }
+
+    addRow() {
+        return this;
+    }
+
+    removeRow() {
+        return this;
+    }
+
     removeSheet(id) {
         this.ops.push();
         return this;

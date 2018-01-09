@@ -112,6 +112,22 @@ class Sheet {
     setState(state) {
         return Sheet.fromJSON({...this, ...state});
     }
+
+    addRow(index, offset) {
+
+    }
+
+    removeRow(index, offset) {
+
+    }
+
+    addCol(index, offset) {
+
+    }
+
+    removeCol(index, offset) {
+
+    }
 }
 
 Sheet.prototype[MODEL_TYPES.SHEET] = true;
