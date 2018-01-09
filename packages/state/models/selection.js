@@ -5,7 +5,7 @@
 import MODEL_TYPES from '../constants/model-types';
 
 export class Selection {
-    constructor({id, ranges}) {
+    constructor({id = '', ranges = [[0, 0, 0, 0]]} = {}) {
         this.id = id;
         this.ranges = ranges;
     }
@@ -50,8 +50,8 @@ export class Selection {
         this.ranges = this.ranges.concat(Selection.normalize(r));
     }
 
-    setRange(ranges) {
-        this.ranges = ranges;
+    setRange(index, range) {
+        this.ranges[index] = range;
     }
 
     removeAllRanges() {
