@@ -37,7 +37,7 @@ export class Change {
     }
 
     clone() {
-        return new Change(this.id, this.p, this.oi, this.od);
+        return new Change(this.id, this.p.slice(), this.oi, this.od);
     }
 
     static fromJSON({t, id, p, oi, od}) {
@@ -66,21 +66,21 @@ export class Insert {
             let [x, y] = convertCoor(current);
             if (this.t === 'ic') {
                 if (this.i <= x) {
-                    x += +this.a;
+                    x += this.a;
                 }
             } else {
                 if (this.i <= y) {
-                    y += +this.a;
+                    y += this.a;
                 }
             }
             obj[`${x}:${y}`] = state[this.id]['c'][current];
             return obj;
         }, {});
-        return {...state, [this.id]: {...state[this.id], c: c}}
+        return {...state, [this.id]: {...state[this.id], c: c}};
     }
 
     clone() {
-        return new Insert(this.id, this.i, this.a);
+        return new Insert(this.id, this.t, this.i, this.a);
     }
 
     static fromJSON({t, id, i, a}) {
@@ -127,7 +127,7 @@ export class Delete {
     }
 
     clone() {
-        return new Delete(this.id, this.i, this.a);
+        return new Delete(this.id, this.t, this.i, this.a);
     }
 
     static fromJSON({t, id, i, a}) {

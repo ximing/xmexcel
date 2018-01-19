@@ -49,4 +49,14 @@ test('insert and delte ', (t) => {
     let d = new Delete('1', 'dc', 3, 1);
     newState = d.apply(newState);
     t.is(JSON.stringify(Object.keys(newState['1']['c'])), '["4:0","4:1","5:2","1:2","3:3","3:7"]');
+    insert = new Insert('1', 'ic', 0, 1);
+    newState = insert.apply(newState);
+    t.is(JSON.stringify(Object.keys(newState['1']['c'])), '["5:0","5:1","6:2","2:2","4:3","4:7"]');
+    insert = new Insert('1', 'ir', 0, 1);
+    newState = insert.apply(newState);
+    t.is(JSON.stringify(Object.keys(newState['1']['c'])), '["5:1","5:2","6:3","2:3","4:4","4:8"]');
+    d = new Delete('1', 'dc', 3, 1);
+    newState = d.apply(newState);
+    t.is(JSON.stringify(Object.keys(newState['1']['c'])), '["4:1","4:2","5:3","2:3","3:4","3:8"]');
 });
+

@@ -110,16 +110,26 @@ export class ExcelModel {
             } else if (op2.t === 'dr' || op2.t === 'dc') {
                 if (op2.i >= op1.i) {
                     /*
-                    * a 01234
-                    * b    34567
-                    * a 01234
-                    * b      5678
+                    * a [    ]
+                    * b         [    ]
                     * */
-                    b.i = Math.max(0, b.i - a.a);
-                    // b.a = Math.max(0, b.a - a.a);
-                    let offset;
-                    if ((offset = a.i + a.a - b.i) > 0) {
-                        b.a = Math.max(0, b.a - offset);
+                    if (b.i >= a.i + a.a) {
+                        b.i = b.i - a.a;
+                    } else if (b.a + b.i <= a.i + a.a) {
+                        /*
+                        * a [      ]
+                        * b   [  ]
+                        * */
+                        a.a -= b.a;
+                        b = Empty.create();
+                    } else if (b.a + b.i > a.i + a.a) {
+                        /*
+                        * a [   ]
+                        * b   [    ]
+                        * */
+                        a.a = b.i - a.i;
+                        b.a -= (op1.i + op1.a - op2.i);
+                        b.i = Math.max(0, op2.i + op2.a - b.a - op1.a);
                     }
                 } else {
                     /*
@@ -128,12 +138,21 @@ export class ExcelModel {
                     * */
                     if (b.a + b.i >= a.i + a.a) {
                         b.a -= a.a;
+                        a = Empty.create();
                     } else if (b.a + b.i > a.i) {
                         /*
                          * a    3456
                          * b 01234
                          * */
                         b.a = a.i - b.i;
+                        a.a -= (op2.a - op1.i + op2.i);
+                        a.i = Math.max(0, op1.i + op1.a - a.a - op2.a);
+                    } else if (b.a + b.i <= a.i) {
+                        /*
+                        * a        [   ]
+                        * b [   ]
+                        * */
+                        a.i -= b.a;
                     }
                 }
                 return [a, b];
@@ -142,32 +161,44 @@ export class ExcelModel {
             }
         } else if (op2.t === 'ir') {
             if (op1.t === 'c') {
-                if (a.p[1] >= b.i) {
-                    a.p[1] += b.a;
+                if (a.p[2] >= b.i) {
+                    a.p[2] += b.a;
                 }
             } else if (op1.t === 'dr') {
-                if (a.i > b.i) {
-                    b.i = a.i + a.a;
+                //a dr
+                //b ir
+                if (b.i >= a.i + a.a) {
+                    b.i -= a.a;
+                } else if (b.i > a.i) {
+                    a = [new Delete(a.id, a.i, b.i - a.i), new Delete(a.id, b.i + b.a - 1, a.a - b.i + a.i)];
+                } else {
+                    a.i += b.a;
                 }
             }
             return [a, b];
         } else if (op2.t === 'ic') {
             if (op1.t === 'c') {
-                if (a.p[2] >= b.i) {
-                    a.p[2] += b.a;
+                if (a.p[1] >= b.i) {
+                    a.p[1] += b.a;
                 }
             } else if (op1.t === 'dc') {
-                if (a.i > b.i) {
-                    b.i = a.i + a.a;
+                //a dc
+                //b ic
+                if (b.i >= a.i + a.a) {
+                    b.i -= a.a;
+                } else if (b.i > a.i) {
+                    a = [new Delete(a.id, a.i, b.i - a.i), new Delete(a.id, b.i + b.a - 1, a.a - b.i + a.i)];
+                } else {
+                    a.i += b.a;
                 }
             }
             return [a, b];
         } else if (op2.t === 'dr') {
             if (op1.t === 'c') {
-                if (a.p[1] >= b.i && a.p[1] < b.i + b.a) {
+                if (a.p[2] >= b.i && a.p[2] < b.i + b.a) {
                     a = Empty.create();
-                } else if (a.p[1] >= b.i + b.a) {
-                    a.p[1] -= b.a;
+                } else if (a.p[2] >= b.i + b.a) {
+                    a.p[2] -= b.a;
                 }
             } else if (op1.t === 'ir') {
                 //完全在右侧
@@ -183,10 +214,10 @@ export class ExcelModel {
             return [a, b];
         } else if (op2.t === 'dc') {
             if (op1.t === 'c') {
-                if (a.p[2] >= b.i && a.p[2] < b.i + b.a) {
+                if (a.p[1] >= b.i && a.p[1] < b.i + b.a) {
                     a = Empty.create();
-                } else if (a.p[2] >= b.i + b.a) {
-                    a.p[2] -= b.a;
+                } else if (a.p[1] >= b.i + b.a) {
+                    a.p[1] -= b.a;
                 }
             } else if (op1.t === 'ic') {
                 if (b.i >= a.i + a.a) {
