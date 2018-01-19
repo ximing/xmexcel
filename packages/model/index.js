@@ -142,13 +142,23 @@ export class ExcelModel {
                         b.p[1] += a.a;
                     }
                 } else if (op1.t === 'ir') {
-
+                    if (a.i < b.p[2]) {
+                        b.p[2] += a.a;
+                    }
                 } else if (op1.t === 'dc') {
-
+                    if (a.i + a.a <= b.p[1]) {
+                        b.p[1] -= a.a;
+                    } else if (a.i < b.p[1]) {
+                        b = Empty.create();
+                    }
                 } else if (op1.t === 'dr') {
-
+                    if (a.i + a.a <= b.p[2]) {
+                        b.p[2] -= a.a;
+                    } else if (a.i < b.p[2]) {
+                        b = Empty.create();
+                    }
                 }
-                return [a, b]
+                return [a, b];
             } else {
                 throw new Error('无效的类型');
             }
