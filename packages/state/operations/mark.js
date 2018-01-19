@@ -9,9 +9,10 @@ import CellMeta from '../models/cellMeta';
 import Mark from '../models/mark';
 
 export class AddMark {
-    constructor({selection, v}) {
+    constructor({selection, changes, v}) {
         this.name = OP_NAME.ADD_MARK;
         this.selection = selection;
+        this.changes = changes;
         this.v = v;
     }
 
