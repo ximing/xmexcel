@@ -2,9 +2,55 @@
  * Created by ximing on 1/18/18.
  */
 'use strict';
+import shortid from 'shortid';
+
 import {Empty, Delete, Insert, Change} from './op';
 
 export {Empty, Delete, Insert, Change};
+
+/*
+{
+    "title":'DXExcelState',
+    "type":'object',
+    "properties":{
+        "id": {
+            "description": "",
+            "type": "object",
+            "properties": {
+                "cells":{
+                    title:"DXExcelCells",
+                    "type": "object",
+                    "properties": {
+                        "id":{
+                            title:"DXExcelCell",
+                            "type": "object",
+                            "properties":{
+                                v:''
+                            }
+                        }
+                    }
+                },
+                "name":{
+                    "type": "string"
+                },
+                "id":{
+                    "type": "string"
+                },
+                "fixedCol":{
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "fixedRow":{
+                    "type": "integer",
+                    "minimum": 0
+                },
+                "mergeCells":[]
+            }
+        }
+    }
+}
+
+* */
 
 export class ExcelModel {
     constructor(state) {
@@ -16,8 +62,13 @@ export class ExcelModel {
     }
 
     static empty() {
+        let id = shortid.generate();
         return new ExcelModel({
-            id:''
+            [id]: {
+                c: {},
+                name: '工作表1',
+                id: id
+            }
         });
     }
 
@@ -84,93 +135,90 @@ export class ExcelModel {
             } else {
                 throw new Error('无效的类型');
             }
-        } else {
-            if (op2.t === 'ir') {
-                if (op1.t === 'c') {
-                    if (a.p[1] >= b.i) {
-                        a.p[1] += b.a;
-                    }
-                } else if (op1.t === 'dr') {
-                    if (a.i > b.i) {
-                        b.i = a.i + a.a;
-                    }
+        } else if (op2.t === 'ir') {
+            if (op1.t === 'c') {
+                if (a.p[1] >= b.i) {
+                    a.p[1] += b.a;
                 }
-                return [a, b];
-            } else if (op2.t === 'ic') {
-                if (op1.t === 'c') {
-                    if (a.p[2] >= b.i) {
-                        a.p[2] += b.a;
-                    }
-                } else if (op1.t === 'dc') {
-                    if (a.i > b.i) {
-                        b.i = a.i + a.a;
-                    }
+            } else if (op1.t === 'dr') {
+                if (a.i > b.i) {
+                    b.i = a.i + a.a;
                 }
-                return [a, b];
-            } else if (op2.t === 'dr') {
-                if (op1.t === 'c') {
-                    if (a.p[1] >= b.i && a.p[1] < b.i + b.a) {
-                        a = Empty.create();
-                    } else if (a.p[1] >= b.i + b.a) {
-                        a.p[1] -= b.a;
-                    }
-                } else if (op1.t === 'ir') {
-                    //完全在右侧
-                    if (b.i >= a.i + a.a) {
-                        b.i -= a.a;
-                    } else if (b.i + b.a <= a.i) {
-                        //完全在左侧
-                        a.i -= b.a;
-                    } else {
-                        b = [new Delete(b.id, b.i, a.i - b.i), new Delete(b.id, a.i + a.a - 1, b.a - a.i + b.i)];
-                    }
-                }
-                return [a, b];
-            } else if (op2.t === 'dc') {
-                if (op1.t === 'c') {
-                    if (a.p[2] >= b.i && a.p[2] < b.i + b.a) {
-                        a = Empty.create();
-                    } else if (a.p[2] >= b.i + b.a) {
-                        a.p[2] -= b.a;
-                    }
-                } else if (op1.t === 'ic') {
-                    if (b.i >= a.i + a.a) {
-                        b.i -= a.a;
-                    } else if (b.i + b.a <= a.i) {
-                        //完全在左侧
-                        a.i -= b.a;
-                    } else {
-                        b = [new Delete(b.id, b.i, a.i - b.i), new Delete(b.id, a.i + a.a - 1, b.a - a.i + b.i)];
-                    }
-                }
-                return [a, b];
-            } else if (op2.t === 'c') {
-                if (op1.t === 'ic') {
-                    if (a.i < b.p[1]) {
-                        b.p[1] += a.a;
-                    }
-                } else if (op1.t === 'ir') {
-                    if (a.i < b.p[2]) {
-                        b.p[2] += a.a;
-                    }
-                } else if (op1.t === 'dc') {
-                    if (a.i + a.a <= b.p[1]) {
-                        b.p[1] -= a.a;
-                    } else if (a.i < b.p[1]) {
-                        b = Empty.create();
-                    }
-                } else if (op1.t === 'dr') {
-                    if (a.i + a.a <= b.p[2]) {
-                        b.p[2] -= a.a;
-                    } else if (a.i < b.p[2]) {
-                        b = Empty.create();
-                    }
-                }
-                return [a, b];
-            } else {
-                throw new Error('无效的类型');
             }
-
+            return [a, b];
+        } else if (op2.t === 'ic') {
+            if (op1.t === 'c') {
+                if (a.p[2] >= b.i) {
+                    a.p[2] += b.a;
+                }
+            } else if (op1.t === 'dc') {
+                if (a.i > b.i) {
+                    b.i = a.i + a.a;
+                }
+            }
+            return [a, b];
+        } else if (op2.t === 'dr') {
+            if (op1.t === 'c') {
+                if (a.p[1] >= b.i && a.p[1] < b.i + b.a) {
+                    a = Empty.create();
+                } else if (a.p[1] >= b.i + b.a) {
+                    a.p[1] -= b.a;
+                }
+            } else if (op1.t === 'ir') {
+                //完全在右侧
+                if (b.i >= a.i + a.a) {
+                    b.i -= a.a;
+                } else if (b.i + b.a <= a.i) {
+                    //完全在左侧
+                    a.i -= b.a;
+                } else {
+                    b = [new Delete(b.id, b.i, a.i - b.i), new Delete(b.id, a.i + a.a - 1, b.a - a.i + b.i)];
+                }
+            }
+            return [a, b];
+        } else if (op2.t === 'dc') {
+            if (op1.t === 'c') {
+                if (a.p[2] >= b.i && a.p[2] < b.i + b.a) {
+                    a = Empty.create();
+                } else if (a.p[2] >= b.i + b.a) {
+                    a.p[2] -= b.a;
+                }
+            } else if (op1.t === 'ic') {
+                if (b.i >= a.i + a.a) {
+                    b.i -= a.a;
+                } else if (b.i + b.a <= a.i) {
+                    //完全在左侧
+                    a.i -= b.a;
+                } else {
+                    b = [new Delete(b.id, b.i, a.i - b.i), new Delete(b.id, a.i + a.a - 1, b.a - a.i + b.i)];
+                }
+            }
+            return [a, b];
+        } else if (op2.t === 'c') {
+            if (op1.t === 'ic') {
+                if (a.i < b.p[1]) {
+                    b.p[1] += a.a;
+                }
+            } else if (op1.t === 'ir') {
+                if (a.i < b.p[2]) {
+                    b.p[2] += a.a;
+                }
+            } else if (op1.t === 'dc') {
+                if (a.i + a.a <= b.p[1]) {
+                    b.p[1] -= a.a;
+                } else if (a.i < b.p[1]) {
+                    b = Empty.create();
+                }
+            } else if (op1.t === 'dr') {
+                if (a.i + a.a <= b.p[2]) {
+                    b.p[2] -= a.a;
+                } else if (a.i < b.p[2]) {
+                    b = Empty.create();
+                }
+            }
+            return [a, b];
+        } else {
+            throw new Error('无效的类型');
         }
     }
 }

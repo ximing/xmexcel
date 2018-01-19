@@ -2,6 +2,7 @@
  * Created by ximing on 1/18/18.
  */
 'use strict';
+import {convertCoor} from './op';
 
 export class Change {
     constructor(id, p, oi, od) {
@@ -21,11 +22,12 @@ export class Change {
 
     apply(state) {
         if (this.p[0] === 'c') {
-            state[this.id]['c'][`${this.p[1]}:${this.p[2]}`] = Object.assign({}, state['c'][`${this.p[1]}:${this.p[2]}`], {v: this.oi});
-            return state;
-        } else {
-            return {};
+            state[this.id]['c'][`${this.p[1]}:${this.p[2]}`] =
+                Object.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`], {[this.p[3] || 'v']: this.oi});
+        } else if (this.p[0] === 'name') {
+            state[this.id][this.p[0]] = this.oi;
         }
+        return {...state};
     }
 
     clone() {
@@ -34,17 +36,38 @@ export class Change {
 }
 
 export class Insert {
-    constructor(id, i, a) {
-        this.t = 'ic';//ic ir
+    constructor(id, t, i, a) {
+        this.t = t;//ic ir
         this.id = id;
         this.i = i;//index
         this.a = a;//amount
     }
 
     revert() {
+        if (this.t === 'ic') {
+            return new Delete(this.id, 'dc', this.i, this.a)
+        } else {
+            return new Delete(this.id, 'dr', this.i, this.a)
+        }
     }
 
     apply(state) {
+        let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
+            let [x, y] = convertCoor(current);
+            if (this.t === 'ic') {
+                if (this.i < y) {
+                    y += this.a;
+                }
+            } else {
+                if (this.i < x) {
+                    x += this.a;
+                }
+            }
+            obj[`${x}:${y}`] = state[this.id]['c'][current];
+            return obj;
+        }, {});
+        state[this.id]['c'] = c;
+        return {...state};
     }
 
     clone() {
@@ -53,18 +76,42 @@ export class Insert {
 }
 
 export class Delete {
-    constructor(id, i, a) {
-        this.t = 'dc';//dc dr
+    constructor(id, t, i, a) {
+        this.t = t;//dc dr
         this.id = id;
         this.i = i;
         this.a = a;
     }
 
     revert() {
+        if (this.t === 'dc') {
+            return new Insert(this.id, 'ic', this.i, this.a);
+        } else {
+            return new Insert(this.id, 'ir', this.i, this.a);
+        }
     }
 
     apply(state) {
-
+        let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
+            let [x, y] = convertCoor(current);
+            if (this.t === 'dc') {
+                if (y >= this.i && y < this.i + this.a) {
+                    return obj;
+                } else if (y >= this.i + this.a) {
+                    y -= this.a;
+                }
+            } else {
+                if (x >= this.i && x < this.i + this.a) {
+                    return obj;
+                } else if (x >= this.i + this.a) {
+                    x -= this.a;
+                }
+            }
+            obj[`${x}:${y}`] = state[this.id]['c'][current];
+            return obj;
+        }, {});
+        state[this.id]['c'] = c;
+        return {...state};
     }
 
     clone() {
