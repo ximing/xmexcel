@@ -2,7 +2,7 @@
  * Created by ximing on 1/18/18.
  */
 'use strict';
-import {convertCoor} from './op';
+import {convertCoor} from './util';
 
 export class Change {
     constructor(id, p, oi, od) {
@@ -22,16 +22,26 @@ export class Change {
 
     apply(state) {
         if (this.p[0] === 'c') {
-            state[this.id]['c'][`${this.p[1]}:${this.p[2]}`] =
-                Object.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`], {[this.p[3] || 'v']: this.oi});
+            return {
+                ...state, [this.id]: {
+                    ...state[this.id], c: {
+                        ...state[this.id]['c'],
+                        [`${this.p[1]}:${this.p[2]}`]: Object.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`], {[this.p[3] || 'v']: this.oi})
+                    }
+                }
+            }
         } else if (this.p[0] === 'name') {
             state[this.id][this.p[0]] = this.oi;
+            return {...state, [this.id]: {...state[this.id], [this.p[0]]: this.oi}}
         }
-        return {...state};
     }
 
     clone() {
         return new Change(this.id, this.p, this.oi, this.od);
+    }
+
+    static fromJSON({t, id, p, oi, od}) {
+        return new Change(id, p, oi, od);
     }
 }
 
@@ -55,23 +65,26 @@ export class Insert {
         let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
             let [x, y] = convertCoor(current);
             if (this.t === 'ic') {
-                if (this.i < y) {
-                    y += this.a;
+                if (this.i <= x) {
+                    x += +this.a;
                 }
             } else {
-                if (this.i < x) {
-                    x += this.a;
+                if (this.i <= y) {
+                    y += +this.a;
                 }
             }
             obj[`${x}:${y}`] = state[this.id]['c'][current];
             return obj;
         }, {});
-        state[this.id]['c'] = c;
-        return {...state};
+        return {...state, [this.id]: {...state[this.id], c: c}}
     }
 
     clone() {
         return new Insert(this.id, this.i, this.a);
+    }
+
+    static fromJSON({t, id, i, a}) {
+        return new Insert(id, t, i, a);
     }
 }
 
@@ -95,27 +108,30 @@ export class Delete {
         let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
             let [x, y] = convertCoor(current);
             if (this.t === 'dc') {
-                if (y >= this.i && y < this.i + this.a) {
-                    return obj;
-                } else if (y >= this.i + this.a) {
-                    y -= this.a;
-                }
-            } else {
                 if (x >= this.i && x < this.i + this.a) {
                     return obj;
                 } else if (x >= this.i + this.a) {
                     x -= this.a;
                 }
+            } else {
+                if (y >= this.i && y < this.i + this.a) {
+                    return obj;
+                } else if (y >= this.i + this.a) {
+                    y -= this.a;
+                }
             }
             obj[`${x}:${y}`] = state[this.id]['c'][current];
             return obj;
         }, {});
-        state[this.id]['c'] = c;
-        return {...state};
+        return {...state, [this.id]: {...state[this.id], c: c}}
     }
 
     clone() {
         return new Delete(this.id, this.i, this.a);
+    }
+
+    static fromJSON({t, id, i, a}) {
+        return new Delete(id, t, i, a);
     }
 }
 
@@ -124,8 +140,28 @@ export class Empty {
         this.t = 'e';
     }
 
+    apply(state) {
+        return state;
+    }
+
     static create() {
         return new Empty();
     }
 }
 
+export class Op {
+    static fromJSON(obj) {
+        const {t} = obj;
+        if (t === 'c') {
+            return Change.fromJSON(obj);
+        } else if (t === 'ic' || t === 'ir') {
+            return Insert.fromJSON(obj);
+        } else if (t === 'dc' || t === 'dr') {
+            return Delete.fromJSON(obj);
+        } else if (t === 'e') {
+            return Empty.create();
+        } else {
+            throw new Error('错误的op类型');
+        }
+    }
+}

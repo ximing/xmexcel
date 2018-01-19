@@ -3,5 +3,5 @@
  */
 'use strict';
 export const convertCoor = function (key) {
-    return key.split(':').map(parseInt);
+    return key.split(':').map(item => parseInt(item));
 };

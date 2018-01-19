@@ -4,9 +4,9 @@
 'use strict';
 import shortid from 'shortid';
 
-import {Empty, Delete, Insert, Change} from './op';
+import {Empty, Delete, Insert, Change, Op} from './op';
 
-export {Empty, Delete, Insert, Change};
+export {Empty, Delete, Insert, Change, Op};
 
 /*
 {
@@ -53,8 +53,10 @@ export {Empty, Delete, Insert, Change};
 * */
 
 export class ExcelModel {
-    constructor(state) {
-        this.state = state;
+    constructor(excel) {
+        this.excel = excel;
+        this.undo = [];
+        this.redo = [];
     }
 
     static fromJSON(obj) {
@@ -76,11 +78,14 @@ export class ExcelModel {
         if (!Array.isArray(ops)) {
             ops = [ops];
         }
-
         ops.forEach(op => {
             this.state = op.apply(this.state);
         });
         return this.state;
+    }
+
+    receive(ops) {
+
     }
 
     static transform(op1, op2) {

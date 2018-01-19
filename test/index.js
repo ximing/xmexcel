@@ -4,22 +4,49 @@
 'use strict';
 import test from 'ava';
 
-import ExcelState from '../src/index';
+import {ExcelModel, Empty, Delete, Insert, Change} from '../src/index';
 
-import {defaultData} from './lib';
+let state = {
+    '1': {
+        c: {
+            '4:0': {v: 1},
+            '4:1': {v: 1},
+            '5:2': {v: 1}
+        }
+    }
+};
+test('change', (t) => {
+    let excelModel = ExcelModel.empty();
+    // t.truthy(Doc.isDoc(state.doc));
+    let id = Object.keys(excelModel.excel)[0];
+    let change = new Change(id, ['c', 1, 2, 'v'], '1', null);
+    let newModel = change.apply(excelModel.excel);
+    t.is(newModel[id]['c'][`1:2`]['v'], '1');
+});
 
-// test('doc', (t) => {
-//     let state = ExcelState.create({
-//         doc: defaultData
-//     });
-//     t.truthy(Doc.isDoc(state.doc));
-// });
-//
-// test('change value', (t) => {
-//     let state = ExcelState.create({
-//         doc: defaultData
-//     });
-//     let tr = state.tr.changeValue({id: 'shortid', ranges: [[0, 0, 5, 5]]}, 1000);
-//     let newState = state.apply(tr);
-//     t.is(newState.doc.sheets['shortid']['cells'][1][1], 1000);
-// });
+test('insert', (t) => {
+    let insert = new Insert('1', 'ic', 1, 1);
+    let newState = insert.apply(state);
+    t.is(JSON.stringify(Object.keys(newState['1']['c'])), '["5:0","5:1","6:2"]');
+});
+
+test('delete', (t) => {
+    let d = new Delete('1', 'dc', 1, 2);
+    let newState = d.apply(state);
+    t.is(JSON.stringify(Object.keys(newState['1']['c'])), '["2:0","2:1","3:2"]');
+});
+
+test('insert and delte ', (t) => {
+    //4:0 4:1 5:2 1:2 3:3 3:7
+    let change = new Change('1', ['c', 1, 2, 'v'], '1', null);
+    let newState = change.apply(state);
+    change = new Change('1', ['c', 3, 3, 'v'], '1', null);
+    newState = change.apply(newState);
+    change = new Change('1', ['c', 3, 7, 'v'], '1', null);
+    newState = change.apply(newState);
+    let insert = new Insert('1', 'ic', 3, 1);
+    newState = insert.apply(newState);
+    let d = new Delete('1', 'dc', 3, 1);
+    newState = d.apply(newState);
+    t.is(JSON.stringify(Object.keys(newState['1']['c'])), '["4:0","4:1","5:2","1:2","3:3","3:7"]');
+});
