@@ -79,7 +79,7 @@
             "test/*.js"
         ],
         "source": [
-            "packages/state/**/*.{js,jsx}",
+            "src/**/*.{js,jsx}",
             "test/*.js",
             "!dist/**/*",
             "!node_modules/**/*"

@@ -4,6 +4,8 @@
 'use strict';
 import {Empty, Delete, Insert, Change} from './op';
 
+export {Empty, Delete, Insert, Change};
+
 export class ExcelModel {
     constructor(state) {
         this.state = state;
@@ -11,6 +13,12 @@ export class ExcelModel {
 
     static fromJSON(obj) {
         return new ExcelModel(obj);
+    }
+
+    static empty() {
+        return new ExcelModel({
+            id:''
+        });
     }
 
     apply(ops) {
