@@ -245,7 +245,7 @@ export class ExcelModel {
     }
 }
 
-function handledi() {
+function handledi(a, b) {
     //a ic d dc
     if (b.i + b.a >= a.i) {
         //a       [  ]
@@ -256,16 +256,16 @@ function handledi() {
         //a    [   ]
         //b  [   ]
 
-    } else if () {
+    } else if (true) {
         //a  [  ]
         //b [       ]
-    } else if () {
+    } else if (true) {
         //a [    ]
         //b   [       ]
-    } else if () {
+    } else if (true) {
         //a [    ]
         //b        [       ]
-    } else if () {
+    } else if (true) {
         //a [           ]
         //b   [       ]
     }
@@ -282,16 +282,16 @@ function handleid(a, b) {
         //a    [   ]
         //b  [   ]
 
-    } else if () {
+    } else if (true) {
         //a  [  ]
         //b [       ]
-    } else if () {
+    } else if (true) {
         //a [    ]
         //b   [       ]
-    } else if () {
+    } else if (true) {
         //a [    ]
         //b        [       ]
-    } else if () {
+    } else if (true) {
         //a [           ]
         //b   [       ]
     }
