@@ -170,7 +170,7 @@ export class ExcelModel {
                 if (b.i >= a.i + a.a) {
                     b.i -= a.a;
                 } else if (b.i > a.i) {
-                    a = [new Delete(a.id, a.i, b.i - a.i), new Delete(a.id, b.i + b.a - 1, a.a - b.i + a.i)];
+                    a = [new Delete(a.id, a.t, a.i, b.i - a.i), new Delete(a.id, a.t, b.i + b.a - 1, a.a - b.i + a.i)];
                 } else {
                     a.i += b.a;
                 }
@@ -187,7 +187,7 @@ export class ExcelModel {
                 if (b.i >= a.i + a.a) {
                     b.i -= a.a;
                 } else if (b.i > a.i) {
-                    a = [new Delete(a.id, a.i, b.i - a.i), new Delete(a.id, b.i + b.a - 1, a.a - b.i + a.i)];
+                    a = [new Delete(a.id, a.t, a.i, b.i - a.i), new Delete(a.id, a.t, b.i + b.a - 1, a.a - b.i + a.i)];
                 } else {
                     a.i += b.a;
                 }
@@ -202,14 +202,7 @@ export class ExcelModel {
                 }
             } else if (op1.t === 'ir') {
                 //完全在右侧
-                if (b.i >= a.i + a.a) {
-                    b.i -= a.a;
-                } else if (b.i + b.a <= a.i) {
-                    //完全在左侧
-                    a.i -= b.a;
-                } else {
-                    b = [new Delete(b.id, b.i, a.i - b.i), new Delete(b.id, a.i + a.a - 1, b.a - a.i + b.i)];
-                }
+                return handleid(a, b)
             }
             return [a, b];
         } else if (op2.t === 'dc') {
@@ -220,14 +213,7 @@ export class ExcelModel {
                     a.p[1] -= b.a;
                 }
             } else if (op1.t === 'ic') {
-                if (b.i >= a.i + a.a) {
-                    b.i -= a.a;
-                } else if (b.i + b.a <= a.i) {
-                    //完全在左侧
-                    a.i -= b.a;
-                } else {
-                    b = [new Delete(b.id, b.i, a.i - b.i), new Delete(b.id, a.i + a.a - 1, b.a - a.i + b.i)];
-                }
+                return handleid(a, b)
             }
             return [a, b];
         } else if (op2.t === 'c') {
@@ -256,5 +242,57 @@ export class ExcelModel {
         } else {
             throw new Error('无效的类型');
         }
+    }
+}
+
+function handledi() {
+    //a ic d dc
+    if (b.i + b.a >= a.i) {
+        //a       [  ]
+        //b [   ]
+        // b.i += a.a;
+        a.i -= b.a;
+    } else if (a.i + a.a > b.i + b.a && a.i >= b.i) {
+        //a    [   ]
+        //b  [   ]
+
+    } else if () {
+        //a  [  ]
+        //b [       ]
+    } else if () {
+        //a [    ]
+        //b   [       ]
+    } else if () {
+        //a [    ]
+        //b        [       ]
+    } else if () {
+        //a [           ]
+        //b   [       ]
+    }
+}
+
+function handleid(a, b) {
+    //a ic d dc
+    if (b.i + b.a >= a.i) {
+        //a       [  ]
+        //b [   ]
+        // b.i += a.a;
+        a.i -= b.a;
+    } else if (a.i + a.a > b.i + b.a && a.i >= b.i) {
+        //a    [   ]
+        //b  [   ]
+
+    } else if () {
+        //a  [  ]
+        //b [       ]
+    } else if () {
+        //a [    ]
+        //b   [       ]
+    } else if () {
+        //a [    ]
+        //b        [       ]
+    } else if () {
+        //a [           ]
+        //b   [       ]
     }
 }
