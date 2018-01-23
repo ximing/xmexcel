@@ -5,3 +5,13 @@ const op = Op.fromJSON(opJsonObj);
 excelModel.apply(op);
 //excelModel.excel 
 ```
+ExcelModel 每次应用op将会产生新的excel
+```javascript
+export class ExcelModel {
+    constructor(excel) {
+        this.excel = excel;
+        this.undo = [];
+        this.redo = [];
+    }
+}
+```
