@@ -5,7 +5,7 @@ const op = Op.fromJSON(opJsonObj);
 excelModel.apply(op);
 //excelModel.excel 
 ```
-ExcelModel 每次应用op将会产生新的excel
+ExcelModel 每次应用op将会产生新的excel和history
 ```javascript
 export class ExcelModel {
     constructor(excel) {
