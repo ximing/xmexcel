@@ -75,13 +75,15 @@ export class ExcelModel {
     }
 
     apply(ops) {
+        console.log('______');
         if (!Array.isArray(ops)) {
             ops = [ops];
         }
         ops.forEach(op => {
-            this.state = op.apply(this.state);
+            this.excel = op.apply(this.excel);
+            console.log('this.excel ======= ', this.excel, op);
         });
-        return this.state;
+        return this.excel;
     }
 
     receive(ops) {

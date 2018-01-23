@@ -33,6 +33,9 @@ export class Change {
         } else if (this.p[0] === 'name') {
             state[this.id][this.p[0]] = this.oi;
             return {...state, [this.id]: {...state[this.id], [this.p[0]]: this.oi}}
+        } else {
+            state[this.id][this.p[0]] = this.oi;
+            return {...state, [this.id]: {...state[this.id], [this.p[0]]: this.oi}}
         }
     }
 
@@ -76,7 +79,41 @@ export class Insert {
             obj[`${x}:${y}`] = state[this.id]['c'][current];
             return obj;
         }, {});
-        return {...state, [this.id]: {...state[this.id], c: c}};
+        let otherProps = {};
+        if (state[this.id]['fixed']) {
+            let row = state[this.id]['fixed'].row;
+            let col = state[this.id]['fixed'].col;
+            if (row && this.t === 'ir' && this.i < row) {
+                row += this.a;
+            }
+            if (col && this.t === 'ic' && this.i < col) {
+                col += this.a;
+            }
+            otherProps['fixed'] = {
+                row, col
+            };
+        }
+        if (state[this.id]['rh']) {
+            otherProps['rh'] = {};
+            Object.keys(state[this.id]['rh']).forEach(key => {
+                if (key >= this.i) {
+                    otherProps['rh'][key + this.a] = state[this.id]['rh'][key];
+                } else {
+                    otherProps['rh'][key] = state[this.id]['rh'][key]
+                }
+            });
+        }
+        if (state[this.id]['cw']) {
+            otherProps['cw'] = {};
+            Object.keys(state[this.id]['cw']).forEach(key => {
+                if (key >= this.i) {
+                    otherProps['cw'][key + this.a] = state[this.id]['cw'][key];
+                } else {
+                    otherProps['cw'][key] = state[this.id]['cw'][key]
+                }
+            });
+        }
+        return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
     }
 
     clone() {
@@ -123,7 +160,45 @@ export class Delete {
             obj[`${x}:${y}`] = state[this.id]['c'][current];
             return obj;
         }, {});
-        return {...state, [this.id]: {...state[this.id], c: c}}
+        let otherProps = {};
+        if (state[this.id]['fixed']) {
+            let row = state[this.id]['fixed'].row;
+            let col = state[this.id]['fixed'].col;
+            if (row && this.t === 'dr' && this.i < row) {
+                row = Math.max(0, row - this.a);
+            }
+            if (col && this.t === 'dc' && this.i < col) {
+                col = Math.max(0, col - this.a);
+            }
+            otherProps['fixed'] = {
+                row, col
+            };
+        }
+        if (state[this.id]['rh']) {
+            otherProps['rh'] = {};
+            Object.keys(state[this.id]['rh']).forEach(key => {
+                if (key >= this.i) {
+                    if (key - this.a >= 0) {
+                        otherProps['rh'][key - this.a] = state[this.id]['rh'][key];
+                    }
+                } else {
+                    otherProps['rh'][key] = state[this.id]['rh'][key]
+                }
+            });
+        }
+        if (state[this.id]['cw']) {
+            otherProps['cw'] = {};
+            Object.keys(state[this.id]['cw']).forEach(key => {
+                if (key >= this.i) {
+                    if (key - this.a >= 0) {
+                        otherProps['cw'][key - this.a] = state[this.id]['cw'][key];
+                    }
+                } else {
+                    otherProps['cw'][key] = state[this.id]['cw'][key]
+                }
+            });
+        }
+        return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}}
     }
 
     clone() {
