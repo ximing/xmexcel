@@ -95,14 +95,17 @@ export class ExcelModel {
             let unconfirmed = [];
             let removeOp = op;
             this.unconfirmed.reverse().forEach(item => {
-                let [a, b] = ExcelModel.transform(item, op);
-                unconfirmed = ExcelModel.trim(a).concat(unconfirmed);
-                removeOp = b;
+                if (!Empty.isEmpty(op)) {
+                    let [a, b] = ExcelModel.transform(item, op);
+                    unconfirmed = ExcelModel.trim(a).concat(unconfirmed);
+                    removeOp = b;
+                }
             });
-            remoteOps = ExcelModel.trim(removeOp).concat(remoteOps);
+            remoteOps = remoteOps.concat(ExcelModel.trim(removeOp));
             this.unconfirmed = unconfirmed;
         });
         this.apply(ops);
+        //rebase history
     }
 
     static trim(ops) {
@@ -111,7 +114,7 @@ export class ExcelModel {
         }
         return ops.filter(op => {
             return !Empty.isEmpty(op);
-        })
+        });
     }
 
     static transform(op1, op2) {
@@ -134,52 +137,25 @@ export class ExcelModel {
                 }
                 return [a, b];
             } else if (op2.t === 'dr' || op2.t === 'dc') {
-                if (op2.i >= op1.i) {
+                if (op2.i > op1.i) {
                     /*
-                    * a [    ]
-                    * b         [    ]
+                    * a |
+                    * b   |
                     * */
-                    if (b.i >= a.i + a.a) {
-                        b.i = b.i - a.a;
-                    } else if (b.a + b.i <= a.i + a.a) {
-                        /*
-                        * a [      ]
-                        * b   [  ]
-                        * */
-                        a.a -= b.a;
-                        b = Empty.create();
-                    } else if (b.a + b.i > a.i + a.a) {
-                        /*
-                        * a [   ]
-                        * b   [    ]
-                        * */
-                        a.a = b.i - a.i;
-                        b.a -= (op1.i + op1.a - op2.i);
-                        b.i = Math.max(0, op2.i + op2.a - b.a - op1.a);
-                    }
+                    b.i -= 1;
+                } else if (op2.i < op1.i) {
+                    /*
+                    * a     |
+                    * b   |
+                    * */
+                    a.i -= 1;
                 } else {
                     /*
-                    * a   23
-                    * b 01234
+                    * a   |
+                    * b   |
                     * */
-                    if (b.a + b.i >= a.i + a.a) {
-                        b.a -= a.a;
-                        a = Empty.create();
-                    } else if (b.a + b.i > a.i) {
-                        /*
-                         * a    3456
-                         * b 01234
-                         * */
-                        b.a = a.i - b.i;
-                        a.a -= (op2.a - op1.i + op2.i);
-                        a.i = Math.max(0, op1.i + op1.a - a.a - op2.a);
-                    } else if (b.a + b.i <= a.i) {
-                        /*
-                        * a        [   ]
-                        * b [   ]
-                        * */
-                        a.i -= b.a;
-                    }
+                    a = Empty.create();
+                    b = Empty.create();
                 }
                 return [a, b];
             } else {
@@ -193,11 +169,23 @@ export class ExcelModel {
             } else if (op1.t === 'dr') {
                 //a dr
                 //b ir
-                if (b.i >= a.i + a.a) {
-                    b.i -= a.a;
-                } else if (b.i > a.i) {
-                    a = [new Delete(a.id, a.t, a.i, b.i - a.i), new Delete(a.id, a.t, b.i + b.a - 1, a.a - b.i + a.i)];
+                if (a.i >= b.i + b.a) {
+                    /*
+                    * a     |
+                    * b [ ]
+                    * */
+                    a.i += b.a;
+                } else if (a.i < b.i) {
+                    /*
+                    * a |
+                    * b   [   ]
+                    * */
+                    b.i -= 1;
                 } else {
+                    /*
+                    * a   |
+                    * b [   ]
+                    * */
                     a.i += b.a;
                 }
             } else if (op1.t === 'rs') {
@@ -212,11 +200,23 @@ export class ExcelModel {
             } else if (op1.t === 'dc') {
                 //a dc
                 //b ic
-                if (b.i >= a.i + a.a) {
-                    b.i -= a.a;
-                } else if (b.i > a.i) {
-                    a = [new Delete(a.id, a.t, a.i, b.i - a.i), new Delete(a.id, a.t, b.i + b.a - 1, a.a - b.i + a.i)];
+                if (a.i >= b.i + b.a) {
+                    /*
+                    * a     |
+                    * b [ ]
+                    * */
+                    a.i += b.a;
+                } else if (a.i < b.i) {
+                    /*
+                    * a |
+                    * b   [   ]
+                    * */
+                    b.i -= 1;
                 } else {
+                    /*
+                    * a   |
+                    * b [   ]
+                    * */
                     a.i += b.a;
                 }
             } else if (op1.t === 'rs') {
@@ -231,8 +231,27 @@ export class ExcelModel {
                     a.p[2] -= b.a;
                 }
             } else if (op1.t === 'ir') {
-                //完全在右侧
-                return handleid(a, b)
+                //a ir
+                //b dr
+                if (a.i > b.i) {
+                    /*
+                    * a   [    ]
+                    * b |
+                    * */
+                    a.i -= 1;
+                } else if (b.i >= a.i + a.a) {
+                    /*
+                    * a   [    ]
+                    * b           |
+                    * */
+                    b.i += a.a;
+                } else {
+                    /*
+                    * a   [    ]
+                    * b     |
+                    * */
+                    b.i += a.a;
+                }
             } else if (op1.t === 'rs') {
                 return [Empty.create(), b]
             }
@@ -245,7 +264,28 @@ export class ExcelModel {
                     a.p[1] -= b.a;
                 }
             } else if (op1.t === 'ic') {
-                return handleid(a, b)
+                //a ic
+                //b dc
+                if (a.i > b.i) {
+                    /*
+                    * a   [    ]
+                    * b |
+                    * */
+                    a.i -= 1;
+                } else if (b.i >= a.i + a.a) {
+                    /*
+                    * a   [    ]
+                    * b           |
+                    * */
+                    b.i += a.a;
+                } else {
+                    /*
+                    * a   [    ]
+                    * b     |
+                    * */
+                    b.i += a.a;
+                }
+
             } else if (op1.t === 'rs') {
                 return [Empty.create(), b]
             }
@@ -260,79 +300,27 @@ export class ExcelModel {
                     b.p[2] += a.a;
                 }
             } else if (op1.t === 'dc') {
-                if (a.i + a.a <= b.p[1]) {
-                    b.p[1] -= a.a;
+                if (a.i + 1 <= b.p[1]) {
+                    b.p[1] -= 1;
                 } else if (a.i < b.p[1]) {
                     b = Empty.create();
                 }
             } else if (op1.t === 'dr') {
-                if (a.i + a.a <= b.p[2]) {
-                    b.p[2] -= a.a;
+                if (a.i + 1 <= b.p[2]) {
+                    b.p[2] -= 1;
                 } else if (a.i < b.p[2]) {
                     b = Empty.create();
                 }
             } else if (op1.t === 'rs') {
-                return [Empty.create(), b]
+                return [Empty.create(), b];
             }
             return [a, b];
         } else if (op2.t === 'as') {
-            return [a, b]
+            return [a, b];
         } else if (op2.t === 'rs') {
-            return [a, Empty.create()]
+            return [a, Empty.create()];
         } else {
             throw new Error('无效的类型');
         }
-    }
-}
-
-function handledi(a, b) {
-    //a ic d dc
-    if (b.i + b.a >= a.i) {
-        //a       [  ]
-        //b [   ]
-        // b.i += a.a;
-        a.i -= b.a;
-    } else if (a.i + a.a > b.i + b.a && a.i >= b.i) {
-        //a    [   ]
-        //b  [   ]
-
-    } else if (true) {
-        //a  [  ]
-        //b [       ]
-    } else if (true) {
-        //a [    ]
-        //b   [       ]
-    } else if (true) {
-        //a [    ]
-        //b        [       ]
-    } else if (true) {
-        //a [           ]
-        //b   [       ]
-    }
-}
-
-function handleid(a, b) {
-    //a ic d dc
-    if (b.i + b.a >= a.i) {
-        //a       [  ]
-        //b [   ]
-        // b.i += a.a;
-        a.i -= b.a;
-    } else if (a.i + a.a > b.i + b.a && a.i >= b.i) {
-        //a    [   ]
-        //b  [   ]
-
-    } else if (true) {
-        //a  [  ]
-        //b [       ]
-    } else if (true) {
-        //a [    ]
-        //b   [       ]
-    } else if (true) {
-        //a [    ]
-        //b        [       ]
-    } else if (true) {
-        //a [           ]
-        //b   [       ]
     }
 }

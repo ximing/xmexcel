@@ -11,9 +11,6 @@ export class Change {
         this.p = p;
         this.oi = oi;
         this.od = od;
-
-        // this.li = 0;
-        // this.ld = '';
     }
 
     revert() {
@@ -150,18 +147,17 @@ export class Insert {
 }
 
 export class Delete {
-    constructor(id, t, i, a) {
+    constructor(id, t, i) {
         this.t = t;//dc dr
         this.id = id;
         this.i = i;
-        this.a = a;
     }
 
     revert() {
         if (this.t === 'dc') {
-            return new Insert(this.id, 'ic', this.i, this.a);
+            return new Insert(this.id, 'ic', this.i, 1);
         } else {
-            return new Insert(this.id, 'ir', this.i, this.a);
+            return new Insert(this.id, 'ir', this.i, 1);
         }
     }
 
@@ -169,15 +165,15 @@ export class Delete {
         let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
             let [x, y] = convertCoor(current);
             if (this.t === 'dc') {
-                if (x >= this.i && x < this.i + this.a) {
+                if (x >= this.i && x < this.i + 1) {
                     return obj;
-                } else if (x >= this.i + this.a) {
-                    x -= this.a;
+                } else if (x >= this.i + 1) {
+                    x -= 1;
                 }
             } else {
-                if (y >= this.i && y < this.i + this.a) {
+                if (y >= this.i && y < this.i + 1) {
                     return obj;
-                } else if (y >= this.i + this.a) {
+                } else if (y >= this.i + 1) {
                     y -= this.a;
                 }
             }
@@ -189,10 +185,10 @@ export class Delete {
             let row = state[this.id]['fixed'].row;
             let col = state[this.id]['fixed'].col;
             if (row && this.t === 'dr' && this.i < row) {
-                row = Math.max(0, row - this.a);
+                row = Math.max(0, row - 1);
             }
             if (col && this.t === 'dc' && this.i < col) {
-                col = Math.max(0, col - this.a);
+                col = Math.max(0, col - 1);
             }
             otherProps['fixed'] = {
                 row, col
@@ -202,11 +198,11 @@ export class Delete {
             otherProps['rh'] = {};
             Object.keys(state[this.id]['rh']).forEach(key => {
                 if (key >= this.i) {
-                    if (key - this.a >= 0) {
-                        otherProps['rh'][key - this.a] = state[this.id]['rh'][key];
+                    if (key - 1 >= 0) {
+                        otherProps['rh'][key - 1] = state[this.id]['rh'][key];
                     }
                 } else {
-                    otherProps['rh'][key] = state[this.id]['rh'][key]
+                    otherProps['rh'][key] = state[this.id]['rh'][key];
                 }
             });
         }
@@ -214,8 +210,8 @@ export class Delete {
             otherProps['cw'] = {};
             Object.keys(state[this.id]['cw']).forEach(key => {
                 if (key >= this.i) {
-                    if (key - this.a >= 0) {
-                        otherProps['cw'][key - this.a] = state[this.id]['cw'][key];
+                    if (key - 1 >= 0) {
+                        otherProps['cw'][key - 1] = state[this.id]['cw'][key];
                     }
                 } else {
                     otherProps['cw'][key] = state[this.id]['cw'][key]
@@ -229,34 +225,34 @@ export class Delete {
                 let {rowspan, colspan} = state[this.id]['mergeCells'][key];
                 let isDelete = false;
                 if (this.t === 'dr') {
-                    if (this.i + this.a <= y) {
+                    if (this.i + 1 <= y) {
                         y -= this.a;
-                    } else if (this.i + this.a > y && this.i + this.a <= y + rowspan && this.i < y) {
+                    } else if (this.i + 1 > y && this.i + 1 <= y + rowspan && this.i < y) {
                         let delta = y - this.i;
                         y -= delta;
-                        rowspan -= (this.a - delta);
-                    } else if (this.i >= y && this.i + this.a <= y + rowspan) {
-                        rowspan -= this.a;
-                    } else if (this.i >= y && this.i + this.a > y + rowspan && this.i < y + rowspan) {
+                        rowspan -= (1 - delta);
+                    } else if (this.i >= y && this.i + 1 <= y + rowspan) {
+                        rowspan -= 1;
+                    } else if (this.i >= y && this.i + 1 > y + rowspan && this.i < y + rowspan) {
                         let delta = y + rowspan - this.i;
                         rowspan -= delta;
-                    } else if (this.i < y && this.i + this.a >= y + rowspan) {
+                    } else if (this.i < y && this.i + 1 >= y + rowspan) {
                         isDelete = true;
                     }
                 }
                 if (this.t === 'dc') {
-                    if (this.i + this.a <= x) {
-                        x -= this.a;
-                    } else if (this.i + this.a > y && this.i + this.a <= x + colspan && this.i < x) {
+                    if (this.i + 1 <= x) {
+                        x -= 1;
+                    } else if (this.i + 1 > y && this.i + 1 <= x + colspan && this.i < x) {
                         let delta = x - this.i;
                         x -= delta;
-                        colspan -= (this.a - delta);
-                    } else if (this.i >= x && this.i + this.a <= x + colspan) {
-                        colspan -= this.a;
-                    } else if (this.i >= x && this.i + this.a > x + colspan && this.i < x + colspan) {
+                        colspan -= (1 - delta);
+                    } else if (this.i >= x && this.i + 1 <= x + colspan) {
+                        colspan -= 1;
+                    } else if (this.i >= x && this.i + 1 > x + colspan && this.i < x + colspan) {
                         let delta = x + colspan - this.i;
                         colspan -= delta;
-                    } else if (this.i < x && this.i + this.a >= x + colspan) {
+                    } else if (this.i < x && this.i + 1 >= x + colspan) {
                         isDelete = true;
                     }
                 }
@@ -276,24 +272,21 @@ export class Delete {
                 if (!isDelete) {
                     otherProps['mergeCells'][`${x}:${y}`] = {
                         rowspan, colspan
-                    }
+                    };
                 }
-
             });
         }
-        return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}}
+        return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
     }
 
     clone() {
-        return new Delete(this.id, this.t, this.i, this.a);
+        return new Delete(this.id, this.t, this.i);
     }
 
-    static fromJSON({t, id, i, a}) {
-        return new Delete(id, t, i, a);
+    static fromJSON({t, id, i}) {
+        return new Delete(id, t, i);
     }
 }
-
-
 
 export class Empty {
     constructor() {
@@ -310,27 +303,6 @@ export class Empty {
 
     static isEmpty(op) {
         return op.t === 'e';
-    }
-}
-
-export class Op {
-    static fromJSON(obj) {
-        const {t} = obj;
-        if (t === 'c') {
-            return Change.fromJSON(obj);
-        } else if (t === 'ic' || t === 'ir') {
-            return Insert.fromJSON(obj);
-        } else if (t === 'dc' || t === 'dr') {
-            return Delete.fromJSON(obj);
-        } else if (t === 'e') {
-            return Empty.create();
-        } else if (t === 'as') {
-            return AddSheet.fromJSON(obj);
-        } else if (t === 'rs') {
-            return RemoveSheet.fromJSON(obj);
-        } else {
-            throw new Error('错误的op类型');
-        }
     }
 }
 
@@ -383,5 +355,26 @@ export class RemoveSheet {
 
     static fromJSON({id, sheet}) {
         return new RemoveSheet(id, sheet);
+    }
+}
+
+export class Op {
+    static fromJSON(obj) {
+        const {t} = obj;
+        if (t === 'c') {
+            return Change.fromJSON(obj);
+        } else if (t === 'ic' || t === 'ir') {
+            return Insert.fromJSON(obj);
+        } else if (t === 'dc' || t === 'dr') {
+            return Delete.fromJSON(obj);
+        } else if (t === 'e') {
+            return Empty.create();
+        } else if (t === 'as') {
+            return AddSheet.fromJSON(obj);
+        } else if (t === 'rs') {
+            return RemoveSheet.fromJSON(obj);
+        } else {
+            throw new Error('错误的op类型');
+        }
     }
 }
