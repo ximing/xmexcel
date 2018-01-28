@@ -113,6 +113,30 @@ export class Insert {
                 }
             });
         }
+        if (state[this.id]['mergeCells']) {
+            otherProps['mergeCells'] = {};
+            Object.keys(state[this.id]['mergeCells']).forEach(key => {
+                let [x, y] = convertCoor(key);
+                let {rowspan, colspan} = state[this.id]['mergeCells'][key];
+                if (this.t === 'ir') {
+                    if (y >= this.i) {
+                        y += this.a;
+                    } else if (this.i < rowspan + y && y < this.i) {
+                        rowspan += this.a;
+                    }
+                }
+                if (this.t === 'ic') {
+                    if (x >= this.i) {
+                        x += this.a;
+                    } else if (this.i < rowspan + x && x < this.i) {
+                        colspan += this.a;
+                    }
+                }
+                otherProps['mergeCells'][`${x}:${y}`] = {
+                    rowspan, colspan
+                }
+            });
+        }
         return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
     }
 
@@ -198,6 +222,65 @@ export class Delete {
                 }
             });
         }
+        if (state[this.id]['mergeCells']) {
+            otherProps['mergeCells'] = {};
+            Object.keys(state[this.id]['mergeCells']).forEach(key => {
+                let [x, y] = convertCoor(key);
+                let {rowspan, colspan} = state[this.id]['mergeCells'][key];
+                let isDelete = false;
+                if (this.t === 'dr') {
+                    if (this.i + this.a <= y) {
+                        y -= this.a;
+                    } else if (this.i + this.a > y && this.i + this.a <= y + rowspan && this.i < y) {
+                        let delta = y - this.i;
+                        y -= delta;
+                        rowspan -= (this.a - delta);
+                    } else if (this.i >= y && this.i + this.a <= y + rowspan) {
+                        rowspan -= this.a;
+                    } else if (this.i >= y && this.i + this.a > y + rowspan && this.i < y + rowspan) {
+                        let delta = y + rowspan - this.i;
+                        rowspan -= delta;
+                    } else if (this.i < y && this.i + this.a >= y + rowspan) {
+                        isDelete = true;
+                    }
+                }
+                if (this.t === 'dc') {
+                    if (this.i + this.a <= x) {
+                        x -= this.a;
+                    } else if (this.i + this.a > y && this.i + this.a <= x + colspan && this.i < x) {
+                        let delta = x - this.i;
+                        x -= delta;
+                        colspan -= (this.a - delta);
+                    } else if (this.i >= x && this.i + this.a <= x + colspan) {
+                        colspan -= this.a;
+                    } else if (this.i >= x && this.i + this.a > x + colspan && this.i < x + colspan) {
+                        let delta = x + colspan - this.i;
+                        colspan -= delta;
+                    } else if (this.i < x && this.i + this.a >= x + colspan) {
+                        isDelete = true;
+                    }
+                }
+
+                if (rowspan <= 0) {
+                    isDelete = true;
+                } else if (rowspan === 1 && colspan <= 1) {
+                    isDelete = true;
+                }
+
+                if (colspan <= 0) {
+                    isDelete = true;
+                } else if (colspan === 1 && rowspan <= 1) {
+                    isDelete = true;
+                }
+
+                if (!isDelete) {
+                    otherProps['mergeCells'][`${x}:${y}`] = {
+                        rowspan, colspan
+                    }
+                }
+
+            });
+        }
         return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}}
     }
 
@@ -210,6 +293,8 @@ export class Delete {
     }
 }
 
+
+
 export class Empty {
     constructor() {
         this.t = 'e';
@@ -221,6 +306,10 @@ export class Empty {
 
     static create() {
         return new Empty();
+    }
+
+    static isEmpty(op) {
+        return op.t === 'e';
     }
 }
 
@@ -235,8 +324,64 @@ export class Op {
             return Delete.fromJSON(obj);
         } else if (t === 'e') {
             return Empty.create();
+        } else if (t === 'as') {
+            return AddSheet.fromJSON(obj);
+        } else if (t === 'rs') {
+            return RemoveSheet.fromJSON(obj);
         } else {
             throw new Error('错误的op类型');
         }
+    }
+}
+
+export class AddSheet {
+    constructor(id, sheet) {
+        this.t = 'as';
+        this.id = id;
+        this.sheet = sheet;
+    }
+
+    revert() {
+        return new RemoveSheet(this.id, this.sheet);
+    }
+
+    apply(state) {
+        return {
+            ...state, [this.id]: this.sheet
+        }
+    }
+
+    clone() {
+        return new AddSheet(this.id, this.sheet);
+    }
+
+    static fromJSON({id, sheet}) {
+        return new AddSheet(id, sheet);
+    }
+}
+
+export class RemoveSheet {
+    constructor(id, sheet) {
+        this.t = 'rs';
+        this.id = id;
+        this.sheet = sheet;
+    }
+
+    revert() {
+        return new AddSheet(this.id, this.sheet);
+    }
+
+    apply(state) {
+        let newState = {...state};
+        delete newState[this.id];
+        return newState;
+    }
+
+    clone() {
+        return new RemoveSheet(this.id, this.sheet);
+    }
+
+    static fromJSON({id, sheet}) {
+        return new RemoveSheet(id, sheet);
     }
 }

@@ -4,9 +4,10 @@
 'use strict';
 import shortid from 'shortid';
 
-import {Empty, Delete, Insert, Change, Op} from './op';
+import {Empty, Delete, Insert, Change, RemoveSheet, Op, AddSheet} from './op';
 
-export {Empty, Delete, Insert, Change, Op};
+export {Empty, Delete, Insert, Change, RemoveSheet, Op, AddSheet};
+export {convertCoor, inMergeCell} from './util'
 
 /*
 {
@@ -53,10 +54,12 @@ export {Empty, Delete, Insert, Change, Op};
 * */
 
 export class ExcelModel {
-    constructor(excel) {
-        this.excel = excel;
+    constructor(state, version = 0) {
+        this.state = state;
         this.undo = [];
         this.redo = [];
+        this.unconfirmed = [];
+        this.version = version;
     }
 
     static fromJSON(obj) {
@@ -69,25 +72,46 @@ export class ExcelModel {
             [id]: {
                 c: {},
                 name: '工作表1',
-                id: id
+                id: id,
+                order: 0
             }
         });
     }
 
     apply(ops) {
-        console.log('______');
         if (!Array.isArray(ops)) {
             ops = [ops];
         }
+        let state = this.state;
         ops.forEach(op => {
-            this.excel = op.apply(this.excel);
-            console.log('this.excel ======= ', this.excel, op);
+            state = op.apply(state);
         });
-        return this.excel;
+        return new ExcelModel(state);
     }
 
     receive(ops) {
+        let remoteOps = [];
+        ops.forEach(op => {
+            let unconfirmed = [];
+            let removeOp = op;
+            this.unconfirmed.reverse().forEach(item => {
+                let [a, b] = ExcelModel.transform(item, op);
+                unconfirmed = ExcelModel.trim(a).concat(unconfirmed);
+                removeOp = b;
+            });
+            remoteOps = ExcelModel.trim(removeOp).concat(remoteOps);
+            this.unconfirmed = unconfirmed;
+        });
+        this.apply(ops);
+    }
 
+    static trim(ops) {
+        if (!Array.isArray(ops)) {
+            ops = [ops];
+        }
+        return ops.filter(op => {
+            return !Empty.isEmpty(op);
+        })
     }
 
     static transform(op1, op2) {
@@ -176,6 +200,8 @@ export class ExcelModel {
                 } else {
                     a.i += b.a;
                 }
+            } else if (op1.t === 'rs') {
+                return [Empty.create(), b]
             }
             return [a, b];
         } else if (op2.t === 'ic') {
@@ -193,6 +219,8 @@ export class ExcelModel {
                 } else {
                     a.i += b.a;
                 }
+            } else if (op1.t === 'rs') {
+                return [Empty.create(), b]
             }
             return [a, b];
         } else if (op2.t === 'dr') {
@@ -205,6 +233,8 @@ export class ExcelModel {
             } else if (op1.t === 'ir') {
                 //完全在右侧
                 return handleid(a, b)
+            } else if (op1.t === 'rs') {
+                return [Empty.create(), b]
             }
             return [a, b];
         } else if (op2.t === 'dc') {
@@ -216,6 +246,8 @@ export class ExcelModel {
                 }
             } else if (op1.t === 'ic') {
                 return handleid(a, b)
+            } else if (op1.t === 'rs') {
+                return [Empty.create(), b]
             }
             return [a, b];
         } else if (op2.t === 'c') {
@@ -239,8 +271,14 @@ export class ExcelModel {
                 } else if (a.i < b.p[2]) {
                     b = Empty.create();
                 }
+            } else if (op1.t === 'rs') {
+                return [Empty.create(), b]
             }
             return [a, b];
+        } else if (op2.t === 'as') {
+            return [a, b]
+        } else if (op2.t === 'rs') {
+            return [a, Empty.create()]
         } else {
             throw new Error('无效的类型');
         }
