@@ -54,7 +54,7 @@ export {convertCoor, inMergeCell} from './util'
 * */
 
 export class ExcelModel {
-    constructor(state, version = 0) {
+    constructor(state, {version = 0, clientId = 0} = {}) {
         this.state = state;
         this.undo = [];
         this.redo = [];
