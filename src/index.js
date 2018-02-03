@@ -54,11 +54,12 @@ export {convertCoor, inMergeCell} from './util'
 * */
 
 export class ExcelModel {
-    constructor(state, {version = 0, clientId = 0} = {}) {
+    constructor({state, version = 0, clientID = '', unconfirmed = []} = {}) {
         this.state = state;
         this.undo = [];
         this.redo = [];
-        this.unconfirmed = [];
+        this.unconfirmed = unconfirmed;
+        this.clientID = clientID;
         this.version = version;
     }
 
@@ -69,16 +70,28 @@ export class ExcelModel {
     static empty() {
         let id = shortid.generate();
         return new ExcelModel({
-            [id]: {
-                c: {},
-                name: '工作表1',
-                id: id,
-                order: 0
+            state: {
+                [id]: {
+                    c: {},
+                    name: '工作表1',
+                    id: id,
+                    order: 0
+                }
             }
         });
     }
 
     apply(ops) {
+        let state = this.applyOpsToState(ops);
+        return new ExcelModel({
+            state,
+            version: this.version,
+            clientID: this.clientID,
+            unconfirmed: this.unconfirmed.concat(ops)
+        });
+    }
+
+    applyOpsToState(ops) {
         if (!Array.isArray(ops)) {
             ops = [ops];
         }
@@ -86,35 +99,57 @@ export class ExcelModel {
         ops.forEach(op => {
             state = op.apply(state);
         });
-        return new ExcelModel(state);
+        return state;
     }
 
-    receive(ops) {
+    receive(ops, clientIDs) {
+        this.version += ops.length;
+        // Find out which prefix of the steps originated with us
+        let ours = 0;
+        while (ours < clientIDs.length && clientIDs[ours] === this.clientID) ++ours;
+        this.unconfirmed = this.unconfirmed.slice(ours);
+        ops = ours ? ops.slice(ours) : ops;
+
         let remoteOps = [];
-        ops.forEach(op => {
+
+        ops.forEach((op, i) => {
             let unconfirmed = [];
             let removeOp = op;
             this.unconfirmed.reverse().forEach(item => {
-                if (!Empty.isEmpty(op)) {
-                    let [a, b] = ExcelModel.transform(item, op);
-                    unconfirmed = ExcelModel.trim(a).concat(unconfirmed);
+                console.log('unconfirmed rebase', this.unconfirmed);
+                if (!Empty.isEmpty(removeOp)) {
+                    let [a, b] = ExcelModel.transform(item, removeOp);
+                    if (ExcelModel.trim(a)) {
+                        unconfirmed = [a].concat(unconfirmed);
+                    }
                     removeOp = b;
                 }
             });
-            remoteOps = remoteOps.concat(ExcelModel.trim(removeOp));
+            remoteOps.push(removeOp);
             this.unconfirmed = unconfirmed;
         });
-        this.apply(ops);
+
+        if (remoteOps.length > 0) {
+            return {
+                excelModel: new ExcelModel({
+                    state: this.applyOpsToState(remoteOps),
+                    version: this.version,
+                    clientID: this.clientID,
+                    unconfirmed: this.unconfirmed
+                }),
+                removeOps: remoteOps
+            };
+        } else {
+            return {
+                excelModel: this,
+                removeOps: remoteOps
+            };
+        }
         //rebase history
     }
 
-    static trim(ops) {
-        if (!Array.isArray(ops)) {
-            ops = [ops];
-        }
-        return ops.filter(op => {
-            return !Empty.isEmpty(op);
-        });
+    static trim(op) {
+        return !Empty.isEmpty(op);
     }
 
     static transform(op1, op2) {

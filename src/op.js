@@ -30,6 +30,15 @@ export class Change {
         } else if (this.p[0] === 'name') {
             state[this.id][this.p[0]] = this.oi;
             return {...state, [this.id]: {...state[this.id], [this.p[0]]: this.oi}}
+        } else if (this.p[0] === 'mergeCells') {
+            state[this.id][this.p[0]] = this.oi;
+            return {
+                ...state,
+                [this.id]: {
+                    ...state[this.id],
+                    'mergeCells': Object.assign({}, state[this.id]['mergeCells'], {[this.p[1]]: this.oi})
+                }
+            }
         } else {
             state[this.id][this.p[0]] = this.oi;
             return {...state, [this.id]: {...state[this.id], [this.p[0]]: this.oi}}
