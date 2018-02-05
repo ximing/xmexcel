@@ -426,7 +426,7 @@ export class ExcelModel {
                 if (a.i >= row && a.i < row + rowspan) {
                     rowspan -= 1;
                 } else if (a.i < row) {
-                    col -= 1;
+                    row -= 1;
                 }
             } else if (a.t === 'rs') {
                 return [Empty.create(), b];

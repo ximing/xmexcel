@@ -94,8 +94,8 @@ export class Delete {
                 let {rowspan, colspan} = state[this.id]['mergeCells'][key];
                 let isDelete = false;
                 if (this.t === 'dr') {
-                    if (this.i + 1 <= row) {
-                        row -= this.a;
+                    if (this.i < row) {
+                        row -= 1;
                     } else if (this.i + 1 > row && this.i + 1 <= row + rowspan && this.i < row) {
                         let delta = row - this.i;
                         row -= delta;
@@ -110,7 +110,7 @@ export class Delete {
                     }
                 }
                 if (this.t === 'dc') {
-                    if (this.i + 1 <= col) {
+                    if (this.i < col) {
                         col -= 1;
                     } else if (this.i + 1 > col && this.i + 1 <= col + colspan && this.i < col) {
                         let delta = col - this.i;
