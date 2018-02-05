@@ -16,7 +16,7 @@ let state = {
 };
 test('ic and change1', (t) => {
     let op1 = new Insert('1', 'ic', 1, 2);
-    let op2 = new Change('1', ['c', 2, 3], '2', '1');
+    let op2 = new Change('1', ['c', 2, 3, 'v'], '2', '1');
     let [a, b] = ExcelModel.transform(op1, op2);
     t.is(
         JSON.stringify(b.apply(op1.apply(state))),
@@ -25,7 +25,7 @@ test('ic and change1', (t) => {
 });
 
 test('ic and change2', (t) => {
-    let op1 = new Change('1', ['c', 2, 3], '2', '1');
+    let op1 = new Change('1', ['c', 2, 3, 'v'], '2', '1');
     let op2 = new Insert('1', 'ic', 1, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
     t.is(

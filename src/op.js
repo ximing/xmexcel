@@ -26,19 +26,15 @@ export class Change {
                         [`${this.p[1]}:${this.p[2]}`]: Object.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`], {[this.p[3] || 'v']: this.oi})
                     }
                 }
-            }
-        } else if (this.p[0] === 'name') {
-            state[this.id][this.p[0]] = this.oi;
-            return {...state, [this.id]: {...state[this.id], [this.p[0]]: this.oi}}
+            };
         } else if (this.p[0] === 'mergeCells') {
-            state[this.id][this.p[0]] = this.oi;
             return {
                 ...state,
                 [this.id]: {
                     ...state[this.id],
                     'mergeCells': Object.assign({}, state[this.id]['mergeCells'], {[this.p[1]]: this.oi})
                 }
-            }
+            };
         } else {
             state[this.id][this.p[0]] = this.oi;
             return {...state, [this.id]: {...state[this.id], [this.p[0]]: this.oi}}
@@ -63,26 +59,28 @@ export class Insert {
     }
 
     revert() {
-        if (this.t === 'ic') {
-            return new Delete(this.id, 'dc', this.i, this.a)
-        } else {
-            return new Delete(this.id, 'dr', this.i, this.a)
+        let ops = [];
+        for (let i = 0; i < this.a; i++) {
+            ops.push(new Delete(this.id, this.t === 'ic' ? 'dc' : 'dr', this.i + i));
         }
+        return ops;
     }
 
     apply(state) {
         let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
-            let [x, y] = convertCoor(current);
+            let [row, col] = convertCoor(current);
             if (this.t === 'ic') {
-                if (this.i <= x) {
-                    x += this.a;
+                if (this.i <= col) {
+                    col += this.a;
+                }
+            } else if (this.t === 'ir') {
+                if (this.i <= row) {
+                    row += this.a;
                 }
             } else {
-                if (this.i <= y) {
-                    y += this.a;
-                }
+                throw new Error(`error op type is : ${this.t}`)
             }
-            obj[`${x}:${y}`] = state[this.id]['c'][current];
+            obj[`${row}:${col}`] = state[this.id]['c'][current];
             return obj;
         }, {});
         let otherProps = {};
@@ -122,25 +120,25 @@ export class Insert {
         if (state[this.id]['mergeCells']) {
             otherProps['mergeCells'] = {};
             Object.keys(state[this.id]['mergeCells']).forEach(key => {
-                let [x, y] = convertCoor(key);
+                let [row, col] = convertCoor(key);
                 let {rowspan, colspan} = state[this.id]['mergeCells'][key];
                 if (this.t === 'ir') {
-                    if (y >= this.i) {
-                        y += this.a;
-                    } else if (this.i < rowspan + y && y < this.i) {
+                    if (row >= this.i) {
+                        row += this.a;
+                    } else if (this.i < rowspan + row && row < this.i) {
                         rowspan += this.a;
                     }
                 }
                 if (this.t === 'ic') {
-                    if (x >= this.i) {
-                        x += this.a;
-                    } else if (this.i < rowspan + x && x < this.i) {
+                    if (col >= this.i) {
+                        col += this.a;
+                    } else if (this.i < rowspan + col && col < this.i) {
                         colspan += this.a;
                     }
                 }
-                otherProps['mergeCells'][`${x}:${y}`] = {
+                otherProps['mergeCells'][`${row}:${col}`] = {
                     rowspan, colspan
-                }
+                };
             });
         }
         return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
@@ -172,21 +170,21 @@ export class Delete {
 
     apply(state) {
         let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
-            let [x, y] = convertCoor(current);
+            let [row, col] = convertCoor(current);
             if (this.t === 'dc') {
-                if (x >= this.i && x < this.i + 1) {
+                if (col >= this.i && col < this.i + 1) {
                     return obj;
-                } else if (x >= this.i + 1) {
-                    x -= 1;
+                } else if (col >= this.i + 1) {
+                    col -= 1;
                 }
             } else {
-                if (y >= this.i && y < this.i + 1) {
+                if (row >= this.i && row < this.i + 1) {
                     return obj;
-                } else if (y >= this.i + 1) {
-                    y -= this.a;
+                } else if (row >= this.i + 1) {
+                    row -= this.a;
                 }
             }
-            obj[`${x}:${y}`] = state[this.id]['c'][current];
+            obj[`${row}:${col}`] = state[this.id]['c'][current];
             return obj;
         }, {});
         let otherProps = {};
@@ -230,38 +228,38 @@ export class Delete {
         if (state[this.id]['mergeCells']) {
             otherProps['mergeCells'] = {};
             Object.keys(state[this.id]['mergeCells']).forEach(key => {
-                let [x, y] = convertCoor(key);
+                let [row, col] = convertCoor(key);
                 let {rowspan, colspan} = state[this.id]['mergeCells'][key];
                 let isDelete = false;
                 if (this.t === 'dr') {
-                    if (this.i + 1 <= y) {
-                        y -= this.a;
-                    } else if (this.i + 1 > y && this.i + 1 <= y + rowspan && this.i < y) {
+                    if (this.i + 1 <= row) {
+                        row -= this.a;
+                    } else if (this.i + 1 > row && this.i + 1 <= row + rowspan && this.i < y) {
                         let delta = y - this.i;
-                        y -= delta;
+                        row -= delta;
                         rowspan -= (1 - delta);
-                    } else if (this.i >= y && this.i + 1 <= y + rowspan) {
+                    } else if (this.i >= row && this.i + 1 <= row + rowspan) {
                         rowspan -= 1;
-                    } else if (this.i >= y && this.i + 1 > y + rowspan && this.i < y + rowspan) {
-                        let delta = y + rowspan - this.i;
+                    } else if (this.i >= row && this.i + 1 > row + rowspan && this.i < row + rowspan) {
+                        let delta = row + rowspan - this.i;
                         rowspan -= delta;
-                    } else if (this.i < y && this.i + 1 >= y + rowspan) {
+                    } else if (this.i < row && this.i + 1 >= row + rowspan) {
                         isDelete = true;
                     }
                 }
                 if (this.t === 'dc') {
-                    if (this.i + 1 <= x) {
-                        x -= 1;
-                    } else if (this.i + 1 > y && this.i + 1 <= x + colspan && this.i < x) {
-                        let delta = x - this.i;
-                        x -= delta;
+                    if (this.i + 1 <= col) {
+                        col -= 1;
+                    } else if (this.i + 1 > y && this.i + 1 <= col + colspan && this.i < col) {
+                        let delta = col - this.i;
+                        col -= delta;
                         colspan -= (1 - delta);
-                    } else if (this.i >= x && this.i + 1 <= x + colspan) {
+                    } else if (this.i >= col && this.i + 1 <= col + colspan) {
                         colspan -= 1;
-                    } else if (this.i >= x && this.i + 1 > x + colspan && this.i < x + colspan) {
-                        let delta = x + colspan - this.i;
+                    } else if (this.i >= col && this.i + 1 > col + colspan && this.i < col + colspan) {
+                        let delta = col + colspan - this.i;
                         colspan -= delta;
-                    } else if (this.i < x && this.i + 1 >= x + colspan) {
+                    } else if (this.i < col && this.i + 1 >= col + colspan) {
                         isDelete = true;
                     }
                 }
@@ -279,7 +277,7 @@ export class Delete {
                 }
 
                 if (!isDelete) {
-                    otherProps['mergeCells'][`${x}:${y}`] = {
+                    otherProps['mergeCells'][`${row}:${col}`] = {
                         rowspan, colspan
                     };
                 }

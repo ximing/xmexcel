@@ -11,7 +11,7 @@ test('change', (t) => {
         new Change('1', ['c', 2, 3], '3', '4'),
     );
     t.is(JSON.stringify(a), '{"t":"c","id":"1","p":["c",2,3],"oi":"2","od":"1"}');
-    t.is(JSON.stringify(b), '{"t":"c","id":"1","p":["c",2,3],"oi":"2","od":"1"}');
+    t.is(JSON.stringify(b), '{"t":"e"}');
 });
 
 test('change and ic before', (t) => {
@@ -19,7 +19,7 @@ test('change and ic before', (t) => {
         new Change('1', ['c', 2, 3], '2', '1'),
         new Insert('1', 'ic', 1, 2),
     );
-    t.is(JSON.stringify(a), '{"t":"c","id":"1","p":["c",4,3],"oi":"2","od":"1"}');
+    t.is(JSON.stringify(a), '{"t":"c","id":"1","p":["c",2,5],"oi":"2","od":"1"}');
     t.is(JSON.stringify(b), '{"t":"ic","id":"1","i":1,"a":2}');
 });
 
@@ -37,7 +37,7 @@ test('change and ir before', (t) => {
         new Change('1', ['c', 2, 3], '2', '1'),
         new Insert('1', 'ir', 1, 2),
     );
-    t.is(JSON.stringify(a), '{"t":"c","id":"1","p":["c",2,5],"oi":"2","od":"1"}');
+    t.is(JSON.stringify(a), '{"t":"c","id":"1","p":["c",4,3],"oi":"2","od":"1"}');
     t.is(JSON.stringify(b), '{"t":"ir","id":"1","i":1,"a":2}');
 });
 

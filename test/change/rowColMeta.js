@@ -4,7 +4,7 @@
 'use strict';
 import test from 'ava';
 
-import {ExcelModel, Empty, Delete, Insert, Change} from '../src/index';
+import {ExcelModel, Empty, Delete, Insert, Change} from '../../src/index';
 
 let state = {
     '1': {

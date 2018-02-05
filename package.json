@@ -77,7 +77,8 @@
     },
     "ava": {
         "files": [
-            "test/*.js"
+            "test/*.js",
+            "test/change/*.js"
         ],
         "source": [
             "src/**/*.{js,jsx}",
