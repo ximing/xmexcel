@@ -268,7 +268,7 @@ export class ExcelModel {
             } else if (a.p[0] === 'mergeCells') {
                 let [row, col] = convertCoor(a.p[1]);
                 let {rowspan, colspan} = a.oi;
-                if (row < b.i) {
+                if (b.i < row) {
                     row -= 1;
                 } else if (b.i >= row && b.i < row + rowspan) {
                     /*
@@ -281,7 +281,7 @@ export class ExcelModel {
                 a.oi = {rowspan, colspan};
             } else if (a.p[0] === 'fixed') {
                 let {row, col} = a.oi;
-                if (row < b.i) {
+                if (b.i < row) {
                     row -= 1;
                 } else if (row === b.i) {
                     row = 0;
@@ -328,7 +328,7 @@ export class ExcelModel {
             } else if (a.p[0] === 'mergeCells') {
                 let [row, col] = convertCoor(a.p[1]);
                 let {rowspan, colspan} = a.oi;
-                if (col < b.i) {
+                if (b.i < col) {
                     col -= 1;
                 } else if (b.i >= col && b.i < col + colspan) {
                     /*
@@ -341,7 +341,7 @@ export class ExcelModel {
                 a.oi = {rowspan, colspan};
             } else if (a.p[0] === 'fixed') {
                 let {row, col} = a.oi;
-                if (col < b.i) {
+                if (b.i < col) {
                     col -= 1;
                 } else if (col === b.i) {
                     col = 0;

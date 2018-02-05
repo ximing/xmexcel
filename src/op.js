@@ -78,7 +78,7 @@ export class Insert {
                     row += this.a;
                 }
             } else {
-                throw new Error(`error op type is : ${this.t}`)
+                throw new Error(`error insert type is : ${this.t}`)
             }
             obj[`${row}:${col}`] = state[this.id]['c'][current];
             return obj;
@@ -177,12 +177,14 @@ export class Delete {
                 } else if (col >= this.i + 1) {
                     col -= 1;
                 }
-            } else {
+            } else if (this.t === 'dr') {
                 if (row >= this.i && row < this.i + 1) {
                     return obj;
                 } else if (row >= this.i + 1) {
                     row -= this.a;
                 }
+            } else {
+                throw new Error(`error remove type is : ${this.t}`)
             }
             obj[`${row}:${col}`] = state[this.id]['c'][current];
             return obj;
@@ -191,11 +193,19 @@ export class Delete {
         if (state[this.id]['fixed']) {
             let row = state[this.id]['fixed'].row;
             let col = state[this.id]['fixed'].col;
-            if (row && this.t === 'dr' && this.i < row) {
-                row = Math.max(0, row - 1);
+            if (this.t === 'dr') {
+                if (this.i < row) {
+                    row = Math.max(0, row - 1);
+                } else if (this.i === row) {
+                    row = 0;
+                }
             }
-            if (col && this.t === 'dc' && this.i < col) {
-                col = Math.max(0, col - 1);
+            if (this.t === 'dc') {
+                if (this.i < col) {
+                    col = Math.max(0, col - 1);
+                } else if (this.i === col) {
+                    col = 0;
+                }
             }
             otherProps['fixed'] = {
                 row, col
