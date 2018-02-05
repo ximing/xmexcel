@@ -101,7 +101,7 @@
         "babel": "inherit"
     },
     "dependencies": {
-        "lodash": "^4.17.4",
+        "lodash": "^4.17.5",
         "shortid": "^2.2.8"
     }
 }

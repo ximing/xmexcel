@@ -15,9 +15,133 @@ let state = {
         }
     }
 };
+
 test('ic and merge cells', (t) => {
     let op1 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
     let op2 = new Insert('1', 'ic', 1, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+test('ic and merge cells', (t) => {
+    let op1 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op2 = new Insert('1', 'ic', 3, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+test('ic and merge cells', (t) => {
+    let op1 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op2 = new Insert('1', 'ic', 6, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+
+test('ir and merge cells', (t) => {
+    let op1 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op2 = new Insert('1', 'ir', 3, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+test('ir and merge cells', (t) => {
+    let op1 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op2 = new Insert('1', 'ir', 1, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+test('ir and merge cells', (t) => {
+    let op1 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op2 = new Insert('1', 'ir', 6, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+
+// local merge cells remote row/col
+
+
+test('merge cells and ic', (t) => {
+    let op2 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op1 = new Insert('1', 'ic', 1, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+test('merge cells and ic', (t) => {
+    let op2 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op1 = new Insert('1', 'ic', 3, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+test('merge cells and ic', (t) => {
+    let op2 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op1 = new Insert('1', 'ic', 4, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+test('merge cells and ic', (t) => {
+    let op2 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op1 = new Insert('1', 'ic', 6, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+
+test('merge cells and ir', (t) => {
+    let op2 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op1 = new Insert('1', 'ir', 3, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+test('merge cells and ir', (t) => {
+    let op2 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op1 = new Insert('1', 'ir', 1, 2);
+    let [a, b] = ExcelModel.transform(op1, op2);
+    t.is(
+        JSON.stringify(b.apply(op1.apply(state))),
+        JSON.stringify(a.apply(op2.apply(state)))
+    );
+});
+
+test('merge cells and ir', (t) => {
+    let op2 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let op1 = new Insert('1', 'ir', 6, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
     t.is(
         JSON.stringify(b.apply(op1.apply(state))),

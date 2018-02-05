@@ -214,10 +214,15 @@ export class ExcelModel {
                     }
                 } else if (a.p[0] === 'mergeCells') {
                     let [row, col] = convertCoor(a.p[1]);
-                    if (row >= b.i) {
+                    let {rowspan, colspan} = a.oi;
+                    if (b.i <= row) {
                         row += b.a;
+                    } else if (b.i > row && b.i < row + rowspan) {
+                        rowspan += b.a;
                     }
                     a.p[1] = `${row}:${col}`;
+                    a.oi = {rowspan, colspan};
+
                 } else if (a.p[0] === 'fixed') {
                     let {row, col} = a.oi;
                     if (row >= b.i) {
@@ -259,10 +264,14 @@ export class ExcelModel {
                     }
                 } else if (a.p[0] === 'mergeCells') {
                     let [row, col] = convertCoor(a.p[1]);
-                    if (col >= b.i) {
+                    let {rowspan, colspan} = a.oi;
+                    if (b.i <= col) {
                         col += b.a;
+                    } else if (b.i > col && b.i < col + colspan) {
+                        colspan += b.a;
                     }
                     a.p[1] = `${row}:${col}`;
+                    a.oi = {rowspan, colspan};
                 } else if (a.p[0] === 'fixed') {
                     let {row, col} = a.oi;
                     if (col >= b.i) {
@@ -309,7 +318,7 @@ export class ExcelModel {
                     let {rowspan, colspan} = a.oi;
                     if (row < b.i) {
                         row -= 1;
-                    } else {
+                    } else if (b.i >= row && b.i < row + rowspan) {
                         /*
                         * a [   ]
                         * b   |
@@ -367,7 +376,7 @@ export class ExcelModel {
                     let {rowspan, colspan} = a.oi;
                     if (col < b.i) {
                         col -= 1;
-                    } else {
+                    } else if (b.i >= col && b.i < col + colspan) {
                         /*
                         * a [   ]
                         * b   |
@@ -440,12 +449,16 @@ export class ExcelModel {
                 let [row, col] = convertCoor(b.p[1]);
                 let {rowspan, colspan} = b.oi;
                 if (op1.t === 'ic') {
-                    if (a.i < row) {
-                        row += a.a;
+                    if (a.i <= col) {
+                        col += a.a;
+                    } else if (a.i > col && a.i < col + colspan) {
+                        colspan += a.a;
                     }
                 } else if (op1.t === 'ir') {
-                    if (a.i < col) {
-                        col += a.a;
+                    if (a.i <= row) {
+                        row += a.a;
+                    } else if (a.i > row && a.i < row + rowspan) {
+                        rowspan += a.a;
                     }
                 } else if (op1.t === 'dc') {
                     if (a.i >= col && a.i < col + colspan) {
