@@ -6,10 +6,10 @@
 import shortid from 'shortid';
 
 import {Empty, Delete, Insert, Change, RemoveSheet, Op, AddSheet} from './op';
-import {convertCoor} from "./util";
+import {convertCoor} from './util';
 
 export {Empty, Delete, Insert, Change, RemoveSheet, Op, AddSheet};
-export {convertCoor, inMergeCell} from './util'
+export {convertCoor, inMergeCell} from './util';
 
 /*
 {
@@ -201,7 +201,7 @@ export class ExcelModel {
                 a.i += b.a;
             }
         } else if (a.t === 'rs') {
-            return [Empty.create(), b]
+            return [Empty.create(), b];
         }
         return [a, b];
     }
@@ -252,7 +252,7 @@ export class ExcelModel {
                 a.i += b.a;
             }
         } else if (a.t === 'rs') {
-            return [Empty.create(), b]
+            return [Empty.create(), b];
         }
         return [a, b];
     }
@@ -312,7 +312,7 @@ export class ExcelModel {
                 b.i += a.a;
             }
         } else if (a.t === 'rs') {
-            return [Empty.create(), b]
+            return [Empty.create(), b];
         }
         return [a, b];
     }

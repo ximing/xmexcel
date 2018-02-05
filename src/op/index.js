@@ -6,7 +6,7 @@ import {Change} from './change';
 import {Delete} from './delete';
 import {Insert} from './insert';
 
-export class Empty {
+class Empty {
     constructor() {
         this.t = 'e';
     }
@@ -24,7 +24,7 @@ export class Empty {
     }
 }
 
-export class AddSheet {
+class AddSheet {
     constructor(id, sheet) {
         this.t = 'as';
         this.id = id;
@@ -38,7 +38,7 @@ export class AddSheet {
     apply(state) {
         return {
             ...state, [this.id]: this.sheet
-        }
+        };
     }
 
     clone() {
@@ -50,7 +50,7 @@ export class AddSheet {
     }
 }
 
-export class RemoveSheet {
+class RemoveSheet {
     constructor(id, sheet) {
         this.t = 'rs';
         this.id = id;
@@ -98,4 +98,4 @@ export class Op {
 }
 
 
-export {Change, Delete, Insert}
+export {Change, Delete, Insert, RemoveSheet, AddSheet, Empty};

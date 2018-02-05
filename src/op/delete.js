@@ -2,7 +2,7 @@
  * Created by ximing on 2/5/18.
  */
 'use strict';
-import {convertCoor} from "../util";
+import {convertCoor} from '../util';
 import {Insert} from './insert';
 
 export class Delete {
@@ -36,7 +36,7 @@ export class Delete {
                     row -= this.a;
                 }
             } else {
-                throw new Error(`error remove type is : ${this.t}`)
+                throw new Error(`error remove type is : ${this.t}`);
             }
             obj[`${row}:${col}`] = state[this.id]['c'][current];
             return obj;
@@ -83,7 +83,7 @@ export class Delete {
                         otherProps['cw'][key - 1] = state[this.id]['cw'][key];
                     }
                 } else {
-                    otherProps['cw'][key] = state[this.id]['cw'][key]
+                    otherProps['cw'][key] = state[this.id]['cw'][key];
                 }
             });
         }
@@ -96,8 +96,8 @@ export class Delete {
                 if (this.t === 'dr') {
                     if (this.i + 1 <= row) {
                         row -= this.a;
-                    } else if (this.i + 1 > row && this.i + 1 <= row + rowspan && this.i < y) {
-                        let delta = y - this.i;
+                    } else if (this.i + 1 > row && this.i + 1 <= row + rowspan && this.i < row) {
+                        let delta = row - this.i;
                         row -= delta;
                         rowspan -= (1 - delta);
                     } else if (this.i >= row && this.i + 1 <= row + rowspan) {
@@ -112,7 +112,7 @@ export class Delete {
                 if (this.t === 'dc') {
                     if (this.i + 1 <= col) {
                         col -= 1;
-                    } else if (this.i + 1 > y && this.i + 1 <= col + colspan && this.i < col) {
+                    } else if (this.i + 1 > col && this.i + 1 <= col + colspan && this.i < col) {
                         let delta = col - this.i;
                         col -= delta;
                         colspan -= (1 - delta);

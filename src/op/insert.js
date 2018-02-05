@@ -2,8 +2,8 @@
  * Created by ximing on 2/5/18.
  */
 'use strict';
-import {convertCoor} from "../util";
-import {Delete} from "./delete";
+import {convertCoor} from '../util';
+import {Delete} from './delete';
 
 export class Insert {
     constructor(id, t, i, a) {
@@ -33,7 +33,7 @@ export class Insert {
                     row += this.a;
                 }
             } else {
-                throw new Error(`error insert type is : ${this.t}`)
+                throw new Error(`error insert type is : ${this.t}`);
             }
             obj[`${row}:${col}`] = state[this.id]['c'][current];
             return obj;
@@ -58,7 +58,7 @@ export class Insert {
                 if (key >= this.i) {
                     otherProps['rh'][key + this.a] = state[this.id]['rh'][key];
                 } else {
-                    otherProps['rh'][key] = state[this.id]['rh'][key]
+                    otherProps['rh'][key] = state[this.id]['rh'][key];
                 }
             });
         }
@@ -68,7 +68,7 @@ export class Insert {
                 if (key >= this.i) {
                     otherProps['cw'][key + this.a] = state[this.id]['cw'][key];
                 } else {
-                    otherProps['cw'][key] = state[this.id]['cw'][key]
+                    otherProps['cw'][key] = state[this.id]['cw'][key];
                 }
             });
         }
