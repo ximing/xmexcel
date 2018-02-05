@@ -2,6 +2,7 @@
  * Created by ximing on 2/5/18.
  */
 'use strict';
+
 export class Change {
     constructor(id, p, oi, od) {
         this.t = 'c';
@@ -31,6 +32,14 @@ export class Change {
                 [this.id]: {
                     ...state[this.id],
                     'mergeCells': Object.assign({}, state[this.id]['mergeCells'], {[this.p[1]]: this.oi})
+                }
+            };
+        } else if (this.p[0] === 'rh' || this.p[0] === 'cw') {
+            return {
+                ...state,
+                [this.id]: {
+                    ...state[this.id],
+                    [this.p[0]]: Object.assign({}, state[this.id][this.p[0]], {[this.p[1]]: this.oi})
                 }
             };
         } else {

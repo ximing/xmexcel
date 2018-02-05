@@ -66,6 +66,7 @@ export class Delete {
         if (state[this.id]['rh']) {
             otherProps['rh'] = {};
             Object.keys(state[this.id]['rh']).forEach(key => {
+                key = parseInt(key);
                 if (key >= this.i) {
                     if (key - 1 >= 0) {
                         otherProps['rh'][key - 1] = state[this.id]['rh'][key];
@@ -78,6 +79,7 @@ export class Delete {
         if (state[this.id]['cw']) {
             otherProps['cw'] = {};
             Object.keys(state[this.id]['cw']).forEach(key => {
+                key = parseInt(key);
                 if (key >= this.i) {
                     if (key - 1 >= 0) {
                         otherProps['cw'][key - 1] = state[this.id]['cw'][key];

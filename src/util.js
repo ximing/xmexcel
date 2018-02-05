@@ -17,3 +17,4 @@ export const inMergeCell = function (mergeCells = [], selection) {
     }
     return false;
 };
+

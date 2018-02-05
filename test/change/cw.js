@@ -15,7 +15,7 @@ let state = {
         }
     }
 };
-test('change v and merge cells', (t) => {
+test('change cw and merge ic', (t) => {
     let op1 = new Change('1', ['c', 2, 3, 'v'], '11');
     let op2 = new Insert('1', 'ic', 1, 2);
     let [a, b] = ExcelModel.transform(op1, op2);

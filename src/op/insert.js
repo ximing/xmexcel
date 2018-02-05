@@ -55,6 +55,7 @@ export class Insert {
         if (state[this.id]['rh']) {
             otherProps['rh'] = {};
             Object.keys(state[this.id]['rh']).forEach(key => {
+                key = parseInt(key);
                 if (key >= this.i) {
                     otherProps['rh'][key + this.a] = state[this.id]['rh'][key];
                 } else {
@@ -65,6 +66,7 @@ export class Insert {
         if (state[this.id]['cw']) {
             otherProps['cw'] = {};
             Object.keys(state[this.id]['cw']).forEach(key => {
+                key = parseInt(key);
                 if (key >= this.i) {
                     otherProps['cw'][key + this.a] = state[this.id]['cw'][key];
                 } else {
