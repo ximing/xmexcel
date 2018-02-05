@@ -33,7 +33,7 @@ export class Delete {
                 if (row >= this.i && row < this.i + 1) {
                     return obj;
                 } else if (row >= this.i + 1) {
-                    row -= this.a;
+                    row -= 1;
                 }
             } else {
                 throw new Error(`error remove type is : ${this.t}`);
@@ -59,9 +59,11 @@ export class Delete {
                     col = 0;
                 }
             }
-            otherProps['fixed'] = {
-                row, col
-            };
+            if (row > 0 || col > 0) {
+                otherProps['fixed'] = {
+                    row, col
+                };
+            }
         }
         if (state[this.id]['rh'] && this.t === 'dr') {
             otherProps['rh'] = {};
@@ -77,6 +79,9 @@ export class Delete {
                     otherProps['rh'][key] = state[this.id]['rh'][key];
                 }
             });
+            if (Object.keys(otherProps['rh']).length === 0) {
+                delete otherProps['rh'];
+            }
         }
         if (state[this.id]['cw'] && this.t === 'dc') {
             otherProps['cw'] = {};
@@ -92,6 +97,9 @@ export class Delete {
                     otherProps['cw'][key] = state[this.id]['cw'][key];
                 }
             });
+            if (Object.keys(otherProps['cw']).length === 0) {
+                delete otherProps['cw'];
+            }
         }
         if (state[this.id]['mergeCells']) {
             otherProps['mergeCells'] = {};
@@ -150,6 +158,9 @@ export class Delete {
                     };
                 }
             });
+            if (Object.keys(otherProps['mergeCells']).length === 0) {
+                delete otherProps['mergeCells'];
+            }
         }
         return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
     }

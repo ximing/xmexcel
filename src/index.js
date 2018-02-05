@@ -479,12 +479,26 @@ export class ExcelModel {
                 return [Empty.create(), b];
             }
             b.oi = {row, col};
-        } else if (b.p[0] === 'rh' || b.p[0] === 'cw') {
-            if (a.t === 'ic' || a.t === 'ir') {
+        } else if (b.p[0] === 'rh') {
+            if (a.t === 'ir') {
                 if (a.i <= b.p[1]) {
                     b.p[1] += a.a;
                 }
-            } else if (a.t === 'dc' || a.t === 'dr') {
+            } else if (a.t === 'dr') {
+                if (a.i === b.p[1]) {
+                    b = Empty.create();
+                } else if (a.i < b.p[1]) {
+                    b.p[1] -= 1;
+                }
+            } else if (a.t === 'rs') {
+                return [Empty.create(), b];
+            }
+        } else if (b.p[0] === 'cw') {
+            if (a.t === 'ic') {
+                if (a.i <= b.p[1]) {
+                    b.p[1] += a.a;
+                }
+            } else if (a.t === 'dc') {
                 if (a.i === b.p[1]) {
                     b = Empty.create();
                 } else if (a.i < b.p[1]) {
