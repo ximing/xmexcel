@@ -26,15 +26,7 @@ export class Change {
                     }
                 }
             };
-        } else if (this.p[0] === 'mergeCells') {
-            return {
-                ...state,
-                [this.id]: {
-                    ...state[this.id],
-                    'mergeCells': Object.assign({}, state[this.id]['mergeCells'], {[this.p[1]]: this.oi})
-                }
-            };
-        } else if (this.p[0] === 'rh' || this.p[0] === 'cw') {
+        } else if (this.p[0] === 'rh' || this.p[0] === 'cw' || this.p[0] === 'filterByValue' || this.p[0] === 'mergeCells') {
             return {
                 ...state,
                 [this.id]: {
