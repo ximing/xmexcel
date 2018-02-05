@@ -154,6 +154,315 @@ export class ExcelModel {
         return !Empty.isEmpty(op);
     }
 
+    static handleIR(a, b) {
+        if (a.t === 'c') {
+            if (a.p[0] === 'c') {
+                if (a.p[1] >= b.i) {
+                    a.p[1] += b.a;
+                }
+            } else if (a.p[0] === 'mergeCells') {
+                let [row, col] = convertCoor(a.p[1]);
+                let {rowspan, colspan} = a.oi;
+                if (b.i <= row) {
+                    row += b.a;
+                } else if (b.i > row && b.i < row + rowspan) {
+                    rowspan += b.a;
+                }
+                a.p[1] = `${row}:${col}`;
+                a.oi = {rowspan, colspan};
+
+            } else if (a.p[0] === 'fixed') {
+                let {row, col} = a.oi;
+                if (row > b.i) {
+                    row += b.a;
+                }
+                a.oi = {row, col};
+            }
+        } else if (a.t === 'dr') {
+            //a dr
+            //b ir
+            if (a.i >= b.i + b.a) {
+                /*
+                * a     |
+                * b [ ]
+                * */
+                a.i += b.a;
+            } else if (a.i < b.i) {
+                /*
+                * a |
+                * b   [   ]
+                * */
+                b.i -= 1;
+            } else {
+                /*
+                * a   |
+                * b [   ]
+                * */
+                a.i += b.a;
+            }
+        } else if (a.t === 'rs') {
+            return [Empty.create(), b]
+        }
+        return [a, b];
+    }
+
+    static handleIC(a, b) {
+        if (a.t === 'c') {
+            if (a.p[0] === 'c') {
+                if (a.p[2] >= b.i) {
+                    a.p[2] += b.a;
+                }
+            } else if (a.p[0] === 'mergeCells') {
+                let [row, col] = convertCoor(a.p[1]);
+                let {rowspan, colspan} = a.oi;
+                if (b.i <= col) {
+                    col += b.a;
+                } else if (b.i > col && b.i < col + colspan) {
+                    colspan += b.a;
+                }
+                a.p[1] = `${row}:${col}`;
+                a.oi = {rowspan, colspan};
+            } else if (a.p[0] === 'fixed') {
+                let {row, col} = a.oi;
+                if (col > b.i) {
+                    col += b.a;
+                }
+                a.oi = {row, col};
+            }
+        } else if (a.t === 'dc') {
+            //a dc
+            //b ic
+            if (a.i >= b.i + b.a) {
+                /*
+                * a     |
+                * b [ ]
+                * */
+                a.i += b.a;
+            } else if (a.i < b.i) {
+                /*
+                * a |
+                * b   [   ]
+                * */
+                b.i -= 1;
+            } else {
+                /*
+                * a   |
+                * b [   ]
+                * */
+                a.i += b.a;
+            }
+        } else if (a.t === 'rs') {
+            return [Empty.create(), b]
+        }
+        return [a, b];
+    }
+
+    static handleDR(a, b) {
+        if (a.t === 'c') {
+            if (a.p[0] === 'c') {
+                if (a.p[1] === b.i) {
+                    a = Empty.create();
+                } else if (a.p[1] >= b.i) {
+                    a.p[1] -= 1;
+                }
+            } else if (a.p[0] === 'mergeCells') {
+                let [row, col] = convertCoor(a.p[1]);
+                let {rowspan, colspan} = a.oi;
+                if (row < b.i) {
+                    row -= 1;
+                } else if (b.i >= row && b.i < row + rowspan) {
+                    /*
+                    * a [   ]
+                    * b   |
+                    * */
+                    rowspan -= 1;
+                }
+                a.p[1] = `${row}:${col}`;
+                a.oi = {rowspan, colspan};
+            } else if (a.p[0] === 'fixed') {
+                let {row, col} = a.oi;
+                if (row < b.i) {
+                    row -= 1;
+                } else if (row === b.i) {
+                    row = 0;
+                }
+                a.oi = {row, col};
+            }
+
+        } else if (a.t === 'ir') {
+            //a ir
+            //b dr
+            if (a.i > b.i) {
+                /*
+                * a   [    ]
+                * b |
+                * */
+                a.i -= 1;
+            } else if (b.i >= a.i + a.a) {
+                /*
+                * a   [    ]
+                * b           |
+                * */
+                b.i += a.a;
+            } else {
+                /*
+                * a   [    ]
+                * b     |
+                * */
+                b.i += a.a;
+            }
+        } else if (a.t === 'rs') {
+            return [Empty.create(), b]
+        }
+        return [a, b];
+    }
+
+    static handleDC(a, b) {
+        if (a.t === 'c') {
+            if (a.p[0] === 'c') {
+                if (a.p[2] === b.i) {
+                    a = Empty.create();
+                } else if (a.p[2] >= b.i) {
+                    a.p[2] -= 1;
+                }
+            } else if (a.p[0] === 'mergeCells') {
+                let [row, col] = convertCoor(a.p[1]);
+                let {rowspan, colspan} = a.oi;
+                if (col < b.i) {
+                    col -= 1;
+                } else if (b.i >= col && b.i < col + colspan) {
+                    /*
+                    * a [   ]
+                    * b   |
+                    * */
+                    colspan -= 1;
+                }
+                a.p[1] = `${row}:${col}`;
+                a.oi = {rowspan, colspan};
+            } else if (a.p[0] === 'fixed') {
+                let {row, col} = a.oi;
+                if (col < b.i) {
+                    col -= 1;
+                } else if (col === b.i) {
+                    col = 0;
+                }
+                a.oi = {row, col};
+            }
+        } else if (a.t === 'ic') {
+            //a ic
+            //b dc
+            if (a.i > b.i) {
+                /*
+                * a   [    ]
+                * b |
+                * */
+                a.i -= 1;
+            } else if (b.i >= a.i + a.a) {
+                /*
+                * a   [    ]
+                * b           |
+                * */
+                b.i += a.a;
+            } else {
+                /*
+                * a   [    ]
+                * b     |
+                * */
+                b.i += a.a;
+            }
+        } else if (a.t === 'rs') {
+            return [Empty.create(), b];
+        }
+        return [a, b];
+    }
+
+    static handleC(a, b) {
+        if (b.p[0] === 'c') {
+            if (a.t === 'ic') {
+                if (a.i < b.p[2]) {
+                    b.p[2] += a.a;
+                }
+            } else if (a.t === 'ir') {
+                if (a.i < b.p[1]) {
+                    b.p[1] += a.a;
+                }
+            } else if (a.t === 'dc') {
+                if (a.i + 1 <= b.p[2]) {
+                    b.p[2] -= 1;
+                } else if (a.i < b.p[2]) {
+                    b = Empty.create();
+                }
+            } else if (a.t === 'dr') {
+                if (a.i + 1 <= b.p[1]) {
+                    b.p[1] -= 1;
+                } else if (a.i < b.p[1]) {
+                    b = Empty.create();
+                }
+            } else if (a.t === 'rs') {
+                return [Empty.create(), b];
+            }
+        } else if (b.p[0] === 'mergeCells') {
+            let [row, col] = convertCoor(b.p[1]);
+            let {rowspan, colspan} = b.oi;
+            if (a.t === 'ic') {
+                if (a.i <= col) {
+                    col += a.a;
+                } else if (a.i > col && a.i < col + colspan) {
+                    colspan += a.a;
+                }
+            } else if (a.t === 'ir') {
+                if (a.i <= row) {
+                    row += a.a;
+                } else if (a.i > row && a.i < row + rowspan) {
+                    rowspan += a.a;
+                }
+            } else if (a.t === 'dc') {
+                if (a.i >= col && a.i < col + colspan) {
+                    colspan -= 1;
+                } else if (a.i < col) {
+                    col -= 1;
+                }
+            } else if (a.t === 'dr') {
+                if (a.i >= row && a.i < row + rowspan) {
+                    rowspan -= 1;
+                } else if (a.i < row) {
+                    col -= 1;
+                }
+            } else if (a.t === 'rs') {
+                return [Empty.create(), b];
+            }
+            b.p[1] = `${row}:${col}`;
+            b.oi = {rowspan, colspan};
+        } else if (b.p[0] === 'fixed') {
+            let {row, col} = b.oi;
+            if (a.t === 'ic') {
+                if (a.i < col) {
+                    col += a.a;
+                }
+            } else if (a.t === 'ir') {
+                if (a.i < row) {
+                    row += a.a;
+                }
+            } else if (a.t === 'dc') {
+                if (a.i === col) {
+                    col = 0;
+                } else if (a.i < col) {
+                    col -= 1;
+                }
+            } else if (a.t === 'dr') {
+                if (a.i === row) {
+                    row = 0;
+                } else if (a.i < row) {
+                    row -= 1;
+                }
+            } else if (a.t === 'rs') {
+                return [Empty.create(), b];
+            }
+            b.oi = {row, col};
+        }
+        return [a, b];
+    }
+
     static transform(op1, op2) {
         if (op1.id !== op2.id) {
             return [op1, op2];
@@ -207,304 +516,15 @@ export class ExcelModel {
                 throw new Error('无效的类型');
             }
         } else if (op2.t === 'ir') {
-            if (op1.t === 'c') {
-                if (a.p[0] === 'c') {
-                    if (a.p[1] >= b.i) {
-                        a.p[1] += b.a;
-                    }
-                } else if (a.p[0] === 'mergeCells') {
-                    let [row, col] = convertCoor(a.p[1]);
-                    let {rowspan, colspan} = a.oi;
-                    if (b.i <= row) {
-                        row += b.a;
-                    } else if (b.i > row && b.i < row + rowspan) {
-                        rowspan += b.a;
-                    }
-                    a.p[1] = `${row}:${col}`;
-                    a.oi = {rowspan, colspan};
-
-                } else if (a.p[0] === 'fixed') {
-                    let {row, col} = a.oi;
-                    if (row >= b.i) {
-                        row += b.a;
-                    }
-                    a.oi = {row, col};
-                }
-            } else if (op1.t === 'dr') {
-                //a dr
-                //b ir
-                if (a.i >= b.i + b.a) {
-                    /*
-                    * a     |
-                    * b [ ]
-                    * */
-                    a.i += b.a;
-                } else if (a.i < b.i) {
-                    /*
-                    * a |
-                    * b   [   ]
-                    * */
-                    b.i -= 1;
-                } else {
-                    /*
-                    * a   |
-                    * b [   ]
-                    * */
-                    a.i += b.a;
-                }
-            } else if (op1.t === 'rs') {
-                return [Empty.create(), b]
-            }
-            return [a, b];
+            return ExcelModel.handleIR(a, b);
         } else if (op2.t === 'ic') {
-            if (op1.t === 'c') {
-                if (a.p[0] === 'c') {
-                    if (a.p[2] >= b.i) {
-                        a.p[2] += b.a;
-                    }
-                } else if (a.p[0] === 'mergeCells') {
-                    let [row, col] = convertCoor(a.p[1]);
-                    let {rowspan, colspan} = a.oi;
-                    if (b.i <= col) {
-                        col += b.a;
-                    } else if (b.i > col && b.i < col + colspan) {
-                        colspan += b.a;
-                    }
-                    a.p[1] = `${row}:${col}`;
-                    a.oi = {rowspan, colspan};
-                } else if (a.p[0] === 'fixed') {
-                    let {row, col} = a.oi;
-                    if (col >= b.i) {
-                        col += b.a;
-                    }
-                    a.oi = {row, col};
-                }
-            } else if (op1.t === 'dc') {
-                //a dc
-                //b ic
-                if (a.i >= b.i + b.a) {
-                    /*
-                    * a     |
-                    * b [ ]
-                    * */
-                    a.i += b.a;
-                } else if (a.i < b.i) {
-                    /*
-                    * a |
-                    * b   [   ]
-                    * */
-                    b.i -= 1;
-                } else {
-                    /*
-                    * a   |
-                    * b [   ]
-                    * */
-                    a.i += b.a;
-                }
-            } else if (op1.t === 'rs') {
-                return [Empty.create(), b]
-            }
-            return [a, b];
+            return ExcelModel.handleIC(a, b);
         } else if (op2.t === 'dr') {
-            if (op1.t === 'c') {
-                if (a.p[0] === 'c') {
-                    if (a.p[1] === b.i) {
-                        a = Empty.create();
-                    } else if (a.p[1] >= b.i) {
-                        a.p[1] -= 1;
-                    }
-                } else if (a.p[0] === 'mergeCells') {
-                    let [row, col] = convertCoor(a.p[1]);
-                    let {rowspan, colspan} = a.oi;
-                    if (row < b.i) {
-                        row -= 1;
-                    } else if (b.i >= row && b.i < row + rowspan) {
-                        /*
-                        * a [   ]
-                        * b   |
-                        * */
-                        rowspan -= 1;
-                    }
-                    a.p[1] = `${row}:${col}`;
-                    a.oi = {rowspan, colspan};
-                } else if (a.p[0] === 'fixed') {
-                    let {row, col} = a.oi;
-                    if (row < b.i) {
-                        row -= 1;
-                    } else if (row === b.i) {
-                        row = 0;
-                    }
-                    a.oi = {row, col};
-                }
-
-            } else if (op1.t === 'ir') {
-                //a ir
-                //b dr
-                if (a.i > b.i) {
-                    /*
-                    * a   [    ]
-                    * b |
-                    * */
-                    a.i -= 1;
-                } else if (b.i >= a.i + a.a) {
-                    /*
-                    * a   [    ]
-                    * b           |
-                    * */
-                    b.i += a.a;
-                } else {
-                    /*
-                    * a   [    ]
-                    * b     |
-                    * */
-                    b.i += a.a;
-                }
-            } else if (op1.t === 'rs') {
-                return [Empty.create(), b]
-            }
-            return [a, b];
+            return ExcelModel.handleDR(a, b);
         } else if (op2.t === 'dc') {
-            if (op1.t === 'c') {
-                if (a.p[0] === 'c') {
-                    if (a.p[2] === b.i) {
-                        a = Empty.create();
-                    } else if (a.p[2] >= b.i) {
-                        a.p[2] -= 1;
-                    }
-                } else if (a.p[0] === 'mergeCells') {
-                    let [row, col] = convertCoor(a.p[1]);
-                    let {rowspan, colspan} = a.oi;
-                    if (col < b.i) {
-                        col -= 1;
-                    } else if (b.i >= col && b.i < col + colspan) {
-                        /*
-                        * a [   ]
-                        * b   |
-                        * */
-                        colspan -= 1;
-                    }
-                    a.p[1] = `${row}:${col}`;
-                    a.oi = {rowspan, colspan};
-                } else if (a.p[0] === 'fixed') {
-                    let {row, col} = a.oi;
-                    if (col < b.i) {
-                        col -= 1;
-                    } else if (col === b.i) {
-                        col = 0;
-                    }
-                    a.oi = {row, col};
-                }
-            } else if (op1.t === 'ic') {
-                //a ic
-                //b dc
-                if (a.i > b.i) {
-                    /*
-                    * a   [    ]
-                    * b |
-                    * */
-                    a.i -= 1;
-                } else if (b.i >= a.i + a.a) {
-                    /*
-                    * a   [    ]
-                    * b           |
-                    * */
-                    b.i += a.a;
-                } else {
-                    /*
-                    * a   [    ]
-                    * b     |
-                    * */
-                    b.i += a.a;
-                }
-            } else if (op1.t === 'rs') {
-                return [Empty.create(), b]
-            }
-            return [a, b];
+            return ExcelModel.handleDC(a, b);
         } else if (op2.t === 'c') {
-            if (b.p[0] === 'c') {
-                if (op1.t === 'ic') {
-                    if (a.i < b.p[2]) {
-                        b.p[2] += a.a;
-                    }
-                } else if (op1.t === 'ir') {
-                    if (a.i < b.p[1]) {
-                        b.p[1] += a.a;
-                    }
-                } else if (op1.t === 'dc') {
-                    if (a.i + 1 <= b.p[2]) {
-                        b.p[2] -= 1;
-                    } else if (a.i < b.p[2]) {
-                        b = Empty.create();
-                    }
-                } else if (op1.t === 'dr') {
-                    if (a.i + 1 <= b.p[1]) {
-                        b.p[1] -= 1;
-                    } else if (a.i < b.p[1]) {
-                        b = Empty.create();
-                    }
-                } else if (op1.t === 'rs') {
-                    return [Empty.create(), b];
-                }
-            } else if (b.p[0] === 'mergeCells') {
-                let [row, col] = convertCoor(b.p[1]);
-                let {rowspan, colspan} = b.oi;
-                if (op1.t === 'ic') {
-                    if (a.i <= col) {
-                        col += a.a;
-                    } else if (a.i > col && a.i < col + colspan) {
-                        colspan += a.a;
-                    }
-                } else if (op1.t === 'ir') {
-                    if (a.i <= row) {
-                        row += a.a;
-                    } else if (a.i > row && a.i < row + rowspan) {
-                        rowspan += a.a;
-                    }
-                } else if (op1.t === 'dc') {
-                    if (a.i >= col && a.i < col + colspan) {
-                        colspan -= 1;
-                    } else if (a.i < col) {
-                        col -= 1;
-                    }
-                } else if (op1.t === 'dr') {
-                    if (a.i >= row && a.i < row + rowspan) {
-                        rowspan -= 1;
-                    } else if (a.i < row) {
-                        col -= 1;
-                    }
-                } else if (op1.t === 'rs') {
-                    return [Empty.create(), b];
-                }
-                b.p[1] = `${row}:${col}`;
-                b.oi = {rowspan, colspan};
-            } else if (b.p[0] === 'fixed') {
-                let {row, col} = b.oi;
-                if (op1.t === 'ic') {
-                    if (a.i < row) {
-                        row += a.a;
-                    }
-                } else if (op1.t === 'ir') {
-                    if (a.i < col) {
-                        col += a.a;
-                    }
-                } else if (op1.t === 'dc') {
-                    if (a.i === col) {
-                        col = 0;
-                    } else if (a.i < col) {
-                        col -= 1;
-                    }
-                } else if (op1.t === 'dr') {
-                    if (a.i === row) {
-                        row = 0;
-                    } else if (a.i < row) {
-                        row -= 1;
-                    }
-                } else if (op1.t === 'rs') {
-                    return [Empty.create(), b];
-                }
-                b.oi = {row, col};
-            }
-            return [a, b];
+            return ExcelModel.handleC(a, b);
         } else if (op2.t === 'as') {
             return [a, b];
         } else if (op2.t === 'rs') {
