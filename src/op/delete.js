@@ -63,27 +63,31 @@ export class Delete {
                 row, col
             };
         }
-        if (state[this.id]['rh']) {
+        if (state[this.id]['rh'] && this.t === 'dr') {
             otherProps['rh'] = {};
             Object.keys(state[this.id]['rh']).forEach(key => {
                 key = parseInt(key);
-                if (key >= this.i) {
+                if (key > this.i) {
                     if (key - 1 >= 0) {
                         otherProps['rh'][key - 1] = state[this.id]['rh'][key];
                     }
+                } else if (key === this.i) {
+                    //do nothing
                 } else {
                     otherProps['rh'][key] = state[this.id]['rh'][key];
                 }
             });
         }
-        if (state[this.id]['cw']) {
+        if (state[this.id]['cw'] && this.t === 'dc') {
             otherProps['cw'] = {};
             Object.keys(state[this.id]['cw']).forEach(key => {
                 key = parseInt(key);
-                if (key >= this.i) {
+                if (key > this.i) {
                     if (key - 1 >= 0) {
                         otherProps['cw'][key - 1] = state[this.id]['cw'][key];
                     }
+                } else if (key === this.i) {
+                    //do nothing
                 } else {
                     otherProps['cw'][key] = state[this.id]['cw'][key];
                 }

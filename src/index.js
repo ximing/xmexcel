@@ -177,6 +177,10 @@ export class ExcelModel {
                     row += b.a;
                 }
                 a.oi = {row, col};
+            } else if (a.p[0] === 'rh') {
+                if (a.p[1] >= b.i) {
+                    a.p[1] += b.a;
+                }
             }
         } else if (a.t === 'dr') {
             //a dr
@@ -228,6 +232,10 @@ export class ExcelModel {
                     col += b.a;
                 }
                 a.oi = {row, col};
+            } else if (a.p[0] === 'cw') {
+                if (a.p[1] >= b.i) {
+                    a.p[1] += b.a;
+                }
             }
         } else if (a.t === 'dc') {
             //a dc
@@ -287,6 +295,12 @@ export class ExcelModel {
                     row = 0;
                 }
                 a.oi = {row, col};
+            } else if (a.p[0] === 'rh') {
+                if (a.p[1] > b.i) {
+                    a.p[1] -= 1;
+                } else if (a.p[1] === b.i) {
+                    a = Empty.create()
+                }
             }
 
         } else if (a.t === 'ir') {
@@ -347,6 +361,12 @@ export class ExcelModel {
                     col = 0;
                 }
                 a.oi = {row, col};
+            } else if (a.p[0] === 'cw') {
+                if (a.p[1] > b.i) {
+                    a.p[1] -= 1;
+                } else if (a.p[1] === b.i) {
+                    a = Empty.create()
+                }
             }
         } else if (a.t === 'ic') {
             //a ic
@@ -459,6 +479,20 @@ export class ExcelModel {
                 return [Empty.create(), b];
             }
             b.oi = {row, col};
+        } else if (b.p[0] === 'rh' || b.p[0] === 'cw') {
+            if (a.t === 'ic' || a.t === 'ir') {
+                if (a.i <= b.p[1]) {
+                    b.p[1] += a.a;
+                }
+            } else if (a.t === 'dc' || a.t === 'dr') {
+                if (a.i === b.p[1]) {
+                    b = Empty.create();
+                } else if (a.i < b.p[1]) {
+                    b.p[1] -= 1;
+                }
+            } else if (a.t === 'rs') {
+                return [Empty.create(), b];
+            }
         }
         return [a, b];
     }

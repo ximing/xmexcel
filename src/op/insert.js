@@ -52,7 +52,7 @@ export class Insert {
                 row, col
             };
         }
-        if (state[this.id]['rh']) {
+        if (state[this.id]['rh'] && this.t === 'ir') {
             otherProps['rh'] = {};
             Object.keys(state[this.id]['rh']).forEach(key => {
                 key = parseInt(key);
@@ -63,7 +63,7 @@ export class Insert {
                 }
             });
         }
-        if (state[this.id]['cw']) {
+        if (state[this.id]['cw'] && this.t === 'ic') {
             otherProps['cw'] = {};
             Object.keys(state[this.id]['cw']).forEach(key => {
                 key = parseInt(key);
