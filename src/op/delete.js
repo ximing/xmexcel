@@ -162,7 +162,19 @@ export class Delete {
                 delete otherProps['mergeCells'];
             }
         }
-        return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
+        let newSheetState = {...state[this.id]};
+        delete newSheetState['mergeCells'];
+        delete newSheetState['cw'];
+        delete newSheetState['rh'];
+        delete newSheetState['fixed'];
+        return {
+            ...state,
+            [this.id]: {
+                ...newSheetState,
+                c: c,
+                ...otherProps
+            }
+        };
     }
 
     clone() {
