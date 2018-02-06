@@ -1,6 +1,6 @@
 {
     "name": "xmexcel-model",
-    "version": "0.4.1",
+    "version": "0.4.2",
     "description": "excel state",
     "author": "ximing",
     "main": "./dist/index.js",
