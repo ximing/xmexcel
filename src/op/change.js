@@ -18,11 +18,17 @@ export class Change {
 
     apply(state) {
         if (this.p[0] === 'c') {
+            let newMeta = Object.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`], {[this.p[3] || 'v']: this.oi});
+            Object.keys(newMeta).forEach(key => {
+                if (newMeta[key] == null) {
+                    delete newMeta[key];
+                }
+            });
             return {
                 ...state, [this.id]: {
                     ...state[this.id], c: {
                         ...state[this.id]['c'],
-                        [`${this.p[1]}:${this.p[2]}`]: Object.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`], {[this.p[3] || 'v']: this.oi})
+                        [`${this.p[1]}:${this.p[2]}`]: newMeta
                     }
                 }
             };
