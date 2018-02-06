@@ -16,6 +16,16 @@ let state = {
     }
 };
 
+test('merge cell', (t) => {
+    let op1 = new Change('1', ['mergeCells', '2:3'], {rowspan: 2, colspan: 2});
+    let newState = op1.apply(state);
+    t.is(
+        JSON.stringify(newState),
+        '{"1":{"c":{"4:0":{"v":1},"4:1":{"v":1},"5:2":{"v":1}},"mergeCells":{"2:3":{"rowspan":2,"colspan":2}}}}'
+    )
+});
+
+
 // local merge cells and remote add row/col
 
 test('ic and merge cells', (t) => {
