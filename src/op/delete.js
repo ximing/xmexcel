@@ -20,28 +20,7 @@ export class Delete {
         }
     }
 
-    apply(state) {
-        let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
-            let [row, col] = convertCoor(current);
-            if (this.t === 'dc') {
-                if (col >= this.i && col < this.i + 1) {
-                    return obj;
-                } else if (col >= this.i + 1) {
-                    col -= 1;
-                }
-            } else if (this.t === 'dr') {
-                if (row >= this.i && row < this.i + 1) {
-                    return obj;
-                } else if (row >= this.i + 1) {
-                    row -= 1;
-                }
-            } else {
-                throw new Error(`error remove type is : ${this.t}`);
-            }
-            obj[`${row}:${col}`] = state[this.id]['c'][current];
-            return obj;
-        }, {});
-        let otherProps = {};
+    _applyFixed(state, otherProps) {
         if (state[this.id]['fixed']) {
             let row = state[this.id]['fixed'].row;
             let col = state[this.id]['fixed'].col;
@@ -65,6 +44,9 @@ export class Delete {
                 };
             }
         }
+    }
+
+    _applyRh(state, otherProps) {
         if (state[this.id]['rh'] && this.t === 'dr') {
             otherProps['rh'] = {};
             Object.keys(state[this.id]['rh']).forEach(key => {
@@ -83,6 +65,9 @@ export class Delete {
                 delete otherProps['rh'];
             }
         }
+    }
+
+    _applyCw(state, otherProps) {
         if (state[this.id]['cw'] && this.t === 'dc') {
             otherProps['cw'] = {};
             Object.keys(state[this.id]['cw']).forEach(key => {
@@ -101,6 +86,9 @@ export class Delete {
                 delete otherProps['cw'];
             }
         }
+    }
+
+    _applyMergeCells(state, otherProps) {
         if (state[this.id]['mergeCells']) {
             otherProps['mergeCells'] = {};
             Object.keys(state[this.id]['mergeCells']).forEach(key => {
@@ -162,6 +150,76 @@ export class Delete {
                 delete otherProps['mergeCells'];
             }
         }
+    }
+
+    /*
+    * {
+    *   filter: {
+            row: 1,
+            colRange: [0, 5]
+        },
+        filterByValue: {
+            [colIndex]: [1, 2, 3]
+        }
+    * }
+    * */
+    _applyFilter(state, otherProps) {
+        if (state[this.id]['filter']) {
+            otherProps['filter'] = {...state[this.id]['filter']};
+            if (this.t === 'dr') {
+                if (parseInt(otherProps['filter']['row']) === parseInt(this.i)) {
+                    delete otherProps['filter'];
+                }
+            } else if (this.t === 'dc') {
+                if (parseInt(this.i) < parseInt(otherProps['filter']['colRange'][0])) {
+                    otherProps['filter']['colRange'][0] -= 1;
+                    otherProps['filter']['colRange'][1] -= 1;
+                } else if (this.i >= otherProps['filter']['colRange'][0] && this.i <= otherProps['filter']['colRange'][1]) {
+                    otherProps['filter']['colRange'][1] -= 1;
+                }
+            }
+        }
+        if (state[this.id]['filterByValue']) {
+            otherProps['filterByValue'] = {...state[this.id]['filterByValue']};
+            if (this.t === 'dc' && otherProps['filterByValue'][this.i]) {
+                delete otherProps['filterByValue'][this.i];
+            }
+            if (Object.keys(otherProps['filterByValue']).length === 0) {
+                delete otherProps['filterByValue'];
+            }
+        }
+    }
+
+
+    apply(state) {
+        let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
+            let [row, col] = convertCoor(current);
+            if (this.t === 'dc') {
+                if (col >= this.i && col < this.i + 1) {
+                    return obj;
+                } else if (col >= this.i + 1) {
+                    col -= 1;
+                }
+            } else if (this.t === 'dr') {
+                if (row >= this.i && row < this.i + 1) {
+                    return obj;
+                } else if (row >= this.i + 1) {
+                    row -= 1;
+                }
+            } else {
+                throw new Error(`error remove type is : ${this.t}`);
+            }
+            obj[`${row}:${col}`] = state[this.id]['c'][current];
+            return obj;
+        }, {});
+        let otherProps = {};
+
+        this._applyFixed(state, otherProps);
+        this._applyRh(state, otherProps);
+        this._applyCw(state, otherProps);
+        this._applyMergeCells(state, otherProps);
+        this._applyFilter(state, otherProps);
+
         let newSheetState = {...state[this.id]};
         delete newSheetState['mergeCells'];
         delete newSheetState['cw'];

@@ -21,24 +21,7 @@ export class Insert {
         return ops;
     }
 
-    apply(state) {
-        let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
-            let [row, col] = convertCoor(current);
-            if (this.t === 'ic') {
-                if (this.i <= col) {
-                    col += this.a;
-                }
-            } else if (this.t === 'ir') {
-                if (this.i <= row) {
-                    row += this.a;
-                }
-            } else {
-                throw new Error(`error insert type is : ${this.t}`);
-            }
-            obj[`${row}:${col}`] = state[this.id]['c'][current];
-            return obj;
-        }, {});
-        let otherProps = {};
+    _applyFixed(state, otherProps) {
         if (state[this.id]['fixed']) {
             let row = state[this.id]['fixed'].row;
             let col = state[this.id]['fixed'].col;
@@ -52,6 +35,9 @@ export class Insert {
                 row, col
             };
         }
+    }
+
+    _applyRh(state, otherProps) {
         if (state[this.id]['rh'] && this.t === 'ir') {
             otherProps['rh'] = {};
             Object.keys(state[this.id]['rh']).forEach(key => {
@@ -63,6 +49,9 @@ export class Insert {
                 }
             });
         }
+    }
+
+    _applyCw(state, otherProps) {
         if (state[this.id]['cw'] && this.t === 'ic') {
             otherProps['cw'] = {};
             Object.keys(state[this.id]['cw']).forEach(key => {
@@ -74,6 +63,9 @@ export class Insert {
                 }
             });
         }
+    }
+
+    _applyMergeCells(state, otherProps) {
         if (state[this.id]['mergeCells']) {
             otherProps['mergeCells'] = {};
             Object.keys(state[this.id]['mergeCells']).forEach(key => {
@@ -98,6 +90,67 @@ export class Insert {
                 };
             });
         }
+    }
+
+    /*
+    * {
+    *   filter: {
+            row: 1,
+            colRange: [0, 5]
+        },
+        filterByValue: {
+            [colIndex]: [1, 2, 3]
+        }
+    * }
+    * */
+    _applyFilter(state, otherProps) {
+        if (state[this.id]['filter']) {
+            otherProps['filter'] = {...state[this.id]['filter']};
+            if (this.t === 'ir') {
+                if (parseInt(otherProps['filter']['row']) >= parseInt(this.i)) {
+                    otherProps['filter']['row'] = parseInt(otherProps['filter']['row']) + this.a;
+                }
+            } else if (this.t === 'ic') {
+                if (parseInt(this.i) <= parseInt(otherProps['filter']['colRange'][0])) {
+                    otherProps['filter']['colRange'][0] += this.a;
+                    otherProps['filter']['colRange'][1] += this.a;
+                } else if (this.i > otherProps['filter']['colRange'][0] && this.i <= otherProps['filter']['colRange'][1]) {
+                    otherProps['filter']['colRange'][1] += this.a;
+                }
+            }
+        }
+        if (state[this.id]['filterByValue']) {
+            otherProps['filterByValue'] = {...state[this.id]['filterByValue']};
+            if (this.t === 'ic' && otherProps['filterByValue'][this.i]) {
+                otherProps['filterByValue'][this.i + this.a] = otherProps['filterByValue'][this.i];
+                delete otherProps['filterByValue'][this.i];
+            }
+        }
+    }
+
+    apply(state) {
+        let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
+            let [row, col] = convertCoor(current);
+            if (this.t === 'ic') {
+                if (this.i <= col) {
+                    col += this.a;
+                }
+            } else if (this.t === 'ir') {
+                if (this.i <= row) {
+                    row += this.a;
+                }
+            } else {
+                throw new Error(`error insert type is : ${this.t}`);
+            }
+            obj[`${row}:${col}`] = state[this.id]['c'][current];
+            return obj;
+        }, {});
+        let otherProps = {};
+        this._applyFixed(state, otherProps);
+        this._applyRh(state, otherProps);
+        this._applyCw(state, otherProps);
+        this._applyMergeCells(state, otherProps);
+        this._applyFilter(state, otherProps);
         return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
     }
 

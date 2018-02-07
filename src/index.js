@@ -181,6 +181,23 @@ export class ExcelModel {
                 if (a.p[1] >= b.i) {
                     a.p[1] += b.a;
                 }
+            } else if (a.p[0] === 'filter') {
+                /*
+                {
+                    filter: {
+                        row: 1,
+                        colRange: [0, 5]
+                    },
+                    filterByValue: {
+                        [colIndex]: [1, 2, 3]
+                    }
+                }
+                * */
+                if (a.oi) {
+                    if (a.oi.row >= b.i) {
+                        a.oi.row += b.a;
+                    }
+                }
             }
         } else if (a.t === 'dr') {
             //a dr
@@ -235,6 +252,32 @@ export class ExcelModel {
             } else if (a.p[0] === 'cw') {
                 if (a.p[1] >= b.i) {
                     a.p[1] += b.a;
+                }
+            } else if (a.p[0] === 'filter') {
+                /*
+                {
+                    filter: {
+                        row: 1,
+                        colRange: [0, 5]
+                    },
+                    filterByValue: {
+                        [colIndex]: [1, 2, 3]
+                    }
+                }
+                * */
+                if (a.oi) {
+                    if (b.i <= a.oi.colRange[0]) {
+                        a.oi.colRange[0] += b.a;
+                        a.oi.colRange[1] += b.a;
+                    } else if (a.oi.colRange[0] < b.i && a.oi.colRange[1] >= b.i) {
+                        a.oi.colRange[1] += b.a;
+                    }
+                }
+            } else if (a.p[0] === 'filterByValue') {
+                if (a.p[1] && a.oi) {
+                    if (b.i <= a.p[1]) {
+                        a.p[1] += b.a;
+                    }
                 }
             }
         } else if (a.t === 'dc') {
@@ -301,6 +344,25 @@ export class ExcelModel {
                 } else if (a.p[1] === b.i) {
                     a = Empty.create()
                 }
+            } else if (a.p[0] === 'filter') {
+                /*
+                {
+                    filter: {
+                        row: 1,
+                        colRange: [0, 5]
+                    },
+                    filterByValue: {
+                        [colIndex]: [1, 2, 3]
+                    }
+                }
+                * */
+                if (a.oi) {
+                    if (b.i === a.oi.colRange[0]) {
+                        a.oi = null;
+                    } else if (b.i < a.oi.colRange[0]) {
+                        a.oi.row -= 1;
+                    }
+                }
             }
 
         } else if (a.t === 'ir') {
@@ -366,6 +428,32 @@ export class ExcelModel {
                     a.p[1] -= 1;
                 } else if (a.p[1] === b.i) {
                     a = Empty.create()
+                }
+            } else if (a.p[0] === 'filter') {
+                /*
+                {
+                    filter: {
+                        row: 1,
+                        colRange: [0, 5]
+                    },
+                    filterByValue: {
+                        [colIndex]: [1, 2, 3]
+                    }
+                }
+                * */
+                if (a.oi) {
+                    if (b.i < a.oi.colRange[0]) {
+                        a.oi.colRange[0] -= 1;
+                        a.oi.colRange[1] -= 1;
+                    } else if (b.i >= a.oi.colRange[0] && b.i <= a.oi.colRange[1]) {
+                        a.oi.colRange[1] -= 1;
+                    }
+                }
+            } else if (a.p[0] === 'filterByValue') {
+                if (a.p[1] && a.oi) {
+                    if (a.p[1] === b.i) {
+                        a.oi = null;
+                    }
                 }
             }
         } else if (a.t === 'ic') {
@@ -506,6 +594,71 @@ export class ExcelModel {
                 }
             } else if (a.t === 'rs') {
                 return [Empty.create(), b];
+            }
+        } else if (b.p[0] === 'filter') {
+            /*
+            {
+                filter: {
+                    row: 1,
+                    colRange: [0, 5]
+                },
+                filterByValue: {
+                    [colIndex]: [1, 2, 3]
+                }
+            }
+            * */
+            if (a.t === 'c') {
+                if (a.p['filter']) {
+                    b = Empty.create();
+                }
+            } else if (a.t === 'ic') {
+                if (b.oi) {
+                    if (a.i <= b.oi.colRange[0]) {
+                        b.oi.colRange[0] += a.a;
+                        b.oi.colRange[1] += a.a;
+                    } else if (b.oi.colRange[0] > a.i && a.i <= b.oi.colRange[1]) {
+                        b.oi.colRange[1] += a.a;
+                    }
+                }
+            } else if (a.t === 'ir') {
+                if (b.oi) {
+                    if (a.i <= b.oi.row) {
+                        b.oi.row += a.a;
+                    }
+                }
+            } else if (a.t === 'dc') {
+                if (b.oi) {
+                    if (a.i < b.oi.colRange[0]) {
+                        b.oi.colRange[0] -= 1;
+                        b.oi.colRange[1] -= 1;
+                    } else if (a.i >= b.oi.colRange[0] && a.i <= b.oi.colRange[1]) {
+                        b.oi.colRange[0] -= 1;
+                    }
+                }
+            } else if (a.t === 'dr') {
+                if (b.oi) {
+                    if (a.i < b.oi.row) {
+                        b.oi.row -= 1;
+                    } else if (a.i === b.oi.row) {
+                        b = Empty.create();
+                    }
+                }
+            }
+        } else if (b.p[0] === 'filterByValue') {
+            if (a.p['filterByValue']) {
+                b = Empty.create();
+            } else if (a.t === 'ic') {
+                if (b.p[1] && b.oi) {
+                    if (b.p[1] <= a.i) {
+                        b.p[1] += a.i;
+                    }
+                }
+            } else if (a.t === 'dc') {
+                if (b.p[1] && b.oi) {
+                    if (a.i === b.p[1]) {
+                        b = Empty.create();
+                    }
+                }
             }
         }
         return [a, b];

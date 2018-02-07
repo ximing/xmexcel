@@ -2,7 +2,24 @@
  * Created by ximing on 2/5/18.
  */
 'use strict';
+import {trimObj} from '../util';
 
+/*
+{
+    mergeCells:{
+        'row:col': {rowspan: 3, colspan: 3}
+    },
+    filter: {
+        row: 1,
+        colRange: [0, 5]
+    },
+    filterByValue: {
+        [colIndex]: [1, 2, 3]
+    }
+}
+
+
+* */
 export class Change {
     constructor(id, p, oi, od) {
         this.t = 'c';
@@ -33,16 +50,33 @@ export class Change {
                 }
             };
         } else if (this.p[0] === 'rh' || this.p[0] === 'cw' || this.p[0] === 'filterByValue' || this.p[0] === 'mergeCells') {
-            return {
-                ...state,
-                [this.id]: {
-                    ...state[this.id],
-                    [this.p[0]]: Object.assign({}, state[this.id][this.p[0]], {[this.p[1]]: this.oi})
-                }
-            };
+            if (this.p[1] == null) {
+                return {
+                    ...state,
+                    [this.id]: trimObj({
+                        ...state[this.id],
+                        [this.p[0]]: null
+                    })
+                };
+            } else {
+                return {
+                    ...state,
+                    [this.id]: trimObj({
+                        ...state[this.id],
+                        [this.p[0]]: trimObj(Object.assign({}, state[this.id][this.p[0]], {[this.p[1]]: this.oi}))
+                    })
+                };
+            }
+
         } else {
             state[this.id][this.p[0]] = this.oi;
-            return {...state, [this.id]: {...state[this.id], [this.p[0]]: this.oi}};
+            return {
+                ...state,
+                [this.id]: trimObj({
+                    ...state[this.id],
+                    [this.p[0]]: this.oi
+                })
+            };
         }
     }
 

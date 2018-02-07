@@ -18,3 +18,11 @@ export const inMergeCell = function (mergeCells = [], selection) {
     return false;
 };
 
+export const trimObj = function (obj) {
+    Object.keys(obj).forEach(key => {
+        if (obj[key] == null) {
+            delete obj[key];
+        }
+    });
+    return obj;
+};
