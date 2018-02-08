@@ -24,5 +24,6 @@ export const trimObj = function (obj) {
             delete obj[key];
         }
     });
-    return obj;
+
+    return Object.keys(obj).length === 0 ? null : obj;
 };

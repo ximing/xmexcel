@@ -274,7 +274,7 @@ export class ExcelModel {
                     }
                 }
             } else if (a.p[0] === 'filterByValue') {
-                if (a.p[1] && a.oi) {
+                if (a.p[1] >= 0 && a.oi) {
                     if (b.i <= a.p[1]) {
                         a.p[1] += b.a;
                     }

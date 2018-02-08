@@ -122,14 +122,17 @@ export class Insert {
             }
         }
 
-        if (state[this.id]['filterByValue']) {
-            otherProps['filterByValue'] = _.cloneDeep(state[this.id]['filterByValue']);
-            if (this.t === 'ic' && otherProps['filterByValue'][this.i]) {
-                otherProps['filterByValue'][this.i + this.a] = otherProps['filterByValue'][this.i];
-                delete otherProps['filterByValue'][this.i];
-            }
+        if (this.t === 'ic' && state[this.id]['filterByValue']) {
+            otherProps['filterByValue'] = {};
+            Object.keys(state[this.id]['filterByValue']).forEach(key => {
+                key = parseInt(key);
+                if (this.i <= key) {
+                    otherProps['filterByValue'][key + this.a] = state[this.id]['filterByValue'][key];
+                } else {
+                    otherProps['filterByValue'][key] = state[this.id]['filterByValue'][key];
+                }
+            });
         }
-
     }
 
     apply(state) {
