@@ -4,6 +4,7 @@
 'use strict';
 import {convertCoor} from '../util';
 import {Delete} from './delete';
+import _ from 'lodash';
 
 export class Insert {
     constructor(id, t, i, a) {
@@ -104,8 +105,9 @@ export class Insert {
     * }
     * */
     _applyFilter(state, otherProps) {
+
         if (state[this.id]['filter']) {
-            otherProps['filter'] = {...state[this.id]['filter']};
+            otherProps['filter'] = _.cloneDeep(state[this.id]['filter']);
             if (this.t === 'ir') {
                 if (parseInt(otherProps['filter']['row']) >= parseInt(this.i)) {
                     otherProps['filter']['row'] = parseInt(otherProps['filter']['row']) + this.a;
@@ -119,13 +121,15 @@ export class Insert {
                 }
             }
         }
+
         if (state[this.id]['filterByValue']) {
-            otherProps['filterByValue'] = {...state[this.id]['filterByValue']};
+            otherProps['filterByValue'] = _.cloneDeep(state[this.id]['filterByValue']);
             if (this.t === 'ic' && otherProps['filterByValue'][this.i]) {
                 otherProps['filterByValue'][this.i + this.a] = otherProps['filterByValue'][this.i];
                 delete otherProps['filterByValue'][this.i];
             }
         }
+
     }
 
     apply(state) {

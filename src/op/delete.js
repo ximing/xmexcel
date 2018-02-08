@@ -4,6 +4,7 @@
 'use strict';
 import {convertCoor} from '../util';
 import {Insert} from './insert';
+import _ from 'lodash';
 
 export class Delete {
     constructor(id, t, i) {
@@ -165,10 +166,12 @@ export class Delete {
     * */
     _applyFilter(state, otherProps) {
         if (state[this.id]['filter']) {
-            otherProps['filter'] = {...state[this.id]['filter']};
+            otherProps['filter'] = _.cloneDeep(state[this.id]['filter']);
             if (this.t === 'dr') {
                 if (parseInt(otherProps['filter']['row']) === parseInt(this.i)) {
                     delete otherProps['filter'];
+                } else if (parseInt(this.i) < parseInt(otherProps['filter']['row'])) {
+                    otherProps['filter']['row'] -= 1;
                 }
             } else if (this.t === 'dc') {
                 if (parseInt(this.i) < parseInt(otherProps['filter']['colRange'][0])) {
@@ -180,7 +183,7 @@ export class Delete {
             }
         }
         if (state[this.id]['filterByValue']) {
-            otherProps['filterByValue'] = {...state[this.id]['filterByValue']};
+            otherProps['filterByValue'] = _.cloneDeep(state[this.id]['filterByValue']);
             if (this.t === 'dc' && otherProps['filterByValue'][this.i]) {
                 delete otherProps['filterByValue'][this.i];
             }
@@ -225,6 +228,9 @@ export class Delete {
         delete newSheetState['cw'];
         delete newSheetState['rh'];
         delete newSheetState['fixed'];
+        delete newSheetState['filter'];
+        delete newSheetState['filterByValue'];
+
         return {
             ...state,
             [this.id]: {

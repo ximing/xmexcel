@@ -3,6 +3,7 @@
  */
 'use strict';
 import {trimObj} from '../util';
+import _ from 'lodash';
 
 /*
 {
@@ -17,8 +18,6 @@ import {trimObj} from '../util';
         [colIndex]: [1, 2, 3]
     }
 }
-
-
 * */
 export class Change {
     constructor(id, p, oi, od) {
@@ -81,7 +80,18 @@ export class Change {
     }
 
     clone() {
-        return new Change(this.id, this.p.slice(), this.oi, this.od);
+        let oi, od;
+        if (this.oi && _.isObject(this.oi)) {
+            oi = _.cloneDeep(this.oi);
+        } else {
+            oi = this.oi;
+        }
+        if (this.od && _.isObject(this.od)) {
+            od = _.cloneDeep(this.od);
+        } else {
+            od = this.od;
+        }
+        return new Change(this.id, this.p.slice(), oi, od);
     }
 
     static fromJSON({t, id, p, oi, od}) {

@@ -616,7 +616,7 @@ export class ExcelModel {
                     if (a.i <= b.oi.colRange[0]) {
                         b.oi.colRange[0] += a.a;
                         b.oi.colRange[1] += a.a;
-                    } else if (b.oi.colRange[0] > a.i && a.i <= b.oi.colRange[1]) {
+                    } else if (a.i > b.oi.colRange[0] && a.i <= b.oi.colRange[1]) {
                         b.oi.colRange[1] += a.a;
                     }
                 }
@@ -632,7 +632,7 @@ export class ExcelModel {
                         b.oi.colRange[0] -= 1;
                         b.oi.colRange[1] -= 1;
                     } else if (a.i >= b.oi.colRange[0] && a.i <= b.oi.colRange[1]) {
-                        b.oi.colRange[0] -= 1;
+                        b.oi.colRange[1] -= 1;
                     }
                 }
             } else if (a.t === 'dr') {
