@@ -18,6 +18,14 @@ export const inMergeCell = function (mergeCells = [], selection) {
     return false;
 };
 
+export const inFilter = function (row, col, filter) {
+    if (filter && filter.colRange && row === filter.row &&
+        (col >= filter.colRange[0] && col <= filter.colRange[1])) {
+        return true;
+    }
+    return false;
+};
+
 export const trimObj = function (obj) {
     Object.keys(obj).forEach(key => {
         if (obj[key] == null) {

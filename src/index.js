@@ -6,10 +6,9 @@
 import shortid from 'shortid';
 
 import {Empty, Delete, Insert, Change, RemoveSheet, Op, AddSheet} from './op';
-import {convertCoor} from './util';
+import {convertCoor, inMergeCell, inFilter} from './util';
 
-export {Empty, Delete, Insert, Change, RemoveSheet, Op, AddSheet};
-export {convertCoor, inMergeCell} from './util';
+export {Empty, Delete, Insert, Change, RemoveSheet, Op, AddSheet, convertCoor, inMergeCell, inFilter};
 
 /*
 {
@@ -198,6 +197,18 @@ export class ExcelModel {
                         a.oi.row += b.a;
                     }
                 }
+            } else if (a.p[0] === 'hiddenRows') {
+                if (a.oi) {
+                    let oi = [];
+                    a.oi.forEach(i => {
+                        if (b.i <= i) {
+                            oi.push(i + b.a);
+                        } else {
+                            oi.push(i);
+                        }
+                    });
+                    a.oi = oi;
+                }
             }
         } else if (a.t === 'dr') {
             //a dr
@@ -363,6 +374,18 @@ export class ExcelModel {
                         a.oi.row -= 1;
                     }
                 }
+            } else if (a.p[0] === 'hiddenRows') {
+                if (a.oi) {
+                    let oi = [];
+                    a.oi.forEach(i => {
+                        if (b.i < i) {
+                            oi.push(i - 1);
+                        } else if (b.i > i) {
+                            oi.push(i);
+                        }
+                    });
+                    a.oi = oi;
+                }
             }
 
         } else if (a.t === 'ir') {
@@ -395,6 +418,8 @@ export class ExcelModel {
 
     static handleDC(a, b) {
         if (a.t === 'c') {
+
+
             if (a.p[0] === 'c') {
                 if (a.p[2] === b.i) {
                     a = Empty.create();
@@ -456,6 +481,8 @@ export class ExcelModel {
                     }
                 }
             }
+
+
         } else if (a.t === 'ic') {
             //a ic
             //b dc
@@ -485,7 +512,11 @@ export class ExcelModel {
     }
 
     static handleC(a, b) {
+
+
         if (b.p[0] === 'c') {
+
+
             if (a.t === 'ic') {
                 if (a.i < b.p[2]) {
                     b.p[2] += a.a;
@@ -509,6 +540,8 @@ export class ExcelModel {
             } else if (a.t === 'rs') {
                 return [Empty.create(), b];
             }
+
+
         } else if (b.p[0] === 'mergeCells') {
             let [row, col] = convertCoor(b.p[1]);
             let {rowspan, colspan} = b.oi;
@@ -608,7 +641,7 @@ export class ExcelModel {
             }
             * */
             if (a.t === 'c') {
-                if (a.p['filter']) {
+                if (a.p[0] === 'filter') {
                     b = Empty.create();
                 }
             } else if (a.t === 'ic') {
@@ -645,18 +678,47 @@ export class ExcelModel {
                 }
             }
         } else if (b.p[0] === 'filterByValue') {
-            if (a.p['filterByValue']) {
+            if (a.t === 'c' && a.p[0] === 'filterByValue') {
                 b = Empty.create();
-            } else if (a.t === 'ic') {
+            }
+            else if (a.t === 'ic') {
                 if (b.p[1] && b.oi) {
                     if (b.p[1] <= a.i) {
-                        b.p[1] += a.i;
+                        b.p[1] += a.a;
                     }
                 }
             } else if (a.t === 'dc') {
                 if (b.p[1] && b.oi) {
                     if (a.i === b.p[1]) {
                         b = Empty.create();
+                    }
+                }
+            }
+        } else if (b.p[0] === 'hiddenRows') {
+            if (a.oi) {
+                if (a.t === 'c' && a.p[0] === 'hiddenRows') {
+                    b = Empty.create();
+                } else if (a.t === 'ir') {
+                    if (b.p[1] && b.oi) {
+                        let oi = [];
+                        b.oi.forEach(i => {
+                            if (i <= a.i) {
+                                oi.push(i + a.a);
+                            }
+                        });
+                        b.oi = oi;
+                    }
+                } else if (a.t === 'dr') {
+                    if (b.p[1] && b.oi) {
+                        let oi = [];
+                        b.oi.forEach(i => {
+                            if (i < a.i) {
+                                oi.push(i - 1);
+                            } else if (i > a.i) {
+                                oi.push(i);
+                            }
+                        });
+                        b.oi = oi;
                     }
                 }
             }

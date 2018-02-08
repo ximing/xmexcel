@@ -68,7 +68,6 @@ export class Change {
             }
 
         } else {
-            state[this.id][this.p[0]] = this.oi;
             return {
                 ...state,
                 [this.id]: trimObj({
