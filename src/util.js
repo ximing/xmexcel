@@ -6,16 +6,34 @@ export const convertCoor = function (key) {
     return key.split(':').map(item => parseInt(item));
 };
 
-export const inMergeCell = function (mergeCells = [], selection) {
-    for (let i = 0, l = mergeCells.length; i < l; i++) {
-        let cell = mergeCells[i];
-        if (cell.row <= selection[0] || cell.col <= selection[1] ||
-            cell.rowspan >= selection[2] - selection[0] + 1 ||
-            cell.colspan >= selection[3] - selection[1] + 1) {
+export const inMergeCell = function (mergeCells = {}, selection) {
+    console.log('inMergeCell', mergeCells, selection);
+    let inRow = false, inCol = false;
+    let keys = Object.keys(mergeCells);
+    for (let i = 0, l = keys.length; i < l; i++) {
+        let key = keys[i];
+        let [row, col] = convertCoor(key);
+        let cell = {
+            row, col,
+            rowspan: mergeCells[key].rowspan,
+            colspan: mergeCells[key].colspan,
+        };
+        if ((selection[0] >= cell.row && selection[0] < cell.row + cell.rowspan) ||
+            (selection[2] >= cell.row && selection[2] < cell.row + cell.rowspan)) {
+            inRow = true;
+        }
+        if ((selection[1] >= cell.col && selection[1] < cell.col + cell.colspan) ||
+            (selection[3] >= cell.col && selection[3] < cell.col + cell.colspan)) {
+            inCol = true;
+        }
+        if (inRow && inCol) {
             return true;
+        } else {
+            inCol = false;
+            inRow = false;
         }
     }
-    return false;
+    return inRow && inCol;
 };
 
 export const inFilter = function (row, col, filter) {

@@ -193,21 +193,6 @@ export class Delete {
         }
     }
 
-    _applyHiddenRows(state, otherProps) {
-        if (this.t === 'dc' && state[this.id]['hiddenRows']) {
-            otherProps['hiddenRows'] = [];
-            state[this.id]['hiddenRows'].forEach(i => {
-                if (i < this.i) {
-                    otherProps['hiddenRows'].push(i);
-                } else if (i > this.i) {
-                    otherProps['hiddenRows'].push(i - 1);
-                }
-            });
-            if (otherProps['hiddenRows'].length === 0) {
-                delete otherProps['hiddenRows'];
-            }
-        }
-    }
 
     apply(state) {
         let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
@@ -237,7 +222,6 @@ export class Delete {
         this._applyCw(state, otherProps);
         this._applyMergeCells(state, otherProps);
         this._applyFilter(state, otherProps);
-        this._applyHiddenRows(state, otherProps);
 
         let newSheetState = {...state[this.id]};
         delete newSheetState['mergeCells'];
@@ -246,7 +230,6 @@ export class Delete {
         delete newSheetState['fixed'];
         delete newSheetState['filter'];
         delete newSheetState['filterByValue'];
-        delete newSheetState['hiddenRows'];
 
         return {
             ...state,
