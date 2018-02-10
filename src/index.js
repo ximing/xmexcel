@@ -117,7 +117,7 @@ export class ExcelModel {
             let unconfirmed = [];
             let removeOp = op;
             this.unconfirmed.reverse().forEach(item => {
-                console.log('unconfirmed rebase', this.unconfirmed);
+                // console.log('unconfirmed rebase', this.unconfirmed);
                 if (!Empty.isEmpty(removeOp)) {
                     let [a, b] = ExcelModel.transform(item, removeOp);
                     if (ExcelModel.trim(a)) {
@@ -341,7 +341,7 @@ export class ExcelModel {
                 if (a.p[1] > b.i) {
                     a.p[1] -= 1;
                 } else if (a.p[1] === b.i) {
-                    a = Empty.create()
+                    a = Empty.create();
                 }
             } else if (a.p[0] === 'filter') {
                 /*
@@ -426,7 +426,7 @@ export class ExcelModel {
                 if (a.p[1] > b.i) {
                     a.p[1] -= 1;
                 } else if (a.p[1] === b.i) {
-                    a = Empty.create()
+                    a = Empty.create();
                 }
             } else if (a.p[0] === 'filter') {
                 /*

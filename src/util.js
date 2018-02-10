@@ -16,7 +16,7 @@ export const inMergeCell = function (mergeCells = {}, selection) {
         let cell = {
             row, col,
             rowspan: mergeCells[key].rowspan,
-            colspan: mergeCells[key].colspan,
+            colspan: mergeCells[key].colspan
         };
         if ((selection[0] >= cell.row && selection[0] < cell.row + cell.rowspan) ||
             (selection[2] >= cell.row && selection[2] < cell.row + cell.rowspan)) {
