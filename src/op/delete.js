@@ -194,7 +194,7 @@ export class Delete {
     }
 
     _applyHiddenRows(state, otherProps) {
-        if (this.t === 'dc' && state[this.id]['hiddenRows']) {
+        if (this.t === 'dr' && state[this.id]['hiddenRows']) {
             otherProps['hiddenRows'] = [];
             state[this.id]['hiddenRows'].forEach(i => {
                 if (i < this.i) {

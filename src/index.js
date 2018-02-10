@@ -512,11 +512,7 @@ export class ExcelModel {
     }
 
     static handleC(a, b) {
-
-
         if (b.p[0] === 'c') {
-
-
             if (a.t === 'ic') {
                 if (a.i < b.p[2]) {
                     b.p[2] += a.a;
@@ -540,8 +536,6 @@ export class ExcelModel {
             } else if (a.t === 'rs') {
                 return [Empty.create(), b];
             }
-
-
         } else if (b.p[0] === 'mergeCells') {
             let [row, col] = convertCoor(b.p[1]);
             let {rowspan, colspan} = b.oi;
@@ -694,26 +688,28 @@ export class ExcelModel {
                 }
             }
         } else if (b.p[0] === 'hiddenRows') {
-            if (a.oi) {
+            if (b.oi) {
                 if (a.t === 'c' && a.p[0] === 'hiddenRows') {
                     b = Empty.create();
                 } else if (a.t === 'ir') {
-                    if (b.p[1] && b.oi) {
+                    if (b.oi) {
                         let oi = [];
                         b.oi.forEach(i => {
-                            if (i <= a.i) {
+                            if (i >= a.i) {
                                 oi.push(i + a.a);
+                            }else{
+                                oi.push(i);
                             }
                         });
                         b.oi = oi;
                     }
                 } else if (a.t === 'dr') {
-                    if (b.p[1] && b.oi) {
+                    if (b.oi) {
                         let oi = [];
                         b.oi.forEach(i => {
-                            if (i < a.i) {
+                            if (i > a.i) {
                                 oi.push(i - 1);
-                            } else if (i > a.i) {
+                            } else if (i < a.i) {
                                 oi.push(i);
                             }
                         });
