@@ -173,7 +173,7 @@ export class Insert {
         this._applyMergeCells(state, otherProps);
         this._applyFilter(state, otherProps);
         this._applyHiddenRows(state, otherProps);
-        
+
         return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
     }
 

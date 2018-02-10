@@ -680,8 +680,7 @@ export class ExcelModel {
         } else if (b.p[0] === 'filterByValue') {
             if (a.t === 'c' && a.p[0] === 'filterByValue') {
                 b = Empty.create();
-            }
-            else if (a.t === 'ic') {
+            } else if (a.t === 'ic') {
                 if (b.p[1] && b.oi) {
                     if (b.p[1] <= a.i) {
                         b.p[1] += a.a;

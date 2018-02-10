@@ -7,7 +7,7 @@ export const convertCoor = function (key) {
 };
 
 export const inMergeCell = function (mergeCells = {}, selection) {
-    console.log('inMergeCell', mergeCells, selection);
+    // console.log('inMergeCell', mergeCells, selection);
     let inRow = false, inCol = false;
     let keys = Object.keys(mergeCells);
     for (let i = 0, l = keys.length; i < l; i++) {
