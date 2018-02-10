@@ -13,6 +13,6 @@ test('convertCoor', (t) => {
 });
 
 test('inMergeCell', (t) => {
-    let isInMergeCell = inMergeCell([{row: 1, col: 1, rowspan: 3, colspan: 2}], [1, 1, 3, 3]);
+    let isInMergeCell = inMergeCell({'1:1': {rowspan: 3, colspan: 2}}, [1, 1, 3, 3]);
     t.is(isInMergeCell, true);
 });
