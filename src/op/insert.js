@@ -135,6 +135,20 @@ export class Insert {
         }
     }
 
+    _applyHiddenRows(state, otherProps) {
+        if (this.t === 'ir' && state[this.id]['hiddenRows']) {
+            otherProps['hiddenRows'] = [];
+            state[this.id]['hiddenRows'].forEach(key => {
+                key = parseInt(key);
+                if (this.i <= key) {
+                    otherProps['hiddenRows'].push(key + this.a);
+                } else {
+                    otherProps['hiddenRows'].push(key);
+                }
+            });
+        }
+    }
+
     apply(state) {
         let c = Object.keys(state[this.id]['c']).reduce((obj, current) => {
             let [row, col] = convertCoor(current);
@@ -158,6 +172,8 @@ export class Insert {
         this._applyCw(state, otherProps);
         this._applyMergeCells(state, otherProps);
         this._applyFilter(state, otherProps);
+        this._applyHiddenRows(state, otherProps);
+        
         return {...state, [this.id]: {...state[this.id], c: c, ...otherProps}};
     }
 
