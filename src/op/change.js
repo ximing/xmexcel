@@ -35,16 +35,17 @@ export class Change {
     apply(state) {
         if (this.p[0] === 'c') {
             let newMeta = Object.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`], {[this.p[3] || 'v']: this.oi});
-            // Object.keys(newMeta).forEach(key => {
-            //     if (newMeta[key] == null) {
-            //         delete newMeta[key];
-            //     }
-            // });
+            Object.keys(newMeta).forEach(key => {
+                if (newMeta[key] == null || newMeta[key] == '') {
+                    delete newMeta[key];
+                }
+            });
+            newMeta = Object.keys(newMeta).length === 0 ? null : newMeta;
             return {
                 ...state, [this.id]: {
                     ...state[this.id], c: trimObj({
                         ...state[this.id]['c'],
-                        [`${this.p[1]}:${this.p[2]}`]: trimObj(newMeta)
+                        [`${this.p[1]}:${this.p[2]}`]: newMeta
                     })
                 }
             };
