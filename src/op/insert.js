@@ -184,4 +184,8 @@ export class Insert {
     static fromJSON({t, id, i, a}) {
         return new Insert(id, t, i, a);
     }
+
+    static isInsert(op) {
+        return op.t === 'ic' || op.t === 'ir';
+    }
 }

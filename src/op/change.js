@@ -96,4 +96,8 @@ export class Change {
     static fromJSON({t, id, p, oi, od}) {
         return new Change(id, p, oi, od);
     }
+
+    static isChange(op) {
+        return op.t === 'c';
+    }
 }

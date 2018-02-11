@@ -48,6 +48,10 @@ class AddSheet {
     static fromJSON({id, sheet}) {
         return new AddSheet(id, sheet);
     }
+
+    static isAddSheet(op) {
+        return op.t === 'as';
+    }
 }
 
 class RemoveSheet {
@@ -73,6 +77,10 @@ class RemoveSheet {
 
     static fromJSON({id, sheet}) {
         return new RemoveSheet(id, sheet);
+    }
+
+    static isRemoveSheet(op) {
+        return op.t === 'rs';
     }
 }
 

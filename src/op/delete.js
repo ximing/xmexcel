@@ -265,4 +265,8 @@ export class Delete {
     static fromJSON({t, id, i}) {
         return new Delete(id, t, i);
     }
+
+    static isDelete(op) {
+        return op.t === 'dc' || op.t === 'dr';
+    }
 }
