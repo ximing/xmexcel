@@ -29,7 +29,18 @@ export class Change {
     }
 
     revert() {
-        return new Change(this.id, this.p, this.od, this.oi);
+        let oi, od;
+        if (this.oi && _.isObject(this.oi)) {
+            oi = _.cloneDeep(this.oi);
+        } else {
+            oi = this.oi;
+        }
+        if (this.od && _.isObject(this.od)) {
+            od = _.cloneDeep(this.od);
+        } else {
+            od = this.od;
+        }
+        return new Change(this.id, this.p, od, oi);
     }
 
     apply(state) {

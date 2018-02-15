@@ -11,6 +11,10 @@ class Empty {
         this.t = 'e';
     }
 
+    revert() {
+        return Empty.create();
+    }
+
     apply(state) {
         return state;
     }

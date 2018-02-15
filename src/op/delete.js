@@ -14,11 +14,7 @@ export class Delete {
     }
 
     revert() {
-        if (this.t === 'dc') {
-            return new Insert(this.id, 'ic', this.i, 1);
-        } else {
-            return new Insert(this.id, 'ir', this.i, 1);
-        }
+        return new Insert(this.id, this.t === 'dc' ? 'ic' : 'ir', this.i, 1)
     }
 
     _applyFixed(state, otherProps) {
