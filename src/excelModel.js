@@ -51,6 +51,8 @@ import {HistoryStep} from './history';
 }
 
 * */
+const MAX_HISTORY_COUNT = 100;
+
 export class ExcelModel {
     constructor({state, version = 0, clientID = '', unconfirmed = [], undo = [], redo = []} = {}) {
         this.state = state;
@@ -86,6 +88,7 @@ export class ExcelModel {
         let state = this.applyOpsToState(ops);
         undo = undo ? undo : this._undo.slice(0).push(new HistoryStep(ops));
         redo = redo ? redo : [];
+        undo = this.compressHistory(undo);
         return new ExcelModel({
             state,
             version: this.version,
@@ -93,6 +96,10 @@ export class ExcelModel {
             undo: undo, redo: redo,
             unconfirmed: this.unconfirmed.concat(ops)
         });
+    }
+
+    compressHistory(undo) {
+        return undo.filter(step => !step.isEmpty()).slice(0, MAX_HISTORY_COUNT);
     }
 
     applyOpsToState(ops) {
@@ -126,8 +133,10 @@ export class ExcelModel {
                     removeOp = b;
                 }
             });
-            remoteOps.push(removeOp);
-            this.unconfirmed = unconfirmed;
+            if (!Empty.isEmpty(removeOp)) {
+                remoteOps.push(removeOp);
+            }
+            this.unconfirmed = unconfirmed.filter(op => !Empty.isEmpty(op));
         });
 
         if (remoteOps.length > 0) {
