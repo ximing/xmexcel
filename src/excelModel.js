@@ -4,9 +4,9 @@
 'use strict';
 import shortid from 'shortid';
 
-import {Empty} from "./op";
-import {convertCoor} from "./util";
-
+import {Empty} from './op';
+import {convertCoor} from './util';
+import {HistoryStep} from './history';
 
 /*
 {
@@ -52,13 +52,10 @@ import {convertCoor} from "./util";
 
 * */
 export class ExcelModel {
-    constructor({
-                    state, version = 0, clientID = '',
-                    unconfirmed = [], undo = [], redo = []
-                } = {}) {
+    constructor({state, version = 0, clientID = '', unconfirmed = [], undo = [], redo = []} = {}) {
         this.state = state;
-        this.undo = undo;
-        this.redo = redo;
+        this._undo = undo;
+        this._redo = redo;
         this.unconfirmed = unconfirmed;
         this.clientID = clientID;
         this.version = version;
@@ -82,13 +79,13 @@ export class ExcelModel {
         });
     }
 
-    apply(ops) {
+    apply(ops, {undo, redo} = {}) {
         if (!Array.isArray(ops)) {
             ops = [ops];
         }
         let state = this.applyOpsToState(ops);
-        let undo = this.undo.slice(0);
-        let redo = this.redo.slice(0);
+        undo = undo ? undo : this._undo.slice(0).push(new HistoryStep(ops));
+        redo = redo ? redo : [];
         return new ExcelModel({
             state,
             version: this.version,
@@ -154,11 +151,43 @@ export class ExcelModel {
     }
 
     _rebaseUndoHistory(ops) {
-        return this.undo.map(step => step.rebase(ops))
+        return this._undo.map(step => step.rebase(ops));
     }
 
     _rebaseRedoHistory(ops) {
-        return this.redo.map(step => step.rebase(ops))
+        return this._redo.map(step => step.rebase(ops));
+    }
+
+    undo() {
+        if (this.canUndo()) {
+            let step = this._undo[this._undo.length - 1];
+            let redo = this._redo.slice(0).push(step);
+            return {
+                ops: step.ops,
+                undo: this._undo.slice(0, -1),
+                redo: redo
+            };
+        }
+    }
+
+    redo() {
+        if (this.canRedo()) {
+            let step = this._redo[this._redo.length - 1];
+            let undo = this._undo.slice(0).push(step);
+            return {
+                ops: step.ops,
+                undo: undo,
+                redo: this._redo.slice(0, -1)
+            };
+        }
+    }
+
+    canUndo() {
+        return this._undo.length > 0;
+    }
+
+    canRedo() {
+        return this._redo.length > 0;
     }
 
     static trim(op) {

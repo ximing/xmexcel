@@ -12,13 +12,13 @@ export class HistoryStep {
     }
 
     revert() {
-        return new HistoryStep(this.ops.reverse().map(op => op.revert()))
+        return new HistoryStep(this.ops.reverse().map(op => op.revert()));
     }
 
     rebase(ops) {
         this.ops.map(op => {
 
-        })
+        });
     }
 
     clone() {

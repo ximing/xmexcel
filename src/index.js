@@ -6,8 +6,8 @@
 
 import {Empty, Delete, Insert, Change, RemoveSheet, Op, AddSheet} from './op';
 import {convertCoor, inMergeCell, inFilter} from './util';
-import {HistoryStep} from './history'
-import {ExcelModel} from './excelModel'
+import {HistoryStep} from './history';
+import {ExcelModel} from './excelModel';
 
 export {
     Empty, Delete, Insert, Change, RemoveSheet, ExcelModel,
