@@ -87,7 +87,7 @@ export class ExcelModel {
         }
         let state = this.applyOpsToState(ops);
         let step = new HistoryStep(ops);
-        undo = undo ? undo : step.isEmpty() ? this._undo.slice(0) : this._undo.slice(0).push(step);
+        undo = undo ? undo : step.isEmpty() ? this._undo.slice(0) : this._undo.concat(step);
         redo = redo ? redo : [];
         undo = this.compressHistory(undo);
         return new ExcelModel({
@@ -170,8 +170,8 @@ export class ExcelModel {
 
     undo() {
         if (this.canUndo()) {
-            let step = this._undo[this._undo.length - 1];
-            let redo = this._redo.slice(0).push(step);
+            let step = this._undo[this._undo.length - 1].revert();
+            let redo = this._redo.concat(step);
             return {
                 ops: step.ops,
                 undo: this._undo.slice(0, -1),
@@ -182,11 +182,10 @@ export class ExcelModel {
 
     redo() {
         if (this.canRedo()) {
-            let step = this._redo[this._redo.length - 1];
-            let revertStep = step.revert();
-            let undo = this._undo.slice(0).push(revertStep);
+            let step = this._redo[this._redo.length - 1].revert();
+            let undo = this._undo.concat(step);
             return {
-                ops: revertStep.ops,
+                ops: step.ops,
                 undo: undo,
                 redo: this._redo.slice(0, -1)
             };
