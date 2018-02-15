@@ -86,7 +86,8 @@ export class ExcelModel {
             ops = [ops];
         }
         let state = this.applyOpsToState(ops);
-        undo = undo ? undo : this._undo.slice(0).push(new HistoryStep(ops));
+        let step = new HistoryStep(ops);
+        undo = undo ? undo : step.isEmpty() ? this._undo.slice(0) : this._undo.slice(0).push(step);
         redo = redo ? redo : [];
         undo = this.compressHistory(undo);
         return new ExcelModel({
@@ -99,7 +100,7 @@ export class ExcelModel {
     }
 
     compressHistory(undo) {
-        return undo.filter(step => !step.isEmpty()).slice(0, MAX_HISTORY_COUNT);
+        return undo.length > MAX_HISTORY_COUNT ? undo.slice(undo.length - MAX_HISTORY_COUNT) : undo;
     }
 
     applyOpsToState(ops) {
