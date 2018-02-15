@@ -2,6 +2,7 @@
  * Created by ximing on 2/15/18.
  */
 'use strict';
+import {ExcelModel} from './excelModel';
 
 export class HistoryStep {
     constructor(ops) {
@@ -16,9 +17,14 @@ export class HistoryStep {
     }
 
     rebase(ops) {
-        this.ops.map(op => {
-
+        let _ops = this.ops;
+        ops.forEach(remoteOp => {
+            _ops = _ops.map(op => {
+                let [a] = ExcelModel.transform(op, remoteOp);
+                return a;
+            });
         });
+        return new HistoryStep(_ops);
     }
 
     clone() {

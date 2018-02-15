@@ -173,9 +173,10 @@ export class ExcelModel {
     redo() {
         if (this.canRedo()) {
             let step = this._redo[this._redo.length - 1];
-            let undo = this._undo.slice(0).push(step);
+            let revertStep = step.revert();
+            let undo = this._undo.slice(0).push(revertStep);
             return {
-                ops: step.ops,
+                ops: revertStep.ops,
                 undo: undo,
                 redo: this._redo.slice(0, -1)
             };
@@ -763,10 +764,10 @@ export class ExcelModel {
     }
 
     static transform(op1, op2) {
-        if (op1.id !== op2.id) {
-            return [op1, op2];
-        }
         let a = op1.clone(), b = op2.clone();
+        if (op1.id !== op2.id) {
+            return [a, b];
+        }
         if (op1.t === op2.t) {
             if (op2.t === 'c') {
                 if (op2.p[0] === 'c') {
