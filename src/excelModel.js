@@ -147,8 +147,8 @@ export class ExcelModel {
                     version: this.version,
                     clientID: this.clientID,
                     unconfirmed: this.unconfirmed,
-                    undo: this._rebaseUndoHistory(ops),
-                    redo: this._rebaseRedoHistory(ops)
+                    undo: this._rebaseHistory(ops, this._undo),
+                    redo: this._rebaseHistory(ops, this._redo)
                 }),
                 removeOps: remoteOps
             };
@@ -160,12 +160,8 @@ export class ExcelModel {
         }
     }
 
-    _rebaseUndoHistory(ops) {
-        return this._undo.map(step => step.rebase(ops));
-    }
-
-    _rebaseRedoHistory(ops) {
-        return this._redo.map(step => step.rebase(ops));
+    _rebaseHistory(ops, history) {
+        return history.map(step => step.rebase(ops));
     }
 
     undo() {
