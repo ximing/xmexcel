@@ -1,10 +1,11 @@
 /**
  * Created by ximing on 2/15/18.
  */
+
 'use strict';
 import shortid from 'shortid';
 
-import {Empty} from './op';
+import {Empty, Insert} from './op';
 import {convertCoor} from './util';
 import {HistoryStep} from './history';
 
@@ -465,8 +466,6 @@ export class ExcelModel {
 
     static handleDC(a, b) {
         if (a.t === 'c') {
-
-
             if (a.p[0] === 'c') {
                 if (a.p[2] === b.i) {
                     a = Empty.create();
@@ -582,6 +581,22 @@ export class ExcelModel {
                 }
             } else if (a.t === 'rs') {
                 return [Empty.create(), b];
+            } else if (a.t === 'c') {
+                if (a.p[0] === 'c' && a.p[1] === b.p[1] && a.p[2] === b.p[2]) {
+                    if (a.p[3] && b.p[3]) {
+                        if (a.p[3] === b.p[3]) {
+                            b = Empty.create();
+                        }
+                    } else if (a.p[3] || b.p[3]) {
+                        if (a.p[3]) {
+                            b.oi = Object.assign({}, b.oi, {[a.p[3]]: a.oi})
+                        } else {
+                            b = Empty.create();
+                        }
+                    } else {
+                        b = Empty.create();
+                    }
+                }
             }
         } else if (b.p[0] === 'mergeCells') {
             let [row, col] = convertCoor(b.p[1]);
@@ -777,7 +792,21 @@ export class ExcelModel {
             if (op2.t === 'c') {
                 if (op2.p[0] === 'c') {
                     if (op1.p[1] === op2.p[1] && op1.p[2] === op2.p[2]) {
-                        b = Empty.create();
+                        if (op1.p[3] && op2[3]) {
+                            if (op1.p[3] === op2[3]) {
+                                b = Empty.create();
+                            }
+                        } else if (op1.p[3] || op2[3]) {
+                            if (op1.p[3]) {
+                                b.oi = Object.assign({}, b.oi, {
+                                    [a.p[3]]: a.oi
+                                });
+                            } else {
+                                b = Empty.create();
+                            }
+                        } else {
+                            b = Empty.create();
+                        }
                     }
                 } else if (op2.p[0] === 'mergeCell') {
                     if (op1.p[1] === op2.p[1]) {

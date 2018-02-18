@@ -45,7 +45,16 @@ export class Change {
 
     apply(state) {
         if (this.p[0] === 'c') {
-            let newMeta = Object.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`], {[this.p[3] || 'v']: this.oi});
+            let newMeta = Object.assign({},
+                state[this.id]['c'][`${this.p[1]}:${this.p[2]}`],
+                {[this.p[3] || 'v']: this.oi});
+            if (this.p[3]) {
+                newMeta = Object.assign({},
+                    state[this.id]['c'][`${this.p[1]}:${this.p[2]}`],
+                    {[this.p[3]]: this.oi});
+            } else {
+                newMeta = Object.assign({}, this.oi);
+            }
             Object.keys(newMeta).forEach(key => {
                 if (newMeta[key] == null || newMeta[key] == '') {
                     delete newMeta[key];
