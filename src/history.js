@@ -2,6 +2,7 @@
  * Created by ximing on 2/15/18.
  */
 'use strict';
+import _ from 'lodash';
 import {ExcelModel} from './excelModel';
 import {Empty} from './op/index';
 
@@ -14,7 +15,9 @@ export class HistoryStep {
     }
 
     revert() {
-        return new HistoryStep(this.ops.reverse().map(op => op.revert()));
+        let ops = this.ops.reverse().map(op => op.revert());
+        ops = _.flatten(ops);
+        return new HistoryStep(ops);
     }
 
     rebase(ops) {
