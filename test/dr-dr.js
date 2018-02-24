@@ -6,6 +6,7 @@
 import test from 'ava';
 import {ExcelModel, Empty, Delete, Insert, Change} from '../src/index';
 import {c} from './lib/cellsData';
+
 let state = {
     '1': {
         c: c
@@ -51,4 +52,27 @@ test('dr and dr', (t) => {
         JSON.stringify(b.apply(op1.apply(state))),
         JSON.stringify(a.apply(op2.apply(state)))
     );
+});
+
+test('delete multiple rows', (t) => {
+    let model = ExcelModel.fromJSON({
+        state: {
+            '1': {
+                c: {
+                    '0:1': {v: 1},
+                    '0:2': {v: 1},
+                    '1:3': {v: 1},
+                    '1:4': {v: 1},
+                    '2:5': {v: 1},
+                    '3:6': {v: 1},
+                    '2:7': {v: 1}
+                }
+            }
+        }
+    });
+    let model1 = model.apply([new Delete('1', 'dr', 0), new Delete('1', 'dr', 0)]);
+    t.is(
+        JSON.stringify(model1.state),
+        JSON.stringify({"1":{"c":{"0:5":{"v":1},"1:6":{"v":1},"0:7":{"v":1}}}})
+    )
 });
