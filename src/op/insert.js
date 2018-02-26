@@ -17,7 +17,7 @@ export class Insert {
     revert() {
         let ops = [];
         for (let i = 0; i < this.a; i++) {
-            ops.push(new Delete(this.id, this.t === 'ic' ? 'dc' : 'dr', this.i + i));
+            ops.push(new Delete(this.id, this.t === 'ic' ? 'dc' : 'dr', this.i));
         }
         return ops;
     }

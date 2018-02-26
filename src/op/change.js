@@ -66,7 +66,7 @@ export class Change {
                     ...state[this.id], c: trimObj({
                         ...state[this.id]['c'],
                         [`${this.p[1]}:${this.p[2]}`]: newMeta
-                    })
+                    }) || {}
                 }
             };
         } else if (this.p[0] === 'rh' || this.p[0] === 'cw' || this.p[0] === 'filterByValue' || this.p[0] === 'mergeCells') {
