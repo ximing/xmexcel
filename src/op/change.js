@@ -45,30 +45,34 @@ export class Change {
 
     apply(state) {
         if (this.p[0] === 'c') {
-            let newMeta = Object.assign({},
-                state[this.id]['c'][`${this.p[1]}:${this.p[2]}`],
-                {[this.p[3] || 'v']: this.oi});
             if (this.p[3]) {
-                newMeta = Object.assign({},
-                    state[this.id]['c'][`${this.p[1]}:${this.p[2]}`],
-                    {[this.p[3]]: this.oi});
+                let newMeta = _.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`]);
+                newMeta[this.p[3]] = this.oi;
+                Object.keys(newMeta).forEach(key => {
+                    if (newMeta[key] == null || newMeta[key] == '') {
+                        delete newMeta[key];
+                    }
+                });
+                return _.assign({}, state, {
+                    [this.id]: _.assign({}, state[this.id], {
+                        c: trimObj(_.assign({},
+                            state[this.id]['c'], {
+                                [`${this.p[1]}:${this.p[2]}`]: newMeta
+                            })
+                        ) || {}
+                    })
+                });
             } else {
-                newMeta = Object.assign({}, this.oi);
+                let c = _.assign({}, state[this.id]['c']);
+                if (this.oi) {
+                    c[`${this.p[1]}:${this.p[2]}`] = this.oi
+                } else {
+                    delete c[`${this.p[1]}:${this.p[2]}`];
+                }
+                return _.assign({}, state, {
+                    [this.id]: _.assign({}, state[this.id], {c: c})
+                });
             }
-            Object.keys(newMeta).forEach(key => {
-                if (newMeta[key] == null || newMeta[key] == '') {
-                    delete newMeta[key];
-                }
-            });
-            newMeta = Object.keys(newMeta).length === 0 ? null : newMeta;
-            return {
-                ...state, [this.id]: {
-                    ...state[this.id], c: trimObj({
-                        ...state[this.id]['c'],
-                        [`${this.p[1]}:${this.p[2]}`]: newMeta
-                    }) || {}
-                }
-            };
         } else if (this.p[0] === 'rh' || this.p[0] === 'cw' || this.p[0] === 'filterByValue' || this.p[0] === 'mergeCells') {
             if (this.p[1] == null) {
                 return {

@@ -106,9 +106,10 @@ export class ExcelModel {
 
     applyOpsToState(ops) {
         let state = this.state;
-        ops.forEach(op => {
-            state = op.apply(state);
-        });
+        let length = ops.length;
+        for (let i = 0; i < length; i++) {
+            state = ops[i].apply(state);
+        }
         return state;
     }
 

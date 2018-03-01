@@ -11,7 +11,14 @@ export class HistoryStep {
         if (!Array.isArray(ops)) {
             ops = [ops];
         }
-        this.ops = ops.filter(op => !Empty.isEmpty(op));
+        let _ops = [],
+            length = ops.length;
+        for (let i = 0; i < length; i++) {
+            if (!Empty.isEmpty(ops[i])) {
+                _ops.push(ops[i])
+            }
+        }
+        this.ops = _ops;
     }
 
     revert() {
