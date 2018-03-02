@@ -4,6 +4,7 @@
 
 'use strict';
 import shortid from 'shortid';
+import _ from 'lodash';
 
 import {Empty, Insert} from './op';
 import {convertCoor} from './util';
@@ -106,6 +107,7 @@ export class ExcelModel {
 
     applyOpsToState(ops) {
         let state = this.state;
+        state = _.cloneDeep(this.state);
         let length = ops.length;
         for (let i = 0; i < length; i++) {
             state = ops[i].apply(state);

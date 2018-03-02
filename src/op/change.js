@@ -46,32 +46,43 @@ export class Change {
     apply(state) {
         if (this.p[0] === 'c') {
             if (this.p[3]) {
-                let newMeta = _.assign({}, state[this.id]['c'][`${this.p[1]}:${this.p[2]}`]);
-                newMeta[this.p[3]] = this.oi;
-                Object.keys(newMeta).forEach(key => {
-                    if (newMeta[key] == null || newMeta[key] == '') {
-                        delete newMeta[key];
+                let key = this.p[3];
+                let meta = state[this.id]['c'][`${this.p[1]}:${this.p[2]}`];
+                if (meta) {
+                    meta = {...meta};
+                    if (this.oi == null || this.oi == '') {
+                        delete meta[key];
+                    } else {
+                        meta[key] = this.oi;
                     }
-                });
-                return _.assign({}, state, {
-                    [this.id]: _.assign({}, state[this.id], {
-                        c: trimObj(_.assign({},
-                            state[this.id]['c'], {
-                                [`${this.p[1]}:${this.p[2]}`]: newMeta
-                            })
-                        ) || {}
-                    })
-                });
+                } else if (this.oi != null && this.oi != '') {
+                    meta = {[key]: this.oi}
+                }
+                state[this.id]['c'][`${this.p[1]}:${this.p[2]}`] = meta;
+                return state;
+                //
+                // let c = state[this.id]['c'] || {};
+                // if (meta) {
+                //     c = _.assign({}, state[this.id]['c'], {
+                //         [`${this.p[1]}:${this.p[2]}`]: meta
+                //     });
+                // }
+                // return _.assign({}, state, {
+                //     [this.id]: _.assign({}, state[this.id], {
+                //         c: c
+                //     })
+                // });
             } else {
                 let c = _.assign({}, state[this.id]['c']);
                 if (this.oi) {
-                    c[`${this.p[1]}:${this.p[2]}`] = this.oi
+                    c[`${this.p[1]}:${this.p[2]}`] = this.oi;
                 } else {
                     delete c[`${this.p[1]}:${this.p[2]}`];
                 }
-                return _.assign({}, state, {
-                    [this.id]: _.assign({}, state[this.id], {c: c})
-                });
+                return state[this.id]['c'] = c;
+                // return _.assign({}, state, {
+                //     [this.id]: _.assign({}, state[this.id], {c: c})
+                // });
             }
         } else if (this.p[0] === 'rh' || this.p[0] === 'cw' || this.p[0] === 'filterByValue' || this.p[0] === 'mergeCells') {
             if (this.p[1] == null) {
