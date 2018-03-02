@@ -73,13 +73,14 @@ export class Change {
                 //     })
                 // });
             } else {
-                let c = _.assign({}, state[this.id]['c']);
+                let c = state[this.id]['c'];
                 if (this.oi) {
                     c[`${this.p[1]}:${this.p[2]}`] = this.oi;
                 } else {
                     delete c[`${this.p[1]}:${this.p[2]}`];
                 }
-                return state[this.id]['c'] = c;
+                state[this.id]['c'] = c;
+                return state;
                 // return _.assign({}, state, {
                 //     [this.id]: _.assign({}, state[this.id], {c: c})
                 // });
