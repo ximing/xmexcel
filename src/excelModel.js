@@ -106,8 +106,7 @@ export class ExcelModel {
     }
 
     applyOpsToState(ops) {
-        let state = this.state;
-        state = _.cloneDeep(this.state);
+        let state = _.cloneDeep(this.state);
         let length = ops.length;
         for (let i = 0; i < length; i++) {
             state = ops[i].apply(state);

@@ -86,31 +86,50 @@ export class Change {
             }
         } else if (this.p[0] === 'rh' || this.p[0] === 'cw' || this.p[0] === 'filterByValue' || this.p[0] === 'mergeCells') {
             if (this.p[1] == null) {
-                return {
-                    ...state,
-                    [this.id]: trimObj({
-                        ...state[this.id],
-                        [this.p[0]]: null
-                    })
-                };
+                if (this.oi == null) {
+                    delete state[this.id][this.p[0]];
+                } else {
+                    state[this.id][this.p[0]] = this.oi;
+                }
+                return state;
+                // return {
+                //     ...state,
+                //     [this.id]: trimObj({
+                //         ...state[this.id],
+                //         [this.p[0]]: null
+                //     })
+                // };
             } else {
-                return {
-                    ...state,
-                    [this.id]: trimObj({
-                        ...state[this.id],
-                        [this.p[0]]: trimObj(Object.assign({}, state[this.id][this.p[0]], {[this.p[1]]: this.oi}))
-                    })
-                };
+                let p0 = trimObj(Object.assign({}, state[this.id][this.p[0]], {[this.p[1]]: this.oi}));
+                if(p0==null){
+                    delete state[this.id][this.p[0]];
+                }else{
+                    state[this.id][this.p[0]] = p0;
+                }
+                return state;
+                // return {
+                //     ...state,
+                //     [this.id]: trimObj({
+                //         ...state[this.id],
+                //         [this.p[0]]: trimObj(Object.assign({}, state[this.id][this.p[0]], {[this.p[1]]: this.oi}))
+                //     })
+                // };
             }
 
         } else {
-            return {
-                ...state,
-                [this.id]: trimObj({
-                    ...state[this.id],
-                    [this.p[0]]: this.oi
-                })
-            };
+            if (this.oi == null) {
+                delete state[this.id][this.p[0]];
+            } else {
+                state[this.id][this.p[0]] = this.oi;
+            }
+            return state;
+            // return {
+            //     ...state,
+            //     [this.id]: trimObj({
+            //         ...state[this.id],
+            //         [this.p[0]]: this.oi
+            //     })
+            // };
         }
     }
 
