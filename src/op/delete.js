@@ -99,56 +99,25 @@ export class Delete {
     _applyMergeCells(state, otherProps) {
         if (state[this.id]["mergeCells"]) {
             otherProps["mergeCells"] = {};
+
             Object.keys(state[this.id]["mergeCells"]).forEach(key => {
                 let [row, col] = convertCoor(key);
                 let { rowspan, colspan } = state[this.id]["mergeCells"][key];
                 let isDelete = false;
+
                 if (this.t === "dr") {
                     if (this.i < row) {
                         row -= 1;
-                    } else if (
-                        this.i + 1 > row &&
-                        this.i + 1 <= row + rowspan &&
-                        this.i < row
-                    ) {
-                        let delta = row - this.i;
-                        row -= delta;
-                        rowspan -= 1 - delta;
                     } else if (this.i >= row && this.i + 1 <= row + rowspan) {
                         rowspan -= 1;
-                    } else if (
-                        this.i >= row &&
-                        this.i + 1 > row + rowspan &&
-                        this.i < row + rowspan
-                    ) {
-                        let delta = row + rowspan - this.i;
-                        rowspan -= delta;
-                    } else if (this.i < row && this.i + 1 >= row + rowspan) {
-                        isDelete = true;
                     }
                 }
+
                 if (this.t === "dc") {
                     if (this.i < col) {
                         col -= 1;
-                    } else if (
-                        this.i + 1 > col &&
-                        this.i + 1 <= col + colspan &&
-                        this.i < col
-                    ) {
-                        let delta = col - this.i;
-                        col -= delta;
-                        colspan -= 1 - delta;
                     } else if (this.i >= col && this.i + 1 <= col + colspan) {
                         colspan -= 1;
-                    } else if (
-                        this.i >= col &&
-                        this.i + 1 > col + colspan &&
-                        this.i < col + colspan
-                    ) {
-                        let delta = col + colspan - this.i;
-                        colspan -= delta;
-                    } else if (this.i < col && this.i + 1 >= col + colspan) {
-                        isDelete = true;
                     }
                 }
 
@@ -158,9 +127,17 @@ export class Delete {
                     isDelete = true;
                 }
 
+                if (row < 0) {
+                    isDelete = true;
+                }
+
                 if (colspan <= 0) {
                     isDelete = true;
                 } else if (colspan === 1 && rowspan <= 1) {
+                    isDelete = true;
+                }
+
+                if (col < 0) {
                     isDelete = true;
                 }
 
@@ -171,6 +148,7 @@ export class Delete {
                     };
                 }
             });
+
             if (Object.keys(otherProps["mergeCells"]).length === 0) {
                 delete otherProps["mergeCells"];
             }
@@ -283,7 +261,7 @@ export class Delete {
         delete newSheetState["filter"];
         delete newSheetState["filterByValue"];
         delete newSheetState["hiddenRows"];
-        console.log("otherProps", otherProps);
+
         return {
             ...state,
             [this.id]: {

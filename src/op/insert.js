@@ -86,16 +86,16 @@ export class Insert {
                 let [row, col] = convertCoor(key);
                 let { rowspan, colspan } = state[this.id]["mergeCells"][key];
                 if (this.t === "ir") {
-                    if (row >= this.i) {
+                    if (row > this.i) {
                         row += this.a;
-                    } else if (this.i < rowspan + row && row < this.i) {
+                    } else if (this.i < rowspan + row - 1 && row <= this.i) {
                         rowspan += this.a;
                     }
                 }
                 if (this.t === "ic") {
-                    if (col >= this.i) {
+                    if (col > this.i) {
                         col += this.a;
-                    } else if (this.i < rowspan + col && col < this.i) {
+                    } else if (this.i < colspan + col - 1 && col <= this.i) {
                         colspan += this.a;
                     }
                 }
