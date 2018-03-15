@@ -84,14 +84,14 @@ export class Insert {
                 if (this.t === "ir") {
                     if (row >= this.i) {
                         row += this.a;
-                    } else if (this.i < rowspan + row - 1 && row < this.i) {
+                    } else if (this.i < rowspan + row && row < this.i) {
                         rowspan += this.a;
                     }
                 }
                 if (this.t === "ic") {
                     if (col >= this.i) {
                         col += this.a;
-                    } else if (this.i < colspan + col - 1 && col < this.i) {
+                    } else if (this.i < colspan + col && col < this.i) {
                         colspan += this.a;
                     }
                 }

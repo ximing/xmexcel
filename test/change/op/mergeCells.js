@@ -119,19 +119,25 @@ test("merge cells and ic", t => {
 
 test("merge cells and ic", t => {
     let op1 = new Insert("1", "ic", 4, 2);
+    let _state = op1.apply(state);
     t.is(
-        JSON.stringify(op1.apply(state)),
+        JSON.stringify(_state),
         JSON.stringify({
             "1": {
                 c: {},
                 mergeCells: {
-                    "7:1": { rowspan: 6, colspan: 4 },
+                    "7:1": { rowspan: 6, colspan: 6 },
                     "8:7": { rowspan: 3, colspan: 1 },
                     "8:8": { rowspan: 1, colspan: 2 }
                 }
             }
         })
     );
+    let op2 = op1.revert();
+    op2.forEach(op => {
+        _state = op.apply(_state);
+    });
+    t.is(JSON.stringify(_state), JSON.stringify(state));
 });
 
 test("merge cells and ic", t => {

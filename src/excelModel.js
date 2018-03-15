@@ -224,7 +224,7 @@ export class ExcelModel {
                 let { rowspan, colspan } = a.oi;
                 if (b.i <= row) {
                     row += b.a;
-                } else if (b.i > row && b.i < row + rowspan - 1) {
+                } else if (b.i > row && b.i < row + rowspan) {
                     rowspan += b.a;
                 }
                 a.p[1] = `${row}:${col}`;
@@ -308,7 +308,7 @@ export class ExcelModel {
                 let { rowspan, colspan } = a.oi;
                 if (b.i <= col) {
                     col += b.a;
-                } else if (b.i > col && b.i < col + colspan - 1) {
+                } else if (b.i > col && b.i < col + colspan) {
                     colspan += b.a;
                 }
                 a.p[1] = `${row}:${col}`;
@@ -612,13 +612,13 @@ export class ExcelModel {
             if (a.t === "ic") {
                 if (a.i <= col) {
                     col += a.a;
-                } else if (a.i > col && a.i < col + colspan - 1) {
+                } else if (a.i > col && a.i < col + colspan) {
                     colspan += a.a;
                 }
             } else if (a.t === "ir") {
                 if (a.i <= row) {
                     row += a.a;
-                } else if (a.i > row && a.i < row + rowspan - 1) {
+                } else if (a.i > row && a.i < row + rowspan) {
                     rowspan += a.a;
                 }
             } else if (a.t === "dc") {
