@@ -52,8 +52,7 @@ export class Delete {
                     key = parseInt(key);
                     if (key > this.i) {
                         if (key - 1 >= 0) {
-                            otherProps["rh"][key - 1] =
-                                state[this.id]["rh"][key];
+                            otherProps["rh"][key - 1] = state[this.id]["rh"][key];
                         }
                     } else if (key === this.i) {
                         //do nothing
@@ -78,8 +77,7 @@ export class Delete {
                     key = parseInt(key);
                     if (key > this.i) {
                         if (key - 1 >= 0) {
-                            otherProps["cw"][key - 1] =
-                                state[this.id]["cw"][key];
+                            otherProps["cw"][key - 1] = state[this.id]["cw"][key];
                         }
                     } else if (key === this.i) {
                         //do nothing
@@ -170,20 +168,13 @@ export class Delete {
         if (state[this.id]["filter"]) {
             otherProps["filter"] = _.cloneDeep(state[this.id]["filter"]);
             if (this.t === "dr") {
-                if (
-                    parseInt(otherProps["filter"]["row"]) === parseInt(this.i)
-                ) {
+                if (parseInt(otherProps["filter"]["row"]) === parseInt(this.i)) {
                     delete otherProps["filter"];
-                } else if (
-                    parseInt(this.i) < parseInt(otherProps["filter"]["row"])
-                ) {
+                } else if (parseInt(this.i) < parseInt(otherProps["filter"]["row"])) {
                     otherProps["filter"]["row"] -= 1;
                 }
             } else if (this.t === "dc") {
-                if (
-                    parseInt(this.i) <
-                    parseInt(otherProps["filter"]["colRange"][0])
-                ) {
+                if (parseInt(this.i) < parseInt(otherProps["filter"]["colRange"][0])) {
                     otherProps["filter"]["colRange"][0] -= 1;
                     otherProps["filter"]["colRange"][1] -= 1;
                 } else if (
@@ -195,9 +186,7 @@ export class Delete {
             }
         }
         if (state[this.id]["filterByValue"]) {
-            otherProps["filterByValue"] = _.cloneDeep(
-                state[this.id]["filterByValue"]
-            );
+            otherProps["filterByValue"] = _.cloneDeep(state[this.id]["filterByValue"]);
             if (this.t === "dc" && otherProps["filterByValue"][this.i]) {
                 delete otherProps["filterByValue"][this.i];
             }
