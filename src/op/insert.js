@@ -17,9 +17,7 @@ export class Insert {
     revert() {
         let ops = [];
         for (let i = 0; i < this.a; i++) {
-            ops.push(
-                new Delete(this.id, this.t === "ic" ? "dc" : "dr", this.i)
-            );
+            ops.push(new Delete(this.id, this.t === "ic" ? "dc" : "dr", this.i));
         }
         return ops;
     }
@@ -48,8 +46,7 @@ export class Insert {
                 Object.keys(state[this.id]["rh"]).forEach(key => {
                     key = parseInt(key);
                     if (key >= this.i) {
-                        otherProps["rh"][key + this.a] =
-                            state[this.id]["rh"][key];
+                        otherProps["rh"][key + this.a] = state[this.id]["rh"][key];
                     } else {
                         otherProps["rh"][key] = state[this.id]["rh"][key];
                     }
@@ -67,8 +64,7 @@ export class Insert {
                 Object.keys(state[this.id]["cw"]).forEach(key => {
                     key = parseInt(key);
                     if (key >= this.i) {
-                        otherProps["cw"][key + this.a] =
-                            state[this.id]["cw"][key];
+                        otherProps["cw"][key + this.a] = state[this.id]["cw"][key];
                     } else {
                         otherProps["cw"][key] = state[this.id]["cw"][key];
                     }
@@ -86,16 +82,16 @@ export class Insert {
                 let [row, col] = convertCoor(key);
                 let { rowspan, colspan } = state[this.id]["mergeCells"][key];
                 if (this.t === "ir") {
-                    if (row > this.i) {
+                    if (row >= this.i) {
                         row += this.a;
-                    } else if (this.i < rowspan + row - 1 && row <= this.i) {
+                    } else if (this.i < rowspan + row - 1 && row < this.i) {
                         rowspan += this.a;
                     }
                 }
                 if (this.t === "ic") {
-                    if (col > this.i) {
+                    if (col >= this.i) {
                         col += this.a;
-                    } else if (this.i < colspan + col - 1 && col <= this.i) {
+                    } else if (this.i < colspan + col - 1 && col < this.i) {
                         colspan += this.a;
                     }
                 }
@@ -123,14 +119,10 @@ export class Insert {
             otherProps["filter"] = _.cloneDeep(state[this.id]["filter"]);
             if (this.t === "ir") {
                 if (parseInt(otherProps["filter"]["row"]) >= parseInt(this.i)) {
-                    otherProps["filter"]["row"] =
-                        parseInt(otherProps["filter"]["row"]) + this.a;
+                    otherProps["filter"]["row"] = parseInt(otherProps["filter"]["row"]) + this.a;
                 }
             } else if (this.t === "ic") {
-                if (
-                    parseInt(this.i) <=
-                    parseInt(otherProps["filter"]["colRange"][0])
-                ) {
+                if (parseInt(this.i) <= parseInt(otherProps["filter"]["colRange"][0])) {
                     otherProps["filter"]["colRange"][0] += this.a;
                     otherProps["filter"]["colRange"][1] += this.a;
                 } else if (
@@ -150,8 +142,7 @@ export class Insert {
                     otherProps["filterByValue"][key + this.a] =
                         state[this.id]["filterByValue"][key];
                 } else {
-                    otherProps["filterByValue"][key] =
-                        state[this.id]["filterByValue"][key];
+                    otherProps["filterByValue"][key] = state[this.id]["filterByValue"][key];
                 }
             });
         }

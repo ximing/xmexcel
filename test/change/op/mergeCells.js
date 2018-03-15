@@ -177,8 +177,8 @@ test("merge cells and ir", t => {
                 c: {},
                 mergeCells: {
                     "7:1": { rowspan: 8, colspan: 4 },
-                    "8:5": { rowspan: 5, colspan: 1 },
-                    "8:6": { rowspan: 1, colspan: 2 }
+                    "10:5": { rowspan: 3, colspan: 1 },
+                    "10:6": { rowspan: 1, colspan: 2 }
                 }
             }
         })

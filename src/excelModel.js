@@ -96,9 +96,7 @@ export class ExcelModel {
         }
         let state = this.applyOpsToState(ops);
         let step = new HistoryStep(ops);
-        undo = undo
-            ? undo
-            : step.isEmpty() ? this._undo.slice(0) : this._undo.concat(step);
+        undo = undo ? undo : step.isEmpty() ? this._undo.slice(0) : this._undo.concat(step);
         redo = redo ? redo : [];
         undo = this.compressHistory(undo);
         return new ExcelModel({
@@ -112,9 +110,7 @@ export class ExcelModel {
     }
 
     compressHistory(undo) {
-        return undo.length > MAX_HISTORY_COUNT
-            ? undo.slice(undo.length - MAX_HISTORY_COUNT)
-            : undo;
+        return undo.length > MAX_HISTORY_COUNT ? undo.slice(undo.length - MAX_HISTORY_COUNT) : undo;
     }
 
     applyOpsToState(ops) {
@@ -226,9 +222,9 @@ export class ExcelModel {
             } else if (a.p[0] === "mergeCells") {
                 let [row, col] = convertCoor(a.p[1]);
                 let { rowspan, colspan } = a.oi;
-                if (b.i < row) {
+                if (b.i <= row) {
                     row += b.a;
-                } else if (b.i >= row && b.i < row + rowspan - 1) {
+                } else if (b.i > row && b.i < row + rowspan - 1) {
                     rowspan += b.a;
                 }
                 a.p[1] = `${row}:${col}`;
@@ -310,9 +306,9 @@ export class ExcelModel {
             } else if (a.p[0] === "mergeCells") {
                 let [row, col] = convertCoor(a.p[1]);
                 let { rowspan, colspan } = a.oi;
-                if (b.i < col) {
+                if (b.i <= col) {
                     col += b.a;
-                } else if (b.i >= col && b.i < col + colspan - 1) {
+                } else if (b.i > col && b.i < col + colspan - 1) {
                     colspan += b.a;
                 }
                 a.p[1] = `${row}:${col}`;
@@ -343,10 +339,7 @@ export class ExcelModel {
                     if (b.i <= a.oi.colRange[0]) {
                         a.oi.colRange[0] += b.a;
                         a.oi.colRange[1] += b.a;
-                    } else if (
-                        a.oi.colRange[0] < b.i &&
-                        a.oi.colRange[1] >= b.i
-                    ) {
+                    } else if (a.oi.colRange[0] < b.i && a.oi.colRange[1] >= b.i) {
                         a.oi.colRange[1] += b.a;
                     }
                 }
@@ -533,10 +526,7 @@ export class ExcelModel {
                     if (b.i < a.oi.colRange[0]) {
                         a.oi.colRange[0] -= 1;
                         a.oi.colRange[1] -= 1;
-                    } else if (
-                        b.i >= a.oi.colRange[0] &&
-                        b.i <= a.oi.colRange[1]
-                    ) {
+                    } else if (b.i >= a.oi.colRange[0] && b.i <= a.oi.colRange[1]) {
                         a.oi.colRange[1] -= 1;
                     }
                 }
@@ -620,15 +610,15 @@ export class ExcelModel {
             let [row, col] = convertCoor(b.p[1]);
             let { rowspan, colspan } = b.oi;
             if (a.t === "ic") {
-                if (a.i < col) {
+                if (a.i <= col) {
                     col += a.a;
-                } else if (a.i >= col && a.i < col + colspan - 1) {
+                } else if (a.i > col && a.i < col + colspan - 1) {
                     colspan += a.a;
                 }
             } else if (a.t === "ir") {
-                if (a.i < row) {
+                if (a.i <= row) {
                     row += a.a;
-                } else if (a.i >= row && a.i < row + rowspan - 1) {
+                } else if (a.i > row && a.i < row + rowspan - 1) {
                     rowspan += a.a;
                 }
             } else if (a.t === "dc") {
@@ -723,10 +713,7 @@ export class ExcelModel {
                     if (a.i <= b.oi.colRange[0]) {
                         b.oi.colRange[0] += a.a;
                         b.oi.colRange[1] += a.a;
-                    } else if (
-                        a.i > b.oi.colRange[0] &&
-                        a.i <= b.oi.colRange[1]
-                    ) {
+                    } else if (a.i > b.oi.colRange[0] && a.i <= b.oi.colRange[1]) {
                         b.oi.colRange[1] += a.a;
                     }
                 }
@@ -741,10 +728,7 @@ export class ExcelModel {
                     if (a.i < b.oi.colRange[0]) {
                         b.oi.colRange[0] -= 1;
                         b.oi.colRange[1] -= 1;
-                    } else if (
-                        a.i >= b.oi.colRange[0] &&
-                        a.i <= b.oi.colRange[1]
-                    ) {
+                    } else if (a.i >= b.oi.colRange[0] && a.i <= b.oi.colRange[1]) {
                         b.oi.colRange[1] -= 1;
                     }
                 }
