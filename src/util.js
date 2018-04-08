@@ -53,3 +53,12 @@ export const trimObj = function (obj) {
 
     return Object.keys(obj).length === 0 ? null : obj;
 };
+
+//divide collaboration ops with local ops
+export const splitOps = ops => {
+    let check = _ => !!_.p && !!_.p[0] && ~['filter', 'filterByValue', 'hiddenRows'].indexOf(_.p[0]);
+    return {
+        // localOps: ops.filter( _ => check(_)),
+        coOps: ops.filter(_ => !check(_))
+    };
+};

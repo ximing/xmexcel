@@ -7,7 +7,7 @@ import shortid from "shortid";
 import _ from "lodash";
 
 import { Empty, Insert } from "./op";
-import { convertCoor } from "./util";
+import { convertCoor, splitOps } from "./util";
 import { HistoryStep } from "./history";
 
 /*
@@ -94,6 +94,7 @@ export class ExcelModel {
         if (!Array.isArray(ops)) {
             ops = [ops];
         }
+        let {coOps} = splitOps(ops);
         let state = this.applyOpsToState(ops);
         let step = new HistoryStep(ops);
         undo = undo ? undo : step.isEmpty() ? this._undo.slice(0) : this._undo.concat(step);
@@ -105,7 +106,7 @@ export class ExcelModel {
             clientID: this.clientID,
             undo: undo,
             redo: redo,
-            unconfirmed: this.unconfirmed.concat(ops)
+            unconfirmed: this.unconfirmed.concat(coOps)
         });
     }
 
