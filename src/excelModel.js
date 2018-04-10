@@ -257,6 +257,11 @@ export class ExcelModel {
                         a.oi.row += b.a;
                     }
                 }
+                if (a.od) {
+                    if (a.od.row >= b.i) {
+                        a.od.row += b.a;
+                    }
+                }
             } else if (a.p[0] === "hiddenRows") {
                 if (a.oi) {
                     let oi = [];
@@ -325,29 +330,22 @@ export class ExcelModel {
                     a.p[1] += b.a;
                 }
             } else if (a.p[0] === "filter") {
-                /*
-                {
-                    filter: {
-                        row: 1,
-                        colRange: [0, 5]
-                    },
-                    filterByValue: {
-                        [colIndex]: [1, 2, 3]
+                let _check = prop => {
+                    if (a[prop]) {
+                        if (b.i <= a[prop].colRange[0]) {
+                            a[prop].colRange[0] += b.a;
+                            a[prop].colRange[1] += b.a;
+                        } else if (a[prop].colRange[0] < b.i && a[prop].colRange[1] >= b.i) {
+                            a[prop].colRange[1] += b.a;
+                        }
                     }
-                }
-                * */
-                if (a.oi) {
-                    if (b.i <= a.oi.colRange[0]) {
-                        a.oi.colRange[0] += b.a;
-                        a.oi.colRange[1] += b.a;
-                    } else if (a.oi.colRange[0] < b.i && a.oi.colRange[1] >= b.i) {
-                        a.oi.colRange[1] += b.a;
-                    }
-                }
+                };
+                ['oi','od'].forEach(_check);
+
             } else if (a.p[0] === "filterByValue") {
-                if (a.p[1] >= 0 && a.oi) {
+                if (a.p[1] >= 0) {
                     if (b.i <= a.p[1]) {
-                        a.p[1] += b.a;
+                        a.p[1] += (+b.a);
                     }
                 }
             }
@@ -416,24 +414,22 @@ export class ExcelModel {
                     a = Empty.create();
                 }
             } else if (a.p[0] === "filter") {
-                /*
-                {
-                    filter: {
-                        row: 1,
-                        colRange: [0, 5]
-                    },
-                    filterByValue: {
-                        [colIndex]: [1, 2, 3]
-                    }
-                }
-                * */
                 if (a.oi) {
-                    if (b.i === a.oi.colRange[0]) {
+                    if (b.i === a.oi.row) {
                         a.oi = null;
-                    } else if (b.i < a.oi.colRange[0]) {
+                    } else if (b.i < a.oi.row) {
                         a.oi.row -= 1;
                     }
                 }
+                if (a.od) {
+                    if (b.i === a.od.row) {
+                        a.od = null;
+                    } else if (b.i < a.od.row) {
+                        a.od.row -= 1;
+                    }
+                }
+            } else if (a.p[0] === "filterByValue") {
+                //can't do anything. because filterByValue OP has no row index.
             } else if (a.p[0] === "hiddenRows") {
                 if (a.oi) {
                     let oi = [];
@@ -512,29 +508,27 @@ export class ExcelModel {
                     a = Empty.create();
                 }
             } else if (a.p[0] === "filter") {
-                /*
-                {
-                    filter: {
-                        row: 1,
-                        colRange: [0, 5]
-                    },
-                    filterByValue: {
-                        [colIndex]: [1, 2, 3]
+
+                let _check = prop => {
+                    if (a[prop]) {
+                        if (b.i < a[prop].colRange[0]) {
+                            a[prop].colRange[0] -= 1;
+                            a[prop].colRange[1] -= 1;
+                        } else if (b.i >= a[prop].colRange[0] && b.i <= a[prop].colRange[1]) {
+                            a[prop].colRange[1] -= 1;
+                        }
                     }
-                }
-                * */
-                if (a.oi) {
-                    if (b.i < a.oi.colRange[0]) {
-                        a.oi.colRange[0] -= 1;
-                        a.oi.colRange[1] -= 1;
-                    } else if (b.i >= a.oi.colRange[0] && b.i <= a.oi.colRange[1]) {
-                        a.oi.colRange[1] -= 1;
-                    }
-                }
+                };
+
+                ['oi','od'].forEach(_check);
+
             } else if (a.p[0] === "filterByValue") {
-                if (a.p[1] && a.oi) {
+                if (a.p[1] >= 0) {
                     if (a.p[1] === b.i) {
                         a.oi = null;
+                        a.od = null;
+                    }else if(a.p[1] > b.i){
+                        a.p[1] -= 1;
                     }
                 }
             }
@@ -802,11 +796,11 @@ export class ExcelModel {
             if (op2.t === "c") {
                 if (op2.p[0] === "c") {
                     if (op1.p[1] === op2.p[1] && op1.p[2] === op2.p[2]) {
-                        if (op1.p[3] && op2[3]) {
-                            if (op1.p[3] === op2[3]) {
+                        if (op1.p[3] && op2.p[3]) {
+                            if (op1.p[3] === op2.p[3]) {
                                 b = Empty.create();
                             }
-                        } else if (op1.p[3] || op2[3]) {
+                        } else if (op1.p[3] || op2.p[3]) {
                             if (op1.p[3]) {
                                 b.oi = Object.assign({}, b.oi, {
                                     [a.p[3]]: a.oi

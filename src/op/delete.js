@@ -185,13 +185,22 @@ export class Delete {
                 }
             }
         }
-        if (state[this.id]["filterByValue"]) {
-            otherProps["filterByValue"] = _.cloneDeep(state[this.id]["filterByValue"]);
-            if (this.t === "dc" && otherProps["filterByValue"][this.i]) {
-                delete otherProps["filterByValue"][this.i];
-            }
-            if (Object.keys(otherProps["filterByValue"]).length === 0) {
-                delete otherProps["filterByValue"];
+
+        let fv = state[this.id]["filterByValue"];
+        //考虑「删除了设置filter的行」的情况
+        if (fv && !(state.filter && +state.filter.row === +this.i)) {
+            if(this.t === 'dc') {
+                let newFv = {};
+                Object.keys(fv).forEach(col => {
+                    if (col < this.i) {
+                        newFv[col] = fv[col];
+                    } else if (col > this.i) {
+                        newFv[col - 1] = fv[col];
+                    }
+                });
+                if (Object.keys(newFv).length > 0) {
+                    otherProps["filterByValue"] = newFv;
+                }
             }
         }
     }

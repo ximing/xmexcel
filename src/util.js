@@ -59,6 +59,6 @@ export const splitOps = ops => {
     let check = _ => !!_.p && !!_.p[0] && ~['filter', 'filterByValue', 'hiddenRows'].indexOf(_.p[0]);
     return {
         // localOps: ops.filter( _ => check(_)),
-        coOps: ops.filter(_ => !check(_))
+        coOps: ops.filter( _ => !check(_))
     };
 };
