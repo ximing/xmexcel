@@ -62,3 +62,37 @@ export const splitOps = ops => {
         coOps: ops.filter( _ => !check(_))
     };
 };
+
+export const getDataAtCol = (c, col, row) => {
+    let data = new Array(row).fill(''),
+        keys = Object.keys(c);
+
+    for (let key of keys) {
+        if (key.endsWith(`:${col}`) && (!!c[key].v || c[key].v === 0)) {
+            let row = convertCoor(key)[0];
+            data[row] = c[key].v;
+        }
+    }
+    //['value','','',3,'']
+    return data;
+};
+
+export const calcHiddenRows = (sheet, dc = -1) => {
+    let {minRow, row, c, filter, filterByValue = {}} = sheet;
+    let cols = Object.keys(filterByValue);
+    let hiddenRows = [];
+    for (let col of cols) {
+        if (Number(col) !== Number(dc)) {
+            let colData = getDataAtCol(c, col, row || minRow || 200);
+            let _hide = [], _filter = filterByValue[col];
+
+            for (let v = filter.row + 1, len = colData.length; v < len; v++) {
+                if (!_filter.includes(colData[v])) {
+                    _hide.push(v);
+                }
+            }
+            hiddenRows = hiddenRows.concat(_hide);
+        }
+    }
+    return [...new Set(hiddenRows)];
+};

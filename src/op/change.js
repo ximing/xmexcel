@@ -2,7 +2,7 @@
  * Created by ximing on 2/5/18.
  */
 'use strict';
-import {trimObj} from '../util';
+import {trimObj, calcHiddenRows } from '../util';
 import _ from 'lodash';
 
 /*
@@ -60,18 +60,6 @@ export class Change {
                 }
                 state[this.id]['c'][`${this.p[1]}:${this.p[2]}`] = meta;
                 return state;
-                //
-                // let c = state[this.id]['c'] || {};
-                // if (meta) {
-                //     c = _.assign({}, state[this.id]['c'], {
-                //         [`${this.p[1]}:${this.p[2]}`]: meta
-                //     });
-                // }
-                // return _.assign({}, state, {
-                //     [this.id]: _.assign({}, state[this.id], {
-                //         c: c
-                //     })
-                // });
             } else {
                 let c = state[this.id]['c'];
                 if (this.oi) {
@@ -85,7 +73,7 @@ export class Change {
                 //     [this.id]: _.assign({}, state[this.id], {c: c})
                 // });
             }
-        } else if (this.p[0] === 'rh' || this.p[0] === 'cw' || this.p[0] === 'filterByValue' || this.p[0] === 'mergeCells') {
+        } else if (this.p[0] === 'rh' || this.p[0] === 'cw' || this.p[0] === 'mergeCells') {
             if (this.p[1] == null) {
                 if (this.oi == null) {
                     delete state[this.id][this.p[0]];
@@ -93,13 +81,6 @@ export class Change {
                     state[this.id][this.p[0]] = this.oi;
                 }
                 return state;
-                // return {
-                //     ...state,
-                //     [this.id]: trimObj({
-                //         ...state[this.id],
-                //         [this.p[0]]: null
-                //     })
-                // };
             } else {
                 let p0 = trimObj(Object.assign({}, state[this.id][this.p[0]], {[this.p[1]]: this.oi}));
                 if(p0==null){
@@ -108,15 +89,34 @@ export class Change {
                     state[this.id][this.p[0]] = p0;
                 }
                 return state;
-                // return {
-                //     ...state,
-                //     [this.id]: trimObj({
-                //         ...state[this.id],
-                //         [this.p[0]]: trimObj(Object.assign({}, state[this.id][this.p[0]], {[this.p[1]]: this.oi}))
-                //     })
-                // };
             }
 
+        } else if(this.p[0] === 'filterByValue'){
+            let sheet = state[this.id];
+            if (this.p[1] == null) {
+                if (this.oi == null) {
+                    delete sheet[this.p[0]];
+                } else {
+                    sheet[this.p[0]] = this.oi;
+                }
+            } else {
+                let p0 = trimObj(Object.assign({}, sheet[this.p[0]], {[this.p[1]]: this.oi}));
+                if(p0==null){
+                    delete sheet[this.p[0]];
+                }else{
+                    sheet[this.p[0]] = p0;
+                }
+            }
+            //calculate hiddenRows here extra.
+            if(!!sheet.filter && (this.oi || this.od)) {
+                let hiddenRows = calcHiddenRows(sheet);
+                if(hiddenRows && hiddenRows.length){
+                    sheet['hiddenRows'] = hiddenRows;
+                }else{
+                    delete sheet['hiddenRows'];
+                }
+            }
+            return state;
         } else {
             if (this.oi == null) {
                 delete state[this.id][this.p[0]];
@@ -124,13 +124,6 @@ export class Change {
                 state[this.id][this.p[0]] = this.oi;
             }
             return state;
-            // return {
-            //     ...state,
-            //     [this.id]: trimObj({
-            //         ...state[this.id],
-            //         [this.p[0]]: this.oi
-            //     })
-            // };
         }
     }
 

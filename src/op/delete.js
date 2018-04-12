@@ -2,7 +2,7 @@
  * Created by ximing on 2/5/18.
  */
 "use strict";
-import { convertCoor } from "../util";
+import { convertCoor, calcHiddenRows } from "../util";
 import { Insert } from "./insert";
 import _ from "lodash";
 
@@ -187,7 +187,6 @@ export class Delete {
         }
 
         let fv = state[this.id]["filterByValue"];
-        //考虑「删除了设置filter的行」的情况
         if (fv && !(state.filter && +state.filter.row === +this.i)) {
             if(this.t === 'dc') {
                 let newFv = {};
@@ -201,14 +200,20 @@ export class Delete {
                 if (Object.keys(newFv).length > 0) {
                     otherProps["filterByValue"] = newFv;
                 }
+            }else{
+                otherProps["filterByValue"] = fv;
             }
         }
     }
 
     _applyHiddenRows(state, otherProps) {
-        if (this.t === "dr" && state[this.id]["hiddenRows"]) {
+        let s = state[this.id];
+
+        if(this.t === "dr" && s.filter && s.filter.row === this.i){
             otherProps["hiddenRows"] = [];
-            state[this.id]["hiddenRows"].forEach(i => {
+        } else if (this.t === "dr" && s["hiddenRows"]) {
+            otherProps["hiddenRows"] = [];
+            s["hiddenRows"].forEach(i => {
                 if (i < this.i) {
                     otherProps["hiddenRows"].push(i);
                 } else if (i > this.i) {
@@ -218,6 +223,27 @@ export class Delete {
             if (otherProps["hiddenRows"].length === 0) {
                 delete otherProps["hiddenRows"];
             }
+        } else if (this.t === 'dc' && !!s.filterByValue) {
+            let _cols = Object.keys(s.filterByValue).map(Number);
+            //if filterByValue include the delete col, re-calculate the hiddenRows
+            if(_cols.includes(this.i)){
+                otherProps["hiddenRows"] = calcHiddenRows(s, this.i);
+            } else {
+                otherProps["hiddenRows"] = [].concat(s.hiddenRows);
+            }
+        }
+    }
+
+    _applyMaxCoord(state, otherProps){
+        let s = state[this.id];
+        let row = s.row || 200,
+            col = s.col || 20;
+        if(this.t === 'dr') {
+            otherProps.row = row - 1;
+            otherProps.col = col;
+        } else if(this.t === 'dc') {
+            otherProps.row = row;
+            otherProps.col = col - 1;
         }
     }
 
@@ -250,6 +276,7 @@ export class Delete {
         this._applyMergeCells(state, otherProps);
         this._applyFilter(state, otherProps);
         this._applyHiddenRows(state, otherProps);
+        this._applyMaxCoord(state, otherProps);
 
         let newSheetState = { ...state[this.id] };
         delete newSheetState["mergeCells"];
@@ -259,7 +286,8 @@ export class Delete {
         delete newSheetState["filter"];
         delete newSheetState["filterByValue"];
         delete newSheetState["hiddenRows"];
-
+        delete newSheetState["row"];
+        delete newSheetState["col"];
         return {
             ...state,
             [this.id]: {

@@ -162,6 +162,19 @@ export class Insert {
         }
     }
 
+    _applyMaxCoord(state, otherProps) {
+        let s = state[this.id];
+        let row = s.row || 200,
+            col = s.col || 20;
+        if(this.t === 'ir') {
+            otherProps.row = row + this.a;
+            otherProps.col = col;
+        } else if(this.t === 'ic') {
+            otherProps.row = row;
+            otherProps.col = col + this.a;
+        }
+    }
+
     apply(state) {
         let c = Object.keys(state[this.id]["c"]).reduce((obj, current) => {
             let [row, col] = convertCoor(current);
@@ -186,6 +199,7 @@ export class Insert {
         this._applyMergeCells(state, otherProps);
         this._applyFilter(state, otherProps);
         this._applyHiddenRows(state, otherProps);
+        this._applyMaxCoord(state, otherProps);
 
         return {
             ...state,

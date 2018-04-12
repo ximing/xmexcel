@@ -262,18 +262,6 @@ export class ExcelModel {
                         a.od.row += b.a;
                     }
                 }
-            } else if (a.p[0] === "hiddenRows") {
-                if (a.oi) {
-                    let oi = [];
-                    a.oi.forEach(i => {
-                        if (b.i <= i) {
-                            oi.push(i + b.a);
-                        } else {
-                            oi.push(i);
-                        }
-                    });
-                    a.oi = oi;
-                }
             }
         } else if (a.t === "dr") {
             //a dr
@@ -430,18 +418,6 @@ export class ExcelModel {
                 }
             } else if (a.p[0] === "filterByValue") {
                 //can't do anything. because filterByValue OP has no row index.
-            } else if (a.p[0] === "hiddenRows") {
-                if (a.oi) {
-                    let oi = [];
-                    a.oi.forEach(i => {
-                        if (b.i < i) {
-                            oi.push(i - 1);
-                        } else if (b.i > i) {
-                            oi.push(i);
-                        }
-                    });
-                    a.oi = oi;
-                }
             }
         } else if (a.t === "ir") {
             //a ir
@@ -749,36 +725,6 @@ export class ExcelModel {
                 if (b.p[1] && b.oi) {
                     if (a.i === b.p[1]) {
                         b = Empty.create();
-                    }
-                }
-            }
-        } else if (b.p[0] === "hiddenRows") {
-            if (b.oi) {
-                if (a.t === "c" && a.p[0] === "hiddenRows") {
-                    b = Empty.create();
-                } else if (a.t === "ir") {
-                    if (b.oi) {
-                        let oi = [];
-                        b.oi.forEach(i => {
-                            if (i >= a.i) {
-                                oi.push(i + a.a);
-                            } else {
-                                oi.push(i);
-                            }
-                        });
-                        b.oi = oi;
-                    }
-                } else if (a.t === "dr") {
-                    if (b.oi) {
-                        let oi = [];
-                        b.oi.forEach(i => {
-                            if (i > a.i) {
-                                oi.push(i - 1);
-                            } else if (i < a.i) {
-                                oi.push(i);
-                            }
-                        });
-                        b.oi = oi;
                     }
                 }
             }
