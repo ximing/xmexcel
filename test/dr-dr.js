@@ -73,6 +73,6 @@ test('delete multiple rows', (t) => {
     let model1 = model.apply([new Delete('1', 'dr', 0), new Delete('1', 'dr', 0)]);
     t.is(
         JSON.stringify(model1.state),
-        JSON.stringify({"1":{"c":{"0:5":{"v":1},"1:6":{"v":1},"0:7":{"v":1}}}})
+        JSON.stringify({"1":{"c":{"0:5":{"v":1},"1:6":{"v":1},"0:7":{"v":1}}, row: 198, col: 20}})
     )
 });

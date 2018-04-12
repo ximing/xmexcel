@@ -85,3 +85,36 @@ test('change filterByValue and dc', (t) => {
         JSON.stringify(a.apply(op2.apply(state)))
     );
 });
+
+let state2 = {
+    '1': {
+        c: {
+            '1:1': {v: 1},
+            '1:2': {v: 2},
+            '1:3': {v: 30},
+            '2:1': {v: 1},
+            '2:2': {v: 4},
+            '2:3': {v: 40}
+        },
+        // x x x x
+        // x 1 2 30
+        // x 1 4 40
+        filter: {
+            colRange: [1, 3],
+            row: 0
+        },
+        row: 4
+    }
+};
+
+test('change filterByValue --> hiddenRows', t => {
+    let op1 = new Change('1', ['filterByValue', 1], [1]);
+    let _state = op1.apply(state2);
+    t.is(_state['1'].hiddenRows.length, 1);
+    t.is(JSON.stringify(_state['1'].hiddenRows), JSON.stringify([3]));
+
+    let op2 = new Change('1', ['filterByValue', 2], [2]);
+    _state = op2.apply(_state);
+    t.is(_state['1'].hiddenRows.length, 2);
+    t.is(JSON.stringify(_state['1'].hiddenRows), JSON.stringify([3, 2]));
+});

@@ -41,10 +41,18 @@ test("ic and merge cells", t => {
     });
     let op2 = new Insert("1", "ic", 1, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("ic and merge cells", t => {
@@ -54,10 +62,18 @@ test("ic and merge cells", t => {
     });
     let op2 = new Insert("1", "ic", 3, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("ic and merge cells", t => {
@@ -67,10 +83,18 @@ test("ic and merge cells", t => {
     });
     let op2 = new Insert("1", "ic", 6, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("ir and merge cells", t => {
@@ -80,10 +104,18 @@ test("ir and merge cells", t => {
     });
     let op2 = new Insert("1", "ir", 3, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].row, state2['1'].row);
 });
 
 test("ir and merge cells", t => {
@@ -93,10 +125,18 @@ test("ir and merge cells", t => {
     });
     let op2 = new Insert("1", "ir", 1, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].row, state2['1'].row);
 });
 
 test("ir and merge cells", t => {
@@ -106,10 +146,18 @@ test("ir and merge cells", t => {
     });
     let op2 = new Insert("1", "ir", 6, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].row, state2['1'].row);
 });
 
 // local add row/col and remote merge cells
@@ -121,10 +169,18 @@ test("merge cells and ic", t => {
     });
     let op1 = new Insert("1", "ic", 1, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and ic", t => {
@@ -134,10 +190,18 @@ test("merge cells and ic", t => {
     });
     let op1 = new Insert("1", "ic", 3, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and ic", t => {
@@ -147,10 +211,18 @@ test("merge cells and ic", t => {
     });
     let op1 = new Insert("1", "ic", 4, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and ic", t => {
@@ -160,10 +232,18 @@ test("merge cells and ic", t => {
     });
     let op1 = new Insert("1", "ic", 6, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and ir", t => {
@@ -173,10 +253,18 @@ test("merge cells and ir", t => {
     });
     let op1 = new Insert("1", "ir", 3, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and ir", t => {
@@ -186,10 +274,17 @@ test("merge cells and ir", t => {
     });
     let op1 = new Insert("1", "ir", 1, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and ir", t => {
@@ -199,10 +294,18 @@ test("merge cells and ir", t => {
     });
     let op1 = new Insert("1", "ir", 6, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 // local is remove row/coll remote is merge cells
@@ -214,10 +317,18 @@ test("merge cells and dc", t => {
         colspan: 2
     });
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dc", t => {
@@ -227,10 +338,18 @@ test("merge cells and dc", t => {
         colspan: 2
     });
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dc", t => {
@@ -240,10 +359,18 @@ test("merge cells and dc", t => {
         colspan: 2
     });
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dc", t => {
@@ -253,10 +380,18 @@ test("merge cells and dc", t => {
         colspan: 2
     });
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dr", t => {
@@ -266,10 +401,18 @@ test("merge cells and dr", t => {
         colspan: 2
     });
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dr", t => {
@@ -279,10 +422,18 @@ test("merge cells and dr", t => {
         colspan: 2
     });
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dr", t => {
@@ -292,10 +443,18 @@ test("merge cells and dr", t => {
         colspan: 2
     });
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 // local merge cells remote remove row/col
@@ -307,10 +466,18 @@ test("merge cells and dc", t => {
     });
     let op2 = new Delete("1", "dc", 1);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dc", t => {
@@ -320,10 +487,18 @@ test("merge cells and dc", t => {
     });
     let op2 = new Delete("1", "dc", 3);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and ic", t => {
@@ -333,10 +508,18 @@ test("merge cells and ic", t => {
     });
     let op2 = new Delete("1", "dc", 4);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dc", t => {
@@ -346,10 +529,18 @@ test("merge cells and dc", t => {
     });
     let op2 = new Delete("1", "dc", 6);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dr", t => {
@@ -359,10 +550,18 @@ test("merge cells and dr", t => {
     });
     let op2 = new Delete("1", "dr", 3);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dr", t => {
@@ -372,10 +571,18 @@ test("merge cells and dr", t => {
     });
     let op2 = new Delete("1", "dr", 1);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });
 
 test("merge cells and dr", t => {
@@ -385,8 +592,16 @@ test("merge cells and dr", t => {
     });
     let op2 = new Delete("1", "dr", 6);
     let [a, b] = ExcelModel.transform(op1, op2);
+
+    let state1 = b.apply(op1.apply(getState()));
+    let state2 = a.apply(op2.apply(getState()));
     t.is(
-        JSON.stringify(b.apply(op1.apply(getState()))),
-        JSON.stringify(a.apply(op2.apply(getState())))
+        JSON.stringify(state1['1']['c']),
+        JSON.stringify(state2['1']['c'])
     );
+    t.is(
+        JSON.stringify(state1['1']['mergeCells']),
+        JSON.stringify(state2['1']['mergeCells'])
+    );
+    t.is(state1['1'].col, state2['1'].col);
 });

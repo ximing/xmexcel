@@ -28,7 +28,9 @@ test("merge cells and dr", t => {
                     "6:1": { rowspan: 6, colspan: 4 },
                     "7:5": { rowspan: 3, colspan: 1 },
                     "7:6": { rowspan: 1, colspan: 2 }
-                }
+                },
+                row: 199,
+                col: 20
             }
         })
     );
@@ -44,7 +46,9 @@ test("merge cells and dr", t => {
                 mergeCells: {
                     "7:1": { rowspan: 5, colspan: 4 },
                     "8:5": { rowspan: 2, colspan: 1 }
-                }
+                },
+                row: 199,
+                col: 20
             }
         })
     );
@@ -61,7 +65,9 @@ test("merge cells and dr", t => {
                     "7:1": { rowspan: 5, colspan: 4 },
                     "8:5": { rowspan: 2, colspan: 1 },
                     "8:6": { rowspan: 1, colspan: 2 }
-                }
+                },
+                row: 199,
+                col: 20
             }
         })
     );
@@ -77,7 +83,9 @@ test("merge cells and dc", t => {
                 mergeCells: {
                     "7:1": { rowspan: 6, colspan: 4 },
                     "8:5": { rowspan: 3, colspan: 1 }
-                }
+                },
+                row: 200,
+                col: 19
             }
         })
     );
@@ -94,7 +102,9 @@ test("merge cells and dc", t => {
                     "7:1": { rowspan: 6, colspan: 3 },
                     "8:4": { rowspan: 3, colspan: 1 },
                     "8:5": { rowspan: 1, colspan: 2 }
-                }
+                },
+                row: 200,
+                col: 19
             }
         })
     );
@@ -111,7 +121,9 @@ test("merge cells and ic", t => {
                     "7:1": { rowspan: 6, colspan: 6 },
                     "8:7": { rowspan: 3, colspan: 1 },
                     "8:8": { rowspan: 1, colspan: 2 }
-                }
+                },
+                row: 200,
+                col: 22
             }
         })
     );
@@ -129,7 +141,9 @@ test("merge cells and ic", t => {
                     "7:1": { rowspan: 6, colspan: 6 },
                     "8:7": { rowspan: 3, colspan: 1 },
                     "8:8": { rowspan: 1, colspan: 2 }
-                }
+                },
+                row: 200,
+                col: 22
             }
         })
     );
@@ -137,6 +151,8 @@ test("merge cells and ic", t => {
     op2.forEach(op => {
         _state = op.apply(_state);
     });
+    delete _state['1']['row'];
+    delete _state['1']['col'];
     t.is(JSON.stringify(_state), JSON.stringify(state));
 });
 
@@ -151,7 +167,9 @@ test("merge cells and ic", t => {
                     "7:1": { rowspan: 6, colspan: 6 },
                     "8:7": { rowspan: 3, colspan: 1 },
                     "8:8": { rowspan: 1, colspan: 2 }
-                }
+                },
+                row: 200,
+                col: 22
             }
         })
     );
@@ -168,7 +186,9 @@ test("merge cells and ir", t => {
                     "9:1": { rowspan: 6, colspan: 4 },
                     "10:5": { rowspan: 3, colspan: 1 },
                     "10:6": { rowspan: 1, colspan: 2 }
-                }
+                },
+                row: 202,
+                col: 20
             }
         })
     );
@@ -185,7 +205,9 @@ test("merge cells and ir", t => {
                     "7:1": { rowspan: 8, colspan: 4 },
                     "10:5": { rowspan: 3, colspan: 1 },
                     "10:6": { rowspan: 1, colspan: 2 }
-                }
+                },
+                row: 202,
+                col: 20
             }
         })
     );

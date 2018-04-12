@@ -4,7 +4,7 @@
 'use strict';
 import test from "ava";
 
-import {convertCoor, inMergeCell, splitOps, inFilter, trimObj} from '../src/util';
+import {convertCoor, inMergeCell, splitOps, inFilter, trimObj, getDataAtCol, calcHiddenRows} from '../src/util';
 import {Change} from '../src';
 
 test('convertCoor', (t) => {
@@ -50,4 +50,60 @@ test('trimObj', t => {
     t.is(Object.keys(target).length, 2);
     target = trimObj(target);
     t.is(Object.keys(target).length, 1);
+});
+
+test('getDataAtCol', t => {
+    let c = {
+        '0:0': {v: -1},
+        '0:1': {v: 0},
+        '1:1': {v: 1},
+        '2:1': {bgColor: "#31849b"},
+        '1:9': {v: 9}
+    };
+    let data = getDataAtCol(c, 1, 5);
+    t.is(data.length, 5);
+    t.is(JSON.stringify(data), JSON.stringify([0, 1, '', '', '']));
+});
+
+let s = {
+    c: {
+        '0:1': {v: 1},
+
+        '1:1': {v: 1},
+        '2:1': {v: 11},
+        '3:1': {v: 1},
+        '4:1': {v: 11},
+        '5:1': {v: 1},
+
+        '2:2': {v: 3},
+        '3:2': {v: 4},
+        '4:2': {v: 5},
+        '5:2': {v: 6}
+    },
+    minRow: 10,
+    filter: {
+        colRange: [1, 3],
+        row: 0
+    },
+    filterByValue: {
+        '1': [1],
+        '2': [4, 5]
+    }
+};
+test('calcHiddenRows', t => {
+    let hiddenRows = calcHiddenRows(s);
+    t.is(hiddenRows.length, 8);
+    t.is(
+        JSON.stringify(hiddenRows.sort((a, b) => a - b)),
+        JSON.stringify([1, 2, 4, 5, 6, 7, 8, 9])
+    );
+});
+
+test('calcHiddenRows with delete col', t => {
+    let hiddenRows = calcHiddenRows(s, 1);
+    t.is(hiddenRows.length, 7);
+    t.is(
+        JSON.stringify(hiddenRows.sort((a, b) => a - b)),
+        JSON.stringify([1, 2, 5, 6, 7, 8, 9])
+    );
 });
