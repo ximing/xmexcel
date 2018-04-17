@@ -118,3 +118,63 @@ test('change filterByValue --> hiddenRows', t => {
     t.is(_state['1'].hiddenRows.length, 2);
     t.is(JSON.stringify(_state['1'].hiddenRows), JSON.stringify([3, 2]));
 });
+
+let state3 = {
+    '1': {
+        c: {
+            '1:1': {v: 1},
+            '1:2': {v: 2},
+            '1:3': {v: 30},
+            '2:1': {v: 1},
+            '2:2': {v: 4},
+            '2:3': {v: 40}
+        },
+        filter: {
+            colRange: [1, 3],
+            row: 0
+        },
+        filterByValue: {
+            '1': [1]
+        },
+        hiddenRows: [3],
+        row: 4
+    }
+};
+
+test('cancel filter and undo it', t => {
+    let ops = [
+        new Change('1', ['filterByValue'], null, {'1': [1]}),
+        new Change('1', ['filter'], null, {
+            colRange: [1, 3],
+            row: 0
+        })
+    ];
+
+    let model = new ExcelModel({
+        state: state3
+    });
+    model = model.apply(ops);
+
+    t.falsy(model.state[1].filter);
+    t.falsy(model.state[1].filterByValue);
+    t.falsy(model.state[1].hiddenRows);
+
+    let {ops: undoOps} = model.undo();
+
+    model = model.apply(undoOps);
+
+    t.is(
+        JSON.stringify(state3['1'].filter),
+        JSON.stringify(model.state['1'].filter)
+    );
+
+    t.is(
+        JSON.stringify(state3['1'].filterByValue),
+        JSON.stringify(model.state['1'].filterByValue)
+    );
+
+    t.is(
+        JSON.stringify(state3['1'].hiddenRows),
+        JSON.stringify(model.state['1'].hiddenRows)
+    );
+});
