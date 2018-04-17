@@ -187,7 +187,7 @@ export class Delete {
         }
 
         let fv = state[this.id]["filterByValue"];
-        if (fv && !(state.filter && +state.filter.row === +this.i)) {
+        if (fv && !(state[this.id].filter && +state[this.id].filter.row === +this.i)) {
             if(this.t === 'dc') {
                 let newFv = {};
                 Object.keys(fv).forEach(col => {

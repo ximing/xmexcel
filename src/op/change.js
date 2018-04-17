@@ -96,6 +96,8 @@ export class Change {
             if (this.p[1] == null) {
                 if (this.oi == null) {
                     delete sheet[this.p[0]];
+                    delete sheet['hiddenRows'];
+                    return state;
                 } else {
                     sheet[this.p[0]] = this.oi;
                 }

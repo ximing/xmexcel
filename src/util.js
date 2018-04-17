@@ -68,7 +68,7 @@ export const getDataAtCol = (c, col, row) => {
         keys = Object.keys(c);
 
     for (let key of keys) {
-        if (key.endsWith(`:${col}`) && (!!c[key].v || c[key].v === 0)) {
+        if (key.endsWith(`:${col}`) && !!c[key] && (!!c[key].v || c[key].v === 0)) {
             let row = convertCoor(key)[0];
             data[row] = c[key].v;
         }
