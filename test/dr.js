@@ -28,7 +28,10 @@ let state2 = {
             colRange: [1,2],
             row: 0
         },
-        hiddenRows: [3, 4, 5]
+        hiddenRows: [3, 4, 5],
+        fixed: {
+            row: 2
+        }
     }
 };
 test('dr->hiddenRows', t => {
@@ -56,4 +59,25 @@ test('dr->hiddenRows', t => {
     let op1 = new Delete('1', 'dr', 0);
     let _state  = op1.apply(state2);
     t.is(_state['1'].hiddenRows.length, 0);
+});
+
+test('dr->fixed', t => {
+    let op1 = new Delete('1', 'dr', 1);
+    let _state  = op1.apply(state2);
+    t.is(_state['1'].fixed.row, 1);
+    t.falsy(_state['1'].fixed.col);
+});
+
+test('dr->fixed', t => {
+    let op1 = new Delete('1', 'dr', 2);
+    let _state  = op1.apply(state2);
+    t.is(_state['1'].fixed.row, 2);
+    t.falsy(_state['1'].fixed.col);
+});
+
+test('dr->fixed', t => {
+    let op1 = new Delete('1', 'dr', 0);
+    let _state  = op1.apply(state2);
+    _state = op1.apply(_state);
+    t.falsy(_state['1'].fixed);
 });

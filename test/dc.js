@@ -29,6 +29,9 @@ let state = {
             1: [1],
             2: [2]
         },
+        fixed: {
+            col: 2
+        },
         hiddenRows: [2, 3],
         row: 4
     }
@@ -52,4 +55,25 @@ test('dc->hiddenRows/filter/filterByValue', t => {
     t.is(JSON.stringify(_state['1'].filter.colRange), JSON.stringify([1, 2]));
 
     t.falsy(_state['1'].filterByValue[2]);
+});
+
+test('dc->fixed. -1', t => {
+    let op1 = new Delete('1', 'dc', 1);
+    let _state  = op1.apply(state);
+    t.is(_state['1'].fixed.col, 1);
+    t.falsy(_state['1'].fixed.row);
+});
+
+test('dc->fixed. -0', t => {
+    let op1 = new Delete('1', 'dc', 2);
+    let _state  = op1.apply(state);
+    t.is(_state['1'].fixed.col, 2);
+    t.falsy(_state['1'].fixed.row);
+});
+
+test('dc->fixed. to 0 and delete', t => {
+    let op1 = new Delete('1', 'dc', 0);
+    let _state  = op1.apply(state);
+    _state = op1.apply(_state);
+    t.falsy(_state['1'].fixed);
 });
