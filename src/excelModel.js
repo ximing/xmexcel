@@ -222,20 +222,32 @@ export class ExcelModel {
                 }
             } else if (a.p[0] === "mergeCells") {
                 let [row, col] = convertCoor(a.p[1]);
-                let { rowspan, colspan } = a.oi;
+
                 if (b.i <= row) {
-                    row += b.a;
-                } else if (b.i > row && b.i < row + rowspan) {
-                    rowspan += b.a;
+                    a.p[1] = `${row + b.a}:${col}`;
+                } else {
+                    ['oi', 'od'].forEach(prop => {
+                        if(!!a[prop]) {
+                            let {rowspan, colspan} = a[prop];
+                            if (b.i > row && b.i < row + rowspan) {
+                                rowspan += b.a;
+                                a[prop] = {rowspan, colspan};
+                            }
+                        }
+                    });
                 }
-                a.p[1] = `${row}:${col}`;
-                a.oi = { rowspan, colspan };
+
             } else if (a.p[0] === "fixed") {
-                let { row, col } = a.oi;
-                if (row > b.i) {
-                    row += b.a;
-                }
-                a.oi = { row, col };
+                ['oi','od'].forEach( prop => {
+                    if(a[prop]) {
+                        let {row, col} = a[prop];
+                        if (row > b.i) {
+                            row += b.a;
+                            a[prop] = {row, col};
+                        }
+                    }
+                });
+
             } else if (a.p[0] === "rh") {
                 if (a.p[1] >= b.i) {
                     a.p[1] += b.a;
@@ -299,20 +311,32 @@ export class ExcelModel {
                 }
             } else if (a.p[0] === "mergeCells") {
                 let [row, col] = convertCoor(a.p[1]);
-                let { rowspan, colspan } = a.oi;
+
                 if (b.i <= col) {
-                    col += b.a;
-                } else if (b.i > col && b.i < col + colspan) {
-                    colspan += b.a;
+                    a.p[1] = `${row}:${col + b.a}`;
+                } else {
+                    ['oi', 'od'].forEach( prop => {
+                        if(!!a[prop]) {
+                            let {rowspan, colspan} = a[prop];
+                            if (b.i > col && b.i < col + colspan) {
+                                colspan += b.a;
+                                a[prop] = {rowspan, colspan};
+                            }
+                        }
+                    });
                 }
-                a.p[1] = `${row}:${col}`;
-                a.oi = { rowspan, colspan };
+
             } else if (a.p[0] === "fixed") {
-                let { row, col } = a.oi;
-                if (col > b.i) {
-                    col += b.a;
-                }
-                a.oi = { row, col };
+                ['oi','od'].forEach( prop => {
+                    if(a[prop]) {
+                        let {row, col} = a[prop];
+                        if (col > b.i) {
+                            col += b.a;
+                            a[prop] = {row, col};
+                        }
+                    }
+                });
+
             } else if (a.p[0] === "cw") {
                 if (a.p[1] >= b.i) {
                     a.p[1] += b.a;
@@ -375,26 +399,38 @@ export class ExcelModel {
                 }
             } else if (a.p[0] === "mergeCells") {
                 let [row, col] = convertCoor(a.p[1]);
-                let { rowspan, colspan } = a.oi;
+
                 if (b.i < row) {
-                    row -= 1;
-                } else if (b.i >= row && b.i < row + rowspan) {
-                    /*
-                    * a [   ]
-                    * b   |
-                    * */
-                    rowspan -= 1;
+                    a.p[1] = `${row - 1}:${col}`;
+                } else {
+                    ['oi', 'od'].forEach(prop => {
+                        if(!!a[prop]) {
+                            let {rowspan, colspan} = a[prop];
+                            if (b.i >= row && b.i < row + rowspan) {
+                                rowspan -= 1;
+                                if(rowspan === 1 && colspan === 1) {
+                                    a[prop] = null;
+                                }else {
+                                    a[prop] = {rowspan, colspan};
+                                }
+                            }
+                        }
+                    });
                 }
-                a.p[1] = `${row}:${col}`;
-                a.oi = { rowspan, colspan };
+
             } else if (a.p[0] === "fixed") {
-                let { row, col } = a.oi;
-                if (b.i < row) {
-                    row -= 1;
-                } else if (row === b.i) {
-                    row = 0;
-                }
-                a.oi = { row, col };
+                ['oi','od'].forEach(prop => {
+                    if(a[prop]) {
+                        let {row, col} = a[prop];
+                        if (b.i < row) {
+                            row -= 1;
+                            if(col > 0 || row > 0){
+                                a[prop] = {row, col};
+                            }
+                        }
+                    }
+                });
+
             } else if (a.p[0] === "rh") {
                 if (a.p[1] > b.i) {
                     a.p[1] -= 1;
@@ -457,26 +493,38 @@ export class ExcelModel {
                 }
             } else if (a.p[0] === "mergeCells") {
                 let [row, col] = convertCoor(a.p[1]);
-                let { rowspan, colspan } = a.oi;
+
                 if (b.i < col) {
-                    col -= 1;
-                } else if (b.i >= col && b.i < col + colspan) {
-                    /*
-                    * a [   ]
-                    * b   |
-                    * */
-                    colspan -= 1;
+                    a.p[1] = `${row}:${col - 1}`;
+                } else {
+                    ['oi', 'od'].forEach(prop => {
+                        if(!!a[prop]) {
+                            let {rowspan, colspan} = a[prop];
+                            if (b.i >= col && b.i < col + colspan) {
+                                colspan -= 1;
+                                if(rowspan === 1 && colspan === 1) {
+                                    a[prop] = null;
+                                }else {
+                                    a[prop] = {rowspan, colspan};
+                                }
+                            }
+                        }
+                    });
                 }
-                a.p[1] = `${row}:${col}`;
-                a.oi = { rowspan, colspan };
+
             } else if (a.p[0] === "fixed") {
-                let { row, col } = a.oi;
-                if (b.i < col) {
-                    col -= 1;
-                } else if (col === b.i) {
-                    col = 0;
-                }
-                a.oi = { row, col };
+                ['oi','od'].forEach(prop => {
+                    if(a[prop]) {
+                        let {row, col} = a[prop];
+                        if (b.i < col) {
+                            col -= 1;
+                            if(col > 0 || row > 0){
+                                a[prop] = {row, col};
+                            }
+                        }
+                    }
+                });
+
             } else if (a.p[0] === "cw") {
                 if (a.p[1] > b.i) {
                     a.p[1] -= 1;
@@ -503,7 +551,7 @@ export class ExcelModel {
                     if (a.p[1] === b.i) {
                         a.oi = null;
                         a.od = null;
-                    }else if(a.p[1] > b.i){
+                    }else if(a.p[1] > b.i) {
                         a.p[1] -= 1;
                     }
                 }
@@ -568,7 +616,7 @@ export class ExcelModel {
                         }
                     } else if (a.p[3] || b.p[3]) {
                         if (a.p[3]) {
-                            b.oi = Object.assign({}, b.oi, { [a.p[3]]: a.oi });
+                            b.oi = Object.assign({}, b.oi, {[a.p[3]]: a.oi});
                         } else {
                             b = Empty.create();
                         }
@@ -578,63 +626,90 @@ export class ExcelModel {
                 }
             }
         } else if (b.p[0] === "mergeCells") {
+
+            //split rowspan/colspan with row/col. oi/od => rowspan/colspan
             let [row, col] = convertCoor(b.p[1]);
-            let { rowspan, colspan } = b.oi;
+            let nRow = row, nCol = col;
             if (a.t === "ic") {
                 if (a.i <= col) {
-                    col += a.a;
-                } else if (a.i > col && a.i < col + colspan) {
-                    colspan += a.a;
+                    nCol += a.a;
                 }
             } else if (a.t === "ir") {
                 if (a.i <= row) {
-                    row += a.a;
-                } else if (a.i > row && a.i < row + rowspan) {
-                    rowspan += a.a;
+                    nRow += a.a;
                 }
             } else if (a.t === "dc") {
-                if (a.i >= col && a.i <= col + colspan - 1) {
-                    colspan -= 1;
-                } else if (a.i < col) {
-                    col -= 1;
-                }
-            } else if (a.t === "dr") {
-                if (a.i >= row && a.i <= row + rowspan - 1) {
-                    rowspan -= 1;
-                } else if (a.i < row) {
-                    row -= 1;
-                }
-            } else if (a.t === "rs") {
-                return [Empty.create(), b];
-            }
-            b.p[1] = `${row}:${col}`;
-            b.oi = { rowspan, colspan };
-        } else if (b.p[0] === "fixed") {
-            let { row, col } = b.oi;
-            if (a.t === "ic") {
                 if (a.i < col) {
-                    col += a.a;
-                }
-            } else if (a.t === "ir") {
-                if (a.i < row) {
-                    row += a.a;
-                }
-            } else if (a.t === "dc") {
-                if (a.i === col) {
-                    col = 0;
-                } else if (a.i < col) {
-                    col -= 1;
+                    nCol -= 1;
                 }
             } else if (a.t === "dr") {
-                if (a.i === row) {
-                    row = 0;
-                } else if (a.i < row) {
-                    row -= 1;
+                if (a.i < row) {
+                    nRow -= 1;
                 }
             } else if (a.t === "rs") {
                 return [Empty.create(), b];
             }
-            b.oi = { row, col };
+            b.p[1] = `${nRow}:${nCol}`;
+
+            ['oi', 'od'].forEach(prop => {
+                if (b[prop]) {
+                    let {rowspan, colspan} = b[prop];
+                    if (a.t === "ic") {
+                        if (a.i > col && a.i < col + colspan) {
+                            colspan += a.a;
+                        }
+                    } else if (a.t === "ir") {
+                        if (a.i > row && a.i < row + rowspan) {
+                            rowspan += a.a;
+                        }
+                    } else if (a.t === "dc") {
+                        if (a.i >= col && a.i <= col + colspan - 1) {
+                            colspan -= 1;
+                        }
+                    } else if (a.t === "dr") {
+                        if (a.i >= row && a.i <= row + rowspan - 1) {
+                            rowspan -= 1;
+                        }
+                    }
+
+                    if (rowspan === 1 && colspan === 1) {
+                        b[prop] = null;
+                    } else {
+                        b[prop] = {rowspan, colspan};
+                    }
+                }
+            });
+
+        } else if (b.p[0] === "fixed") {
+
+            ['oi', 'od'].forEach(prop => {
+                if (b[prop]) {
+                    let {row, col} = b[prop];
+                    if (a.t === "ic") {
+                        if (a.i < col) {
+                            col += a.a;
+                        }
+                    } else if (a.t === "ir") {
+                        if (a.i < row) {
+                            row += a.a;
+                        }
+                    } else if (a.t === "dc") {
+                        if (a.i < col) {
+                            col -= 1;
+                        }
+                    } else if (a.t === "dr") {
+                        if (a.i < row) {
+                            row -= 1;
+                        }
+                    } else if (a.t === "rs") {
+                        return [Empty.create(), b];
+                    }
+                    if (col > 0 || row > 0) {
+                        b[prop] = {row, col};
+                    }
+                }
+            });
+
         } else if (b.p[0] === "rh") {
             if (a.t === "ir") {
                 if (a.i <= b.p[1]) {

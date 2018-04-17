@@ -21,25 +21,20 @@ export class Delete {
         if (state[this.id]["fixed"]) {
             let row = state[this.id]["fixed"].row;
             let col = state[this.id]["fixed"].col;
+
             if (this.t === "dr") {
-                if (this.i < row) {
+                if (this.i + 1 <= row) {
                     row = Math.max(0, row - 1);
-                } else if (this.i === row) {
-                    row = 0;
                 }
             }
             if (this.t === "dc") {
-                if (this.i < col) {
+                if (this.i + 1 <= col) {
                     col = Math.max(0, col - 1);
-                } else if (this.i === col) {
-                    col = 0;
                 }
             }
+
             if (row > 0 || col > 0) {
-                otherProps["fixed"] = {
-                    row,
-                    col
-                };
+                otherProps["fixed"] = Object.assign({}, row ? {row} : {}, col ? {col} : {});
             }
         }
     }

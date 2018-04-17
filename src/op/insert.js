@@ -32,10 +32,7 @@ export class Insert {
             if (col && this.t === "ic" && this.i < col) {
                 col += this.a;
             }
-            otherProps["fixed"] = {
-                row,
-                col
-            };
+            otherProps["fixed"] = Object.assign({}, row ? {row} : {}, col ? {col} : {});
         }
     }
 

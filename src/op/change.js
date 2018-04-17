@@ -58,8 +58,14 @@ export class Change {
                 } else if (this.oi != null && this.oi != '') {
                     meta = {[key]: this.oi}
                 }
-                state[this.id]['c'][`${this.p[1]}:${this.p[2]}`] = meta;
+
+                if(meta && Object.keys(meta).length){
+                    state[this.id]['c'][`${this.p[1]}:${this.p[2]}`] = meta;
+                } else {
+                    delete state[this.id]['c'][`${this.p[1]}:${this.p[2]}`];
+                }
                 return state;
+
             } else {
                 let c = state[this.id]['c'];
                 if (this.oi) {

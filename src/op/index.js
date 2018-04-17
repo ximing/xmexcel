@@ -19,6 +19,10 @@ class Empty {
         return state;
     }
 
+    clone(){
+        return new Empty();
+    }
+
     static create() {
         return new Empty();
     }
