@@ -91,9 +91,10 @@ export const calcHiddenRows = (sheet, dc = -1) => {
     let hiddenRows = [];
 
     if(!row) {
+        row = 200;
         Object.keys(c).forEach(item => {
             let [r] = convertCoor(item);
-            row = Math.max(r + 1, row || 200);
+            row = Math.max(r + 1, row);
         });
     }
 
