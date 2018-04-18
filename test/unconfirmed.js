@@ -27,7 +27,7 @@ test('Excel.apply generate unconfirmed ops for co ops', (t) => {
 
     t.is(
         JSON.stringify(newModel.state),
-        JSON.stringify({"1":{"c":{"0:1":{"v":2},"0:2":{"v":1},"1:1":{"v":2}, "1:2":{"v":1}}}})
+        JSON.stringify({"1":{"c":{"0:1":{"v":2},"0:2":{"v":1},"1:1":{"v":2}, "1:2":{"v":1}},"row":200,"col":20}})
     );
 
     t.is(

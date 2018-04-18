@@ -80,7 +80,7 @@ let s = {
         '4:2': {v: 5},
         '5:2': {v: 6}
     },
-    minRow: 10,
+    row: 10,
     filter: {
         colRange: [1, 3],
         row: 0

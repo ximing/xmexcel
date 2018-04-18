@@ -41,7 +41,9 @@ test('change table cell to empty object', t => {
                 c: {
                     '4:1': {v: 1},
                     '5:2': {v: 1}
-                }
+                },
+                row: 200,
+                col: 20
             }
         })
     );

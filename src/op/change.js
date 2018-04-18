@@ -2,7 +2,7 @@
  * Created by ximing on 2/5/18.
  */
 'use strict';
-import {trimObj, calcHiddenRows } from '../util';
+import {trimObj, calcHiddenRows, convertCoor} from '../util';
 import _ from 'lodash';
 
 /*
@@ -45,6 +45,21 @@ export class Change {
 
     apply(state) {
         if (this.p[0] === 'c') {
+            let [, _row, _col] = this.p;
+            let {c, row, col} = state[this.id];
+
+            if(!(row && col)) {
+                row = 200;
+                col = 20;
+                Object.keys(c).forEach(item => {
+                    let [r, c] = convertCoor(item);
+                    row = Math.max(r + 1, row);
+                    col = Math.max(c + 1, col);
+                });
+            }
+            state[this.id].row = Math.max(row, _row + 1);
+            state[this.id].col = Math.max(col, _col + 1);
+
             if (this.p[3]) {
                 let key = this.p[3];
                 let meta = state[this.id]['c'][`${this.p[1]}:${this.p[2]}`];

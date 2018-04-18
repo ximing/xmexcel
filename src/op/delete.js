@@ -230,9 +230,18 @@ export class Delete {
     }
 
     _applyMaxCoord(state, otherProps){
-        let s = state[this.id];
-        let row = s.row || 200,
-            col = s.col || 20;
+        let {c: cells, row: _row, col: _col} = state[this.id];
+        let row = _row || 200,
+            col = _col || 20;
+
+        if(!(_row && _col)) {
+            Object.keys(cells).forEach(item => {
+                let [r, c] = convertCoor(item);
+                row = Math.max(r + 1, row);
+                col = Math.max(c + 1, col);
+            });
+        }
+
         if(this.t === 'dr') {
             otherProps.row = row - 1;
             otherProps.col = col;

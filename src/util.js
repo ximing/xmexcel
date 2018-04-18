@@ -18,14 +18,22 @@ export const inMergeCell = function (mergeCells = {}, selection) {
             rowspan: mergeCells[key].rowspan,
             colspan: mergeCells[key].colspan
         };
-        if ((selection[0] >= cell.row && selection[0] < cell.row + cell.rowspan) ||
-            (selection[2] >= cell.row && selection[2] < cell.row + cell.rowspan)) {
+
+        if (
+            (selection[0] <= cell.row && selection[2] >= cell.row + cell.rowspan) ||
+            (selection[0] >= cell.row && selection[0] < cell.row + cell.rowspan) ||
+            (selection[2] >= cell.row && selection[2] < cell.row + cell.rowspan)
+        ) {
             inRow = true;
         }
-        if ((selection[1] >= cell.col && selection[1] < cell.col + cell.colspan) ||
-            (selection[3] >= cell.col && selection[3] < cell.col + cell.colspan)) {
+        if (
+            (selection[1] <= cell.col && selection[3] >= cell.col + cell.colspan) ||
+            (selection[1] >= cell.col && selection[1] < cell.col + cell.colspan) ||
+            (selection[3] >= cell.col && selection[3] < cell.col + cell.colspan)
+        ) {
             inCol = true;
         }
+
         if (inRow && inCol) {
             return true;
         } else {
@@ -78,12 +86,20 @@ export const getDataAtCol = (c, col, row) => {
 };
 
 export const calcHiddenRows = (sheet, dc = -1) => {
-    let {minRow, row, c, filter, filterByValue = {}} = sheet;
+    let {row, c, filter, filterByValue = {}} = sheet;
     let cols = Object.keys(filterByValue);
     let hiddenRows = [];
+
+    if(!row) {
+        Object.keys(c).forEach(item => {
+            let [r] = convertCoor(item);
+            row = Math.max(r + 1, row || 200);
+        });
+    }
+
     for (let col of cols) {
         if (Number(col) !== Number(dc)) {
-            let colData = getDataAtCol(c, col, row || minRow || 200);
+            let colData = getDataAtCol(c, col, row);
             let _hide = [], _filter = filterByValue[col];
 
             for (let v = filter.row + 1, len = colData.length; v < len; v++) {
