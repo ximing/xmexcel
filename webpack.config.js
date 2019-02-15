@@ -11,7 +11,6 @@ let env = process.env.NODE_ENV || 'development';
 module.exports = {
     entry: {
         'demo': [
-            'react-hot-loader/patch',
             './example/index.js'
         ]
     },
@@ -56,24 +55,7 @@ module.exports = {
                     //     loader:'react-hot-loader/webpack'
                     // },
                     {
-                        loader: 'babel-loader',
-                        options: {
-                            'presets': [
-                                ['es2015', {'modules': false}],
-                                'stage-0', 'react'
-                            ],
-                            'env': {},
-                            'ignore': [
-                                'node_modules/**',
-                                'dist'
-                            ],
-                            'plugins': [
-                                // 'react-hot-loader/babel',
-                                'transform-decorators-legacy',
-                                "transform-es2015-modules-commonjs",
-                                'transform-class-properties'
-                            ]
-                        }
+                        loader: 'babel-loader'
                     }
                 ],
                 exclude: /node_modules/

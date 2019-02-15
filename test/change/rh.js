@@ -18,7 +18,7 @@ let state = {
 
 // local is is change,remote is insert row/col
 
-test('change rh  and ir', (t) => {
+test('change rh  and ir1', (t) => {
     let op1 = new Change('1', ['rh', 4], 5);
     let op2 = new Insert('1', 'ir', 1, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -28,7 +28,7 @@ test('change rh  and ir', (t) => {
     );
 });
 
-test('change rh  and ir', (t) => {
+test('change rh  and ir2', (t) => {
     let op1 = new Change('1', ['rh', 4], 5);
     let op2 = new Insert('1', 'ir', 4, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -39,7 +39,7 @@ test('change rh  and ir', (t) => {
 });
 
 
-test('change rh  and ir', (t) => {
+test('change rh  and ir3', (t) => {
     let op1 = new Change('1', ['rh', 4], 5);
     let op2 = new Insert('1', 'ir', 6, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -51,7 +51,7 @@ test('change rh  and ir', (t) => {
 
 
 // local is insert row/col ,remote is change
-test('change rh  and ir', (t) => {
+test('change rh  and ir4', (t) => {
     let op1 = new Insert('1', 'ir', 1, 2);
     let op2 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -61,7 +61,7 @@ test('change rh  and ir', (t) => {
     );
 });
 
-test('change rh  and ir', (t) => {
+test('change rh  and ir5', (t) => {
     let op1 = new Insert('1', 'ir', 4, 2);
     let op2 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -71,7 +71,7 @@ test('change rh  and ir', (t) => {
     );
 });
 
-test('change rh  and ir', (t) => {
+test('change rh  and ir6', (t) => {
     let op1 = new Insert('1', 'ir', 6, 2);
     let op2 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -83,7 +83,7 @@ test('change rh  and ir', (t) => {
 
 
 // local is delete row/col ,remote is change
-test('change rh and dr', (t) => {
+test('change rh and dr7', (t) => {
     let op1 = new Delete('1', 'dr', 1);
     let op2 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -93,7 +93,7 @@ test('change rh and dr', (t) => {
     );
 });
 
-test('change rh and dr', (t) => {
+test('change rh and dr8', (t) => {
     let op1 = new Delete('1', 'dr', 4);
     let op2 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -103,7 +103,7 @@ test('change rh and dr', (t) => {
     );
 });
 
-test('change rh and dr', (t) => {
+test('change rh and dr9', (t) => {
     let op1 = new Delete('1', 'dr', 6);
     let op2 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -115,7 +115,7 @@ test('change rh and dr', (t) => {
 
 
 // local is change, remote is delete row/col
-test('change rh and dr', (t) => {
+test('change rh and dr10', (t) => {
     let op2 = new Delete('1', 'dr', 1);
     let op1 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -125,7 +125,7 @@ test('change rh and dr', (t) => {
     );
 });
 
-test('change rh and dr', (t) => {
+test('change rh and dr11', (t) => {
     let op2 = new Delete('1', 'dr', 4);
     let op1 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -135,7 +135,7 @@ test('change rh and dr', (t) => {
     );
 });
 
-test('change rh and dr', (t) => {
+test('change rh and dr12', (t) => {
     let op2 = new Delete('1', 'dr', 6);
     let op1 = new Change('1', ['rh', 4], 5);
     let [a, b] = ExcelModel.transform(op1, op2);

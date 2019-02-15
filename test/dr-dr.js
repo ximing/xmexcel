@@ -12,7 +12,7 @@ let state = {
         c: c
     }
 };
-test('dr and dr', (t) => {
+test('dr and dr1', (t) => {
     let op1 = new Delete('1', 'dr', 3);
     let op2 = new Delete('1', 'dr', 2);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -22,7 +22,7 @@ test('dr and dr', (t) => {
     );
 });
 
-test('dr and dr', (t) => {
+test('dr and dr2', (t) => {
     let op1 = new Delete('1', 'dr', 3);
     let op2 = new Delete('1', 'dr', 3);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -33,7 +33,7 @@ test('dr and dr', (t) => {
 });
 
 
-test('dr and dr', (t) => {
+test('dr and dr3', (t) => {
     let op1 = new Delete('1', 'dr', 0);
     let op2 = new Delete('1', 'dr', 3);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -44,7 +44,7 @@ test('dr and dr', (t) => {
 });
 
 
-test('dr and dr', (t) => {
+test('dr and dr4', (t) => {
     let op1 = new Delete('1', 'dr', 0);
     let op2 = new Delete('1', 'dr', 0);
     let [a, b] = ExcelModel.transform(op1, op2);

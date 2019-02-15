@@ -13,7 +13,7 @@ let state = {
     }
 };
 
-test('dr and ir', (t) => {
+test('dr and ir1', (t) => {
     let op1 = new Delete('1', 'dr', 0);
     let op2 = new Insert('1', 'ir', 1, 4);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -23,7 +23,7 @@ test('dr and ir', (t) => {
     );
 });
 
-test('dr and ir', (t) => {
+test('dr and ir2', (t) => {
     let op1 = new Delete('1', 'dr', 1);
     let op2 = new Insert('1', 'ir', 1, 4);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -32,7 +32,7 @@ test('dr and ir', (t) => {
         JSON.stringify(a.apply(op2.apply(state)))
     );
 });
-test('dr and ir', (t) => {
+test('dr and ir3', (t) => {
     let op1 = new Delete('1', 'dr', 3);
     let op2 = new Insert('1', 'ir', 1, 4);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -41,7 +41,7 @@ test('dr and ir', (t) => {
         JSON.stringify(a.apply(op2.apply(state)))
     );
 });
-test('dr and ir', (t) => {
+test('dr and ir4', (t) => {
     let op1 = new Delete('1', 'dr', 4);
     let op2 = new Insert('1', 'ir', 1, 4);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -50,7 +50,7 @@ test('dr and ir', (t) => {
         JSON.stringify(a.apply(op2.apply(state)))
     );
 });
-test('dr and ir', (t) => {
+test('dr and ir5', (t) => {
     let op1 = new Delete('1', 'dr', 6);
     let op2 = new Insert('1', 'ir', 1, 4);
     let [a, b] = ExcelModel.transform(op1, op2);

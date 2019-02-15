@@ -21,7 +21,7 @@ let state = {
     }
 };
 
-test('dc change filterByValue in excel state', (t) => {
+test('dc change filterByValue in excel state1', (t) => {
     let model = ExcelModel.fromJSON({
         state
     });
@@ -34,7 +34,7 @@ test('dc change filterByValue in excel state', (t) => {
     );
 });
 
-test('dc change filterByValue in excel state', (t) => {
+test('dc change filterByValue in excel state2', (t) => {
     let model = ExcelModel.fromJSON({
         state
     });
@@ -42,7 +42,7 @@ test('dc change filterByValue in excel state', (t) => {
     t.falsy(newState[1].filterByValue);
 });
 
-test('dc change filterByValue in excel state', (t) => {
+test('dc change filterByValue in excel state3', (t) => {
     let model = ExcelModel.fromJSON({
         state
     });
@@ -55,21 +55,21 @@ test('dc change filterByValue in excel state', (t) => {
     );
 });
 
-test('dc change filterByValue in OP', t => {
+test('dc change filterByValue in OP1', t => {
     let op1 = new Change('1', ['filterByValue',2], ['value']);
     let op2 = new Delete('1', 'dc', 1);
     let [a] = ExcelModel.transform(op1, op2);
     t.is(a.p[1], 1);
 });
 
-test('dc change filterByValue in OP', t => {
+test('dc change filterByValue in OP2', t => {
     let op1 = new Change('1', ['filterByValue',2], ['value']);
     let op2 = new Delete('1', 'dc', 2);
     let [a] = ExcelModel.transform(op1, op2);
     t.falsy(a.oi);
 });
 
-test('dc change filterByValue in OP', t => {
+test('dc change filterByValue in OP3', t => {
     let op1 = new Change('1', ['filterByValue',2], ['value']);
     let op2 = new Delete('1', 'dc', 3);
     let [a] = ExcelModel.transform(op1, op2);
@@ -77,7 +77,7 @@ test('dc change filterByValue in OP', t => {
 });
 
 //od has value
-test('dc change filterByValue in OP', t => {
+test('dc change filterByValue in OP4', t => {
     let op1 = new Change('1', ['filterByValue',2], null, ['value']);
     let op2 = new Delete('1', 'dc', 2);
     let [a] = ExcelModel.transform(op1, op2);
@@ -87,7 +87,7 @@ test('dc change filterByValue in OP', t => {
 
 // --------------- filter ---------------
 
-test('dc change filter in OP', t => {
+test('dc change filter in OP1', t => {
     let op1 = new Change('1', ['filter'], {colRange: [2,4], row: 1});
     let op2 = new Delete('1', 'dc', 3);
     let [a] = ExcelModel.transform(op1, op2);
@@ -95,7 +95,7 @@ test('dc change filter in OP', t => {
     t.is(a.oi.colRange[1], 3);
 });
 
-test('dc change filter in OP', t => {
+test('dc change filter in OP2', t => {
     let op1 = new Change('1', ['filter'], {colRange: [2,4], row: 1});
     let op2 = new Delete('1', 'dc', 1);
     let [a] = ExcelModel.transform(op1, op2);
@@ -103,7 +103,7 @@ test('dc change filter in OP', t => {
     t.is(a.oi.colRange[1], 3);
 });
 
-test('dc change filter in OP', t => {
+test('dc change filter in OP3', t => {
     let op1 = new Change('1', ['filter'], {colRange: [2,4], row: 1});
     let op2 = new Delete('1', 'dc', 5);
     let [a] = ExcelModel.transform(op1, op2);
@@ -112,7 +112,7 @@ test('dc change filter in OP', t => {
 });
 
 //od has value
-test('dc change filter in OP', t => {
+test('dc change filter in OP4', t => {
     let op1 = new Change('1', ['filter'], null, {colRange: [2,4], row: 1});
     let op2 = new Delete('1', 'dc', 3);
     let [a] = ExcelModel.transform(op1, op2);
@@ -120,7 +120,7 @@ test('dc change filter in OP', t => {
     t.is(a.od.colRange[1], 3);
 });
 
-test('dc change filter in OP', t => {
+test('dc change filter in OP5', t => {
     let op1 = new Change('1', ['filter'], null, {colRange: [2,4], row: 1});
     let op2 = new Delete('1', 'dc', 1);
     let [a] = ExcelModel.transform(op1, op2);
@@ -128,7 +128,7 @@ test('dc change filter in OP', t => {
     t.is(a.od.colRange[1], 3);
 });
 
-test('dc change filter in OP', t => {
+test('dc change filter in OP6', t => {
     let op1 = new Change('1', ['filter'], null, {colRange: [2,4], row: 1});
     let op2 = new Delete('1', 'dc', 5);
     let [a] = ExcelModel.transform(op1, op2);

@@ -31,8 +31,3 @@ app.router(({history}) => {
     );
 });
 app.start('#app');
-if (module.hot) {
-    module.hot.accept('./DemoContainer', function () {
-        app.start('#app');
-    })
-}

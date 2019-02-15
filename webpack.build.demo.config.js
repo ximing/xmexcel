@@ -29,23 +29,7 @@ module.exports = {
             {
                 test: /\.js$/,
                 use:[{
-                    loader: 'babel-loader',
-                    options: {
-                        'presets': [
-                            ['es2015', {
-                                'modules': false
-                            }], 'stage-0', 'react'
-                        ],
-                        'env': {},
-                        'ignore': [
-                            'node_modules/**',
-                            'dist'
-                        ],
-                        'plugins': [
-                            'react-hot-loader/babel',
-                            'transform-decorators-legacy'
-                        ]
-                    }
+                    loader: 'babel-loader'
                 }],
                 exclude: /node_modules/
             },

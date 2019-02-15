@@ -36,7 +36,7 @@ let state = {
         row: 4
     }
 };
-test('dc->hiddenRows/filter/filterByValue', t => {
+test('dc->hiddenRows/filter/filterByValue1', t => {
     let op1 = new Delete('1', 'dc', 3);
     let _state  = op1.apply(state);
     t.is(_state['1'].hiddenRows.length, 2);
@@ -46,7 +46,7 @@ test('dc->hiddenRows/filter/filterByValue', t => {
 
 });
 
-test('dc->hiddenRows/filter/filterByValue', t => {
+test('dc->hiddenRows/filter/filterByValue2', t => {
     let op1 = new Delete('1', 'dc', 2);
     let _state = op1.apply(state);
     t.is(_state['1'].hiddenRows.length, 1);

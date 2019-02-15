@@ -26,7 +26,7 @@ let state = {
     }
 * }
 * */
-test('change filterByValue and ic', (t) => {
+test('change filterByValue and ic1', (t) => {
     let op1 = new Change('1', ['filterByValue', 1], [1, 2, 3]);
     let op2 = new Insert('1', 'ic', 0, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -36,7 +36,7 @@ test('change filterByValue and ic', (t) => {
     );
 });
 
-test('change filterByValue and ic', (t) => {
+test('change filterByValue and ic2', (t) => {
     let op1 = new Change('1', ['filterByValue', 1], [1, 2, 3]);
     let op2 = new Insert('1', 'ic', 1, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -46,7 +46,7 @@ test('change filterByValue and ic', (t) => {
     );
 });
 
-test('change filterByValue and ic', (t) => {
+test('change filterByValue and ic3', (t) => {
     let op1 = new Change('1', ['filterByValue', 1], [1, 2, 3]);
     let op2 = new Insert('1', 'ic', 2, 2);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -56,7 +56,7 @@ test('change filterByValue and ic', (t) => {
     );
 });
 
-test('change filterByValue and dc', (t) => {
+test('change filterByValue and dc1', (t) => {
     let op1 = new Change('1', ['filterByValue', 1], [1, 2, 3]);
     let op2 = new Delete('1', 'dc', 0);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -66,7 +66,7 @@ test('change filterByValue and dc', (t) => {
     );
 });
 
-test('change filterByValue and dc', (t) => {
+test('change filterByValue and dc2', (t) => {
     let op1 = new Change('1', ['filterByValue', 1], [1, 2, 3]);
     let op2 = new Delete('1', 'dc', 1);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -76,7 +76,7 @@ test('change filterByValue and dc', (t) => {
     );
 });
 
-test('change filterByValue and dc', (t) => {
+test('change filterByValue and dc3', (t) => {
     let op1 = new Change('1', ['filterByValue', 1], [1, 2, 3]);
     let op2 = new Delete('1', 'dc', 2);
     let [a, b] = ExcelModel.transform(op1, op2);

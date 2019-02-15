@@ -11,7 +11,7 @@ let state = {
         c: c
     }
 };
-test('ic and dc', (t) => {
+test('ic and dc1', (t) => {
     let op1 = new Insert('1', 'ic', 1, 4);
     let op2 = new Delete('1', 'dc', 0);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -21,7 +21,7 @@ test('ic and dc', (t) => {
     );
 });
 
-test('ic and dc', (t) => {
+test('ic and dc2', (t) => {
     let op1 = new Insert('1', 'ic', 1, 4);
     let op2 = new Delete('1', 'dc', 1);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -33,7 +33,7 @@ test('ic and dc', (t) => {
 });
 
 
-test('ic and dc', (t) => {
+test('ic and dc3', (t) => {
     let op1 = new Insert('1', 'ic', 1, 4);
     let op2 = new Delete('1', 'dc', 2);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -44,7 +44,7 @@ test('ic and dc', (t) => {
     );
 });
 
-test('ic and dc', (t) => {
+test('ic and dc4', (t) => {
     let op1 = new Insert('1', 'ic', 1, 4);
     let op2 = new Delete('1', 'dc', 4);
     let [a, b] = ExcelModel.transform(op1, op2);
@@ -55,7 +55,7 @@ test('ic and dc', (t) => {
     );
 });
 
-test('ic and dc', (t) => {
+test('ic and dc5', (t) => {
     let op1 = new Insert('1', 'ic', 1, 4);
     let op2 = new Delete('1', 'dc', 6);
     let [a, b] = ExcelModel.transform(op1, op2);

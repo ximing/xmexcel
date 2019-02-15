@@ -34,7 +34,7 @@ test("merge cell", t => {
 
 // local merge cells and remote add row/col
 
-test("ic and merge cells", t => {
+test("ic and merge cells1", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -55,7 +55,7 @@ test("ic and merge cells", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("ic and merge cells", t => {
+test("ic and merge cells2", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -76,7 +76,7 @@ test("ic and merge cells", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("ic and merge cells", t => {
+test("ic and merge cells3", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -97,7 +97,7 @@ test("ic and merge cells", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("ir and merge cells", t => {
+test("ir and merge cells1", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -118,7 +118,7 @@ test("ir and merge cells", t => {
     t.is(state1['1'].row, state2['1'].row);
 });
 
-test("ir and merge cells", t => {
+test("ir and merge cells2", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -139,7 +139,7 @@ test("ir and merge cells", t => {
     t.is(state1['1'].row, state2['1'].row);
 });
 
-test("ir and merge cells", t => {
+test("ir and merge cells3", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -162,7 +162,7 @@ test("ir and merge cells", t => {
 
 // local add row/col and remote merge cells
 
-test("merge cells and ic", t => {
+test("merge cells and ic1", t => {
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -183,7 +183,7 @@ test("merge cells and ic", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and ic", t => {
+test("merge cells and ic2", t => {
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -204,7 +204,7 @@ test("merge cells and ic", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and ic", t => {
+test("merge cells and ic3", t => {
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -225,7 +225,7 @@ test("merge cells and ic", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and ic", t => {
+test("merge cells and ic4", t => {
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -246,7 +246,7 @@ test("merge cells and ic", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and ir", t => {
+test("merge cells and ir1", t => {
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -267,7 +267,7 @@ test("merge cells and ir", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and ir", t => {
+test("merge cells and ir2", t => {
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -287,7 +287,7 @@ test("merge cells and ir", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and ir", t => {
+test("merge cells and ir3", t => {
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -310,7 +310,7 @@ test("merge cells and ir", t => {
 
 // local is remove row/coll remote is merge cells
 
-test("merge cells and dc", t => {
+test("merge cells and dc1", t => {
     let op1 = new Delete("1", "dc", 1);
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
@@ -331,7 +331,7 @@ test("merge cells and dc", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dc", t => {
+test("merge cells and dc2", t => {
     let op1 = new Delete("1", "dc", 3);
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
@@ -352,7 +352,7 @@ test("merge cells and dc", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dc", t => {
+test("merge cells and dc3", t => {
     let op1 = new Delete("1", "dc", 4);
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
@@ -373,7 +373,7 @@ test("merge cells and dc", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dc", t => {
+test("merge cells and dc6", t => {
     let op1 = new Delete("1", "dc", 6);
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
@@ -394,7 +394,7 @@ test("merge cells and dc", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dr", t => {
+test("merge cells and dr1", t => {
     let op1 = new Delete("1", "dr", 3);
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
@@ -415,7 +415,7 @@ test("merge cells and dr", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dr", t => {
+test("merge cells and dr2", t => {
     let op1 = new Delete("1", "dr", 1);
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
@@ -436,7 +436,7 @@ test("merge cells and dr", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dr", t => {
+test("merge cells and dr3", t => {
     let op1 = new Delete("1", "dr", 6);
     let op2 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
@@ -459,7 +459,7 @@ test("merge cells and dr", t => {
 
 // local merge cells remote remove row/col
 
-test("merge cells and dc", t => {
+test("merge cells and dc4", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -480,7 +480,7 @@ test("merge cells and dc", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dc", t => {
+test("merge cells and dc5", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -501,7 +501,7 @@ test("merge cells and dc", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and ic", t => {
+test("merge cells and ic6", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -522,7 +522,7 @@ test("merge cells and ic", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dc", t => {
+test("merge cells and dc7", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -543,7 +543,7 @@ test("merge cells and dc", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dr", t => {
+test("merge cells and dr5", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -564,7 +564,7 @@ test("merge cells and dr", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dr", t => {
+test("merge cells and dr6", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2
@@ -585,7 +585,7 @@ test("merge cells and dr", t => {
     t.is(state1['1'].col, state2['1'].col);
 });
 
-test("merge cells and dr", t => {
+test("merge cells and dr7", t => {
     let op1 = new Change("1", ["mergeCells", "2:3"], {
         rowspan: 2,
         colspan: 2

@@ -21,7 +21,7 @@ let state = {
     }
 };
 
-test('ic change filterByValue in Excel state', (t) => {
+test('ic change filterByValue in Excel state1', (t) => {
     let model = ExcelModel.fromJSON({
         state
     });
@@ -34,7 +34,7 @@ test('ic change filterByValue in Excel state', (t) => {
     );
 });
 
-test('ic change filterByValue in Excel state', (t) => {
+test('ic change filterByValue in Excel state2', (t) => {
     let model = ExcelModel.fromJSON({
         state
     });
@@ -48,14 +48,14 @@ test('ic change filterByValue in Excel state', (t) => {
 });
 
 
-test('ic change filterByValue in OP', t => {
+test('ic change filterByValue in OP1', t => {
     let op1 = new Change('1', ['filterByValue', 2], ['value']);
     let op2 = new Insert('1', 'ic', 2, 2);
     let [a] = ExcelModel.transform(op1, op2);
     t.is(a.p[1], 4);
 });
 
-test('ic change filterByValue in OP', t => {
+test('ic change filterByValue in OP2', t => {
     let op1 = new Change('1', ['filterByValue', 2], ['value']);
     let op2 = new Insert('1', 'ic', 3, 1);
     let [a] = ExcelModel.transform(op1, op2);
@@ -64,7 +64,7 @@ test('ic change filterByValue in OP', t => {
 
 
 // --------------- filter ---------------
-test('ic change filter in OP', t => {
+test('ic change filter in OP1', t => {
     let op1 = new Change('1', ['filter'], {colRange: [2,4], row: 1});
     let op2 = new Insert('1', 'ic', 3, 2);
     let [a] = ExcelModel.transform(op1, op2);
@@ -72,7 +72,7 @@ test('ic change filter in OP', t => {
     t.is(a.oi.colRange[1], 6);
 });
 
-test('ic change filter in OP', t => {
+test('ic change filter in OP2', t => {
     let op1 = new Change('1', ['filter'], {colRange: [2,4], row: 1});
     let op2 = new Insert('1', 'ic', 1, 2);
     let [a] = ExcelModel.transform(op1, op2);
@@ -80,7 +80,7 @@ test('ic change filter in OP', t => {
     t.is(a.oi.colRange[1], 6);
 });
 
-test('ic change filter in OP', t => {
+test('ic change filter in OP3', t => {
     let op1 = new Change('1', ['filter'], {colRange: [2,4], row: 1});
     let op2 = new Insert('1', 'ic', 5, 2);
     let [a] = ExcelModel.transform(op1, op2);
@@ -89,7 +89,7 @@ test('ic change filter in OP', t => {
 });
 
 //od has value
-test('ic change filter in OP', t => {
+test('ic change filter in OP4', t => {
     let op1 = new Change('1', ['filter'], null, {colRange: [2,4], row: 1});
     let op2 = new Insert('1', 'ic', 3, 2);
     let [a] = ExcelModel.transform(op1, op2);
@@ -97,7 +97,7 @@ test('ic change filter in OP', t => {
     t.is(a.od.colRange[1], 6);
 });
 
-test('ic change filter in OP', t => {
+test('ic change filter in OP5', t => {
     let op1 = new Change('1', ['filter'], null, {colRange: [2,4], row: 1});
     let op2 = new Insert('1', 'ic', 1, 2);
     let [a] = ExcelModel.transform(op1, op2);
@@ -105,7 +105,7 @@ test('ic change filter in OP', t => {
     t.is(a.od.colRange[1], 6);
 });
 
-test('ic change filter in OP', t => {
+test('ic change filter in OP6', t => {
     let op1 = new Change('1', ['filter'], null, {colRange: [2,4], row: 1});
     let op2 = new Insert('1', 'ic', 5, 2);
     let [a] = ExcelModel.transform(op1, op2);

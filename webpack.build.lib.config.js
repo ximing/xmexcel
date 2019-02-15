@@ -35,18 +35,10 @@ module.exports = {
                 use:[{
                     loader: 'babel-loader',
                     options: {
-                        'presets': [
-                            ['es2015', {
-                                'modules': false
-                            }], 'stage-0', 'react'
-                        ],
                         'env': {},
                         'ignore': [
                             'node_modules/**',
                             'dist'
-                        ],
-                        'plugins': [
-                            'transform-decorators-legacy'
                         ]
                     }
                 }],

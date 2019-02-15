@@ -17,7 +17,7 @@ let state = {
     }
 };
 
-test("merge cells and dr", t => {
+test("merge cells and dr1", t => {
     let op1 = new Delete("1", "dr", 6);
     t.is(
         JSON.stringify(op1.apply(state)),
@@ -36,7 +36,7 @@ test("merge cells and dr", t => {
     );
 });
 
-test("merge cells and dr", t => {
+test("merge cells and dr2", t => {
     let op1 = new Delete("1", "dr", 8);
     t.is(
         JSON.stringify(op1.apply(state)),
@@ -54,7 +54,7 @@ test("merge cells and dr", t => {
     );
 });
 
-test("merge cells and dr", t => {
+test("merge cells and dr3", t => {
     let op1 = new Delete("1", "dr", 9);
     t.is(
         JSON.stringify(op1.apply(state)),
@@ -73,7 +73,7 @@ test("merge cells and dr", t => {
     );
 });
 
-test("merge cells and dc", t => {
+test("merge cells and dc1", t => {
     let op1 = new Delete("1", "dc", 6);
     t.is(
         JSON.stringify(op1.apply(state)),
@@ -91,7 +91,7 @@ test("merge cells and dc", t => {
     );
 });
 
-test("merge cells and dc", t => {
+test("merge cells and dc2", t => {
     let op1 = new Delete("1", "dc", 2);
     t.is(
         JSON.stringify(op1.apply(state)),
@@ -110,7 +110,7 @@ test("merge cells and dc", t => {
     );
 });
 
-test("merge cells and ic", t => {
+test("merge cells and ic1", t => {
     let op1 = new Insert("1", "ic", 2, 2);
     t.is(
         JSON.stringify(op1.apply(state)),
@@ -129,7 +129,7 @@ test("merge cells and ic", t => {
     );
 });
 
-test("merge cells and ic", t => {
+test("merge cells and ic2", t => {
     let op1 = new Insert("1", "ic", 4, 2);
     let _state = op1.apply(state);
     t.is(
@@ -156,7 +156,7 @@ test("merge cells and ic", t => {
     t.is(JSON.stringify(_state), JSON.stringify(state));
 });
 
-test("merge cells and ic", t => {
+test("merge cells and ic3", t => {
     let op1 = new Insert("1", "ic", 3, 2);
     t.is(
         JSON.stringify(op1.apply(state)),
@@ -175,7 +175,7 @@ test("merge cells and ic", t => {
     );
 });
 
-test("merge cells and ir", t => {
+test("merge cells and ir1", t => {
     let op1 = new Insert("1", "ir", 3, 2);
     t.is(
         JSON.stringify(op1.apply(state)),
@@ -194,7 +194,7 @@ test("merge cells and ir", t => {
     );
 });
 
-test("merge cells and ir", t => {
+test("merge cells and ir2", t => {
     let op1 = new Insert("1", "ir", 8, 2);
     t.is(
         JSON.stringify(op1.apply(state)),
