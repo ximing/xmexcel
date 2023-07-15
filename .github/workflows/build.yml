@@ -26,10 +26,10 @@ jobs:
             ${{ runner.os }}-build-${{ env.cache-name }}-
             ${{ runner.os }}-build-
             ${{ runner.os }}-
-      - name: use Node.js 10
+      - name: use Node.js 16
         uses: actions/setup-node@v1
         with:
-          node-version: '10.x'
+          node-version: '16.x'
       - name: npm install
         run: |
           npm i -g pnpm
