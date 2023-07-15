@@ -1,0 +1,38 @@
+name: build
+on:
+  push:
+    branches:
+      - master
+      - deploy
+    tags:
+      - v1
+    paths:
+      - 'src/**'
+      - '__tests__/**'
+      - '.github/**'
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@master
+      - name: Cache node modules
+        uses: actions/cache@v1
+        with:
+          path: ~/.npm
+          key: ${{ runner.os }}-node-${{ hashFiles('**/package-lock.json') }}
+          restore-keys: |
+            ${{ runner.os }}-build-${{ env.cache-name }}-
+            ${{ runner.os }}-build-
+            ${{ runner.os }}-
+      - name: use Node.js 10
+        uses: actions/setup-node@v1
+        with:
+          node-version: '10.x'
+      - name: npm install
+        run: |
+          npm install --registry=https://registry.npmjs.org
+          npm run build
+        env:
+          CI: true
