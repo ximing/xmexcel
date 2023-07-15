@@ -37,3 +37,6 @@ jobs:
           pnpm run build
         env:
           CI: true
+      - name: npm run build
+        run: |
+          npm run build
